@@ -17,5 +17,6 @@ namespace tds.Models
         public string GSTIN { get; set; }
 
         public string tradeName { get; set; }
+        public string departmentName { get; set; }
     }
 }

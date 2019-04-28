@@ -8,6 +8,6 @@ namespace tds.Models
     public class Tax
     {
         public string id { get; set; }
-        public double percent { get; set;}
+        public double rate { get; set;}
     }
 }

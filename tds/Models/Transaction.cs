@@ -28,7 +28,12 @@ namespace tds.Models
         public string incometaxtId { get; set; }
         public virtual Tax incomeTax { get; set; }
 
-        public string labourCess { get; set; }
+        public string labourCessId { get; set; }
+        public virtual Tax labourCess { get; set; }
+
+        public Double cgstAmount { get; set; }
+        public Double sgstAmount { get; set; }
+        public Double itAmount { get; set; }
 
 
 

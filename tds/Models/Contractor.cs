@@ -20,7 +20,7 @@ namespace tds.Models
         [Required(ErrorMessage = "Registration No. is required")]
         public string regNo { get; set; }
 
-        public string phoneNo { get; set; }
+        public long phoneNo { get; set; }
 
         public string address { get; set; }
 
