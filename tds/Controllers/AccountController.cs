@@ -9,6 +9,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using tds.Models;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace tds.Controllers
 {
@@ -58,7 +59,7 @@ namespace tds.Controllers
         public ActionResult Login(string returnUrl)
         {
             ViewBag.ReturnUrl = returnUrl;
-            return View();
+            return View("Loginnew");
         }
 
         //
@@ -79,7 +80,23 @@ namespace tds.Controllers
             switch (result)
             {
                 case SignInStatus.Success:
-                    return RedirectToLocal(returnUrl);
+                    {
+                        IdentityUser user = UserManager.FindByName(model.Email);
+                        var roleStore = new RoleStore<IdentityRole>(new ApplicationDbContext());
+                        var roleManager = new RoleManager<IdentityRole>(roleStore);
+                        if (UserManager.IsInRole(user.Id, roleManager.FindByName("Admin").Name))
+                        {
+                            return RedirectToAction("DashBoard", "Admin");
+
+
+                        }
+
+                        else
+                        {
+                            return RedirectToAction("DashBoard", "Index");
+                        }
+
+                    }
                 case SignInStatus.LockedOut:
                     return View("Lockout");
                 case SignInStatus.RequiresVerification:
@@ -149,9 +166,14 @@ namespace tds.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Register(RegisterViewModel model)
         {
+
+
+            ApplicationDbContext context = new ApplicationDbContext();
+            var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(context));
+
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                var user = new ApplicationUser { UserName = model.Email, Email = model.Email};     
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
