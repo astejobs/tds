@@ -29,5 +29,9 @@ namespace tds.Models
         {
             return new ApplicationDbContext();
         }
+        public DbSet<Models.Deductor> Deductor { get; set; }
+        public DbSet<Models.Contractor> Contractor { get; set; }
+        public DbSet<Models.Tax> Tax { get; set; }
+        public DbSet<Models.Transaction> Transaction { get; set; }
     }
 }
