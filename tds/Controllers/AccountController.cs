@@ -59,14 +59,14 @@ namespace tds.Controllers
         public ActionResult Login(string returnUrl)
         {
             ViewBag.ReturnUrl = returnUrl;
-            return View("Loginnew");
+            return View();
         }
 
         //
         // POST: /Account/Login
         [HttpPost]
         [AllowAnonymous]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public async Task<ActionResult> Login(LoginViewModel model, string returnUrl)
         {
             if (!ModelState.IsValid)
@@ -76,33 +76,41 @@ namespace tds.Controllers
 
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true
-            var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
+            var result = await SignInManager.PasswordSignInAsync(model.UserName, model.Password, model.RememberMe, shouldLockout: false);
             switch (result)
             {
                 case SignInStatus.Success:
                     {
-                        IdentityUser user = UserManager.FindByName(model.Email);
+                        IdentityUser user = UserManager.FindByName(model.UserName);
                         var roleStore = new RoleStore<IdentityRole>(new ApplicationDbContext());
                         var roleManager = new RoleManager<IdentityRole>(roleStore);
+                      //if (User.IsInRole("Admin"))
+                      //  {
+                      //      return RedirectToAction("DashBoard", "Admin");
+                      //  }
                         if (UserManager.IsInRole(user.Id, roleManager.FindByName("Admin").Name))
                         {
-                            return RedirectToAction("DashBoard", "Admin");
+                            return RedirectToAction("Index", "Admin");
 
 
                         }
 
                         else
                         {
-                            return RedirectToAction("DashBoard", "Index");
+                            return RedirectToAction("", "Index");
                         }
 
                     }
                 case SignInStatus.LockedOut:
+                    ViewBag.Message = "LockedOut";
                     return View("Lockout");
                 case SignInStatus.RequiresVerification:
                     return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
                 case SignInStatus.Failure:
+                     ViewBag.Message = "Invalid userName or Password.";
+                    return View();
                 default:
+                    ViewBag.Message = "Invalid login attempt.";
                     ModelState.AddModelError("", "Invalid login attempt.");
                     return View(model);
             }
@@ -173,12 +181,13 @@ namespace tds.Controllers
 
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email};     
+                var user = new ApplicationUser { UserName = model.UserName, Email = model.Email};     
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
+                
                     await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
-                    
+                   await this.UserManager.AddToRoleAsync(user.Id, "Admin");
                     // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link
                     // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
@@ -231,12 +240,12 @@ namespace tds.Controllers
                     return View("ForgotPasswordConfirmation");
                 }
 
-                // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
-                // Send an email with this link
-                // string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
-                // var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);		
-                // await UserManager.SendEmailAsync(user.Id, "Reset Password", "Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>");
-                // return RedirectToAction("ForgotPasswordConfirmation", "Account");
+                //For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
+                //Send an email with this link
+                 string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
+                var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+                await UserManager.SendEmailAsync(user.Id, "Reset Password", "Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>");
+                return RedirectToAction("ForgotPasswordConfirmation", "Account");
             }
 
             // If we got this far, something failed, redisplay form
