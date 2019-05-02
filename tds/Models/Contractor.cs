@@ -8,6 +8,11 @@ namespace tds.Models
 {
     public class Contractor
     {
+
+        public Contractor()
+        {
+            this.id = Guid.NewGuid().ToString();
+        }
         public string id { get; set; }
 
         [Required(ErrorMessage = "Name is required")]

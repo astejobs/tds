@@ -7,11 +7,21 @@ namespace tds.Models
 {
     public class Transaction
     {
+        ApplicationDbContext dbContext = new ApplicationDbContext();
+
+        public Transaction()
+        {
+           id = Guid.NewGuid().ToString();
+            
+
+        }
+
+
         public string id { get; set; }
         
-        public string deductorId { get; set; }
+      //  public string deductorId { get; set; }
 
-        public virtual Deductor deductor { get; set; }
+      //  public virtual Deductor deductor { get; set; }
 
         public string contractorId { get; set; }
 

@@ -1,0 +1,226 @@
+﻿@using tds.Models
+@using PagedList;
+
+
+@using PagedList.Mvc;
+@model EntityViewModel<Tax>
+
+@{
+    Layout = null;
+    String actionName= (String)TempData["actionStatus"];
+}
+  
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Admin</title>
+    <!-- base:css -->
+    <link rel="stylesheet" href="~/Content/vendors/mdi/css/materialdesignicons.min.css">
+    <link rel="stylesheet" href="~/Content/vendors/css/vendor.bundle.base.css">
+    <link rel="stylesheet" href="~/Content/vendors/flag-icon-css/css/flag-icon.min.css">
+    <!-- endinject -->
+    <!-- plugin css for this page -->
+    <link rel="stylesheet" href="~/Content/vendors/select2/select2.min.css">
+    <link rel="stylesheet" href="~/Content/vendors/select2-bootstrap-theme/select2-bootstrap.min.css">
+    <!-- End plugin css for this page -->
+    <!-- inject:css -->
+    <link rel="stylesheet" href="~/Content/css/vertical-layout-light/style.css">
+    <!-- endinject -->
+    <link rel="shortcut icon" href="~/Content/images/favicon.png" />
+</head>
+<body>
+    <div class="container-scroller">
+        <!-- partial:../../partials/_navbar.html -->
+        @Html.Partial("_Header")
+        <!-- partial -->
+        <div class="container-fluid page-body-wrapper">
+            <!-- partial:../../partials/_settings-panel.html -->
+            <!-- partial -->
+            <!-- partial:../../partials/_sidebar.html -->
+            @Html.Partial("_Menu")
+            <!-- partial -->
+            <div class="main-panel">
+                <div class="content-wrapper">
+                    <div class="row">
+                        <div class="col-12 grid-margin">
+                            <div class="card">
+                                <div class="card-body">
+                                    @if (TempData["MsgFail"] != null)
+                                    {
+
+                                    <div class="alert alert-fill-danger" role="alert">
+                                        <i class="mdi mdi-alert-circle"></i> @TempData["MsgFail"].
+                                    </div>
+                                    }
+                                    @if (TempData["MsgSuccess"] != null)
+                                    {
+
+                                    <div class="alert alert-fill-primary" role="alert">
+                                        <i class="mdi mdi-alert-circle"></i> @TempData["MsgSuccess"].
+                                    </div>
+                                    }
+                                        <h4 class="card-title">Tax/Labour_Cess</h4>
+                                    
+                                        @using (Html.BeginForm(actionName, "Tax", Model.entity, FormMethod.Post, new { @class = "form-sample", role = "form" }))
+                                        {
+                                            @Html.ValidationSummary()
+                                            @Html.AntiForgeryToken()
+                                            <p class="card-description">
+                                                Details
+                                            </p>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-3 col-form-label">Rate(%)</label>
+                                                        <div class="col-sm-9">
+                                                            @Html.TextBoxFor(model => model.entity.rate, new { placeholder = "Rate", @class = "form-control" })
+                                                            @Html.ValidationMessageFor(model => model.entity.rate, "", new { @class = "text-danger" })
+                                                            @Html.Hidden("page", TempData["page"], new { name = "page" })
+                                                            @if (actionName == "Put")
+                                                            {
+                                                                @Html.HiddenFor(model => model.entity.id)
+                                                            }
+
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+                                            if (actionName == "Post")
+                                            {
+                                                <button type="submit" class="btn btn-primary mr-2">Submit</button>
+
+                                            }
+                                            else
+                                            {
+                                                <button type="submit" class="btn btn-primary mr-2">Update</button>
+
+                                            }
+
+                                        }
+                                    </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-12 grid-margin stretch-card">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h4 class="card-title">Search Result</h4>
+                                    <p class="card-description">
+                                        Add class <code>.table-bordered</code>
+                                    </p>
+                                    <div class="table-responsive pt-3">
+                                        <table class="table table-bordered">
+                                            <thead>
+
+                                                <tr>
+                                                    <th>
+                                                        S.No
+                                                    </th>
+
+
+                                                    <th>
+                                                        Rate
+                                                    </th>
+                                                    <th>
+                                                        Action
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var item in Model.entityList.Select((x, i) => new { Data = x, Index = i }))
+                                                {
+                                                    <tr>
+                                                        <td>
+                                                            @(item.Index + ((Model.entityList.PageNumber - 1) * Model.entityList.PageSize) + 1)
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(modelitem => item.Data.rate)
+                                                        </td>
+                                                        <td>
+
+                                                            <a href="@Url.Action("Get", "Tax",new {id=item.Data.id})">
+                                                                <i class="mdi mdi-circle-edit-outline"></i> &nbsp;
+                                                            </a>
+                                                            
+                                                            <a href="@Url.Action("Delete", "Tax",new {id=item.Data.id })">
+                                                                <i class="mdi mdi-delete-circle"></i>
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                </div>
+                                <nav>
+                                   
+                                        <div id='Paging' style="text-align:center">
+                                            Page @(Model.entityList.PageCount < Model.entityList.PageNumber ? 0 : Model.entityList.PageNumber)
+                                            of @Model.entityList.PageCount
+                                            <ul class="pagination flex-wrap d-flex justify-content-center">
+
+                                                <li class="page-item">
+                                                    @Html.PagedListPager(Model.entityList, page => Url.Action("Get", new { page }), new PagedListRenderOptions() { LiElementClasses = new string[] { "page-link" } })
+
+                                                </li>
+
+                                            </ul>
+                                        </div>
+                                   
+                                        <!--  <ul class="pagination flex-wrap d-flex justify-content-center">
+              <li class="page-item"><a class="page-link" href="#"><i class="mdi mdi-chevron-left"></i></a></li>
+              <li class="page-item active"><a class="page-link" href="#">1</a></li>
+              <li class="page-item"><a class="page-link" href="#">2</a></li>
+              <li class="page-item"><a class="page-link" href="#">3</a></li>
+              <li class="page-item"><a class="page-link" href="#">4</a></li>
+              <li class="page-item"><a class="page-link" href="#"><i class="mdi mdi-chevron-right"></i></a></li>
+          </ul>-->
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- content-wrapper ends -->
+                <!-- partial:../../partials/_footer.html -->
+                <div class="footer-wrapper">
+                    <footer class="footer">
+                        <div class="d-sm-flex justify-content-center justify-content-sm-between">
+                            <span class="text-center text-sm-left d-block d-sm-inline-block">Copyright &copy; 2019. All rights reserved. </span>
+                        </div>
+                    </footer>
+                </div>
+                <!-- partial -->
+            </div>
+            <!-- main-panel ends -->
+        </div>
+        <!-- page-body-wrapper ends -->
+    </div>
+    <!-- container-scroller -->
+    <!-- base:js -->
+    <script src="~/Content/vendors/js/vendor.bundle.base.js"></script>
+    <!-- endinject -->
+    <!-- inject:js -->
+    <script src="~/Content/js/off-canvas.js"></script>
+    <script src="~/Content/js/hoverable-collapse.js"></script>
+    <script src="~/Content/js/template.js"></script>
+    <script src="~/Content/js/settings.js"></script>
+    <script src="~/Content/js/todolist.js"></script>
+    <!-- endinject -->
+    <!-- plugin js for this page -->
+    <script src="~/Content/vendors/typeahead.js/typeahead.bundle.min.js"></script>
+    <script src="~/Content/vendors/select2/select2.min.js"></script>
+    <!-- End plugin js for this page -->
+    <!-- Custom js for this page-->
+    <script src="~/Content/js/file-upload.js"></script>
+    <script src="~/Content/js/typeahead.js"></script>
+    <script src="~/Content/js/select2.js"></script>
+    <!-- End custom js for this page-->
+</body>
+</html>

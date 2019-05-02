@@ -1,0 +1,187 @@
+﻿@using tds.Models
+@model Transaction
+
+@{
+    Layout = null;
+
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Admin</title>
+    <!-- base:css -->
+    <link rel="stylesheet" href="~/Content/vendors/mdi/css/materialdesignicons.min.css">
+    <link rel="stylesheet" href="~/Content/vendors/css/vendor.bundle.base.css">
+    <link rel="stylesheet" href="~/Content/vendors/flag-icon-css/css/flag-icon.min.css">
+    <!-- endinject -->
+    <!-- plugin css for this page -->
+    <link rel="stylesheet" href="~/Content/vendors/select2/select2.min.css">
+    <link rel="stylesheet" href="~/Content/vendors/select2-bootstrap-theme/select2-bootstrap.min.css">
+    <!-- End plugin css for this page -->
+    <!-- inject:css -->
+    <link rel="stylesheet" href="~/Content/css/vertical-layout-light/style.css">
+    <!-- endinject -->
+    <link rel="shortcut icon" href="~/Content/images/favicon.png" />
+    <style>
+
+        #exampleFormControlSelect2 {
+            padding: 1rem .75rem !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-scroller">
+        <!-- partial:../../partials/_navbar.html -->
+        @Html.Partial("_Header")
+        <!-- partial -->
+        <div class="container-fluid page-body-wrapper">
+            <!-- partial:../../partials/_settings-panel.html -->
+            <!-- partial -->
+            <!-- partial:../../partials/_sidebar.html -->
+            @Html.Partial("_Menu")
+            <!-- partial -->
+            <div class="main-panel">
+                <div class="content-wrapper">
+                    <div class="row">
+                        <div class="col-12 grid-margin">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="alert alert-fill-danger" role="alert">
+                                        <i class="mdi mdi-alert-circle"></i> Oh snap! Change a few things up and try submitting again.
+                                    </div>
+                                    <div class="alert alert-fill-primary" role="alert">
+                                        <i class="mdi mdi-alert-circle"></i> There! This is a primary alert.
+                                    </div>
+                                    <h4 class="card-title">Transaction</h4>
+                                    @using (Html.BeginForm("Post", "Transaction", Model, FormMethod.Post, new { @class = "form-sample", role = "form" }))
+                                    {
+                                        @Html.ValidationSummary()
+                                        @Html.AntiForgeryToken()
+                                    <p class="card-description">
+                                        Personal info
+                                        @if (actionName == "Put")
+                                        {
+                                            @Html.HiddenFor(model => model.entity.id)
+                                        }
+                                    </p>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group row">
+                                                    <label class="col-sm-3 col-form-label">Deductee /Contractor</label>
+                                                    <div class="col-sm-9">
+                                                        @Html.DropDownListFor(m => m.contractorId,
+                  new SelectList(ViewBag.Contractors,
+                "id", "name"), "Choose Contractor", new { @class = "form-control", @Id = "exampleFormControlSelect2" })
+                                                       
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group row">
+                                                    <label class="col-sm-3 col-form-label">Amount Paid</label>
+                                                    <div class="col-sm-9">
+                                                        @Html.TextBoxFor(model => model.amountPaid, new { placeholder = "Amount", @class = "form-control" })
+                                                        @Html.ValidationMessageFor(model => model.amountPaid, "", new { @class = "text-danger" })
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group row">
+                                                    <label class="col-sm-3 col-form-label">Labour_Cess %</label>
+                                                    <div class="col-sm-9">
+                                                        @Html.DropDownListFor(m => m.labourCessId,
+                  new SelectList(ViewBag.Taxes,
+                "id", "rate"), new { @class = "form-control", @Id = "exampleFormControlSelect2" })
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group row">
+                                                    <label for="exampleInputMobile" class="col-sm-3 col-form-label">CGST %</label>
+                                                    <div class="col-sm-9">
+                                                        @Html.DropDownListFor(m => m.cgstId,
+                                                                         new SelectList(ViewBag.Taxes,
+                                                                       "id", "rate"), new { @class = "form-control", @Id = "exampleFormControlSelect2" })
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group row">
+                                                    <label class="col-sm-3 col-form-label">SGST %</label>
+                                                    <div class="col-sm-9">
+                                                        @Html.DropDownListFor(m => m.sgstId,
+                 new SelectList(ViewBag.Taxes,
+               "id", "rate"), new { @class = "form-control", @Id = "exampleFormControlSelect2" })
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group row">
+                                                    <label class="col-sm-3 col-form-label">IT %</label>
+                                                    <div class="col-sm-9">
+                                                        @Html.DropDownListFor(m => m.incometaxtId,
+                  new SelectList(ViewBag.Taxes,
+                "id", "rate"), new { @class = "form-control", @Id = "exampleFormControlSelect2" })
+
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                        <button type="submit" class="btn btn-primary mr-2">Submit</button>
+                                    }
+                                    </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- content-wrapper ends -->
+                <!-- partial:../../partials/_footer.html -->
+                <div class="footer-wrapper">
+                    <footer class="footer">
+                        <div class="d-sm-flex justify-content-center justify-content-sm-between">
+                            <span class="text-center text-sm-left d-block d-sm-inline-block">Copyright &copy; 2019. All rights reserved. </span>
+
+                        </div>
+                    </footer>
+                </div>
+                <!-- partial -->
+            </div>
+            <!-- main-panel ends -->
+        </div>
+        <!-- page-body-wrapper ends -->
+    </div>
+    <!-- container-scroller -->
+    <!-- base:js -->
+    <script src="~/Content/vendors/js/vendor.bundle.base.js"></script>
+    <!-- endinject -->
+    <!-- inject:js -->
+    <script src="~/Content/js/off-canvas.js"></script>
+    <script src="~/Content/js/hoverable-collapse.js"></script>
+    <script src="~/Content/js/template.js"></script>
+    <script src="~/Content/js/settings.js"></script>
+    <script src="~/Content/js/todolist.js"></script>
+    <!-- endinject -->
+    <!-- plugin js for this page -->
+    <script src="~/Content/vendors/typeahead.js/typeahead.bundle.min.js"></script>
+    <script src="~/Content/vendors/select2/select2.min.js"></script>
+    <!-- End plugin js for this page -->
+    <!-- Custom js for this page-->
+    <script src="~/Content/js/file-upload.js"></script>
+    <script src="~/Content/js/typeahead.js"></script>
+    <script src="~/Content/js/select2.js"></script>
+    <!-- End custom js for this page-->
+</body>
+</html>

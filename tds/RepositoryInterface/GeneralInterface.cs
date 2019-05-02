@@ -1,13 +1,18 @@
 ﻿using System;
+using PagedList;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace tds.RepositoryInterface
 {
     interface GeneralInterface<TEntity>:IDisposable where TEntity:class
     {
-      void Save(TEntity entity);
+      Boolean Save(TEntity entity);
+
+        List<TEntity> listAll(string id);
+        TEntity Find(string id);
+        Boolean Update(TEntity entity);
+        IPagedList<TEntity> pagedList(int num,string sortBy);
+        Boolean Delete(string entityId);
     }
 }
