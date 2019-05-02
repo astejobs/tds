@@ -26,6 +26,17 @@ namespace tds.Models
         {
             Database.SetInitializer<ApplicationDbContext>(new MyDBInitializer());
         }
+        public DbSet<Models.Deductor> Deductor { get; set; }
+        public DbSet<Models.Contractor> Contractor { get; set; }
+        public DbSet<Models.Tax> Tax { get; set; }
+        public DbSet<Models.Transaction> Transaction { get; set; }
+
+        public static ApplicationDbContext Create()
+        {
+            return new ApplicationDbContext();
+        }
+    }
+
         public class MyDBInitializer : CreateDatabaseIfNotExists<ApplicationDbContext>
         {
             protected override void Seed(ApplicationDbContext context)
@@ -54,21 +65,4 @@ namespace tds.Models
 
             }
         }
-
-
-
-
-
-
-
-
-
-
-
-
-        public static ApplicationDbContext Create()
-        {
-            return new ApplicationDbContext();
-        }
-    }
 }
