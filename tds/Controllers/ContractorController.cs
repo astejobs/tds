@@ -29,6 +29,7 @@ namespace tds.Controllers
         public ActionResult Get(int? page,string id) 
         {
             EntityViewModel<Contractor> contractor = new EntityViewModel<Contractor>();
+           
             if (id == null)
             {
                contractor.entity =null;
@@ -38,27 +39,22 @@ namespace tds.Controllers
             {
                 Contractor cont = generalInterface.Find(id);
                 contractor.entity = cont;
-                TempData["actionStatus"] = "Put";
+                TempData["actionStatus"] = "Put";              
             }
-
             int pageIndex = 1;
             pageIndex = page.HasValue ? Convert.ToInt32(page) : 1;
-            IPagedList<Contractor> conList= generalInterface.pagedList(pageIndex, id);
-
-            if (conList.Count!=0)
-                contractor.entityList = conList;
-            else
-                contractor.entityList = null;
+            IPagedList<Contractor> conList = generalInterface.pagedList(pageIndex, id);     
+            contractor.entityList = conList;
             return View("contractor",contractor);
             
         }
 
         [HttpPost]
-        [Route("contractor/")]
         [ValidateAntiForgeryToken]
+        [Route("contractor/")]        
         public ActionResult Post(EntityViewModel<Contractor> contractor)
         {
-
+            
 
             if (ModelState.IsValid)
             {
@@ -86,6 +82,7 @@ namespace tds.Controllers
         {
             if (ModelState.IsValid)
             {
+                
                 generalInterface.Update(contractor.entity);
                 TempData["MsgSuccess"] = "Contractor has been Updated Successfully";
             }
@@ -93,7 +90,7 @@ namespace tds.Controllers
             {
                 TempData["MsgFail"] = "Updation Failed,Enter Valid data";
             }
-            return RedirectToAction("Get");
+            return RedirectToAction("Get", new { id = contractor.entity.id});
         }
 
 

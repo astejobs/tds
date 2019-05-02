@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
@@ -12,16 +13,16 @@ namespace tds.Models
         public Transaction()
         {
            id = Guid.NewGuid().ToString();
-            
 
+            createDate = DateTime.Now;
         }
 
 
         public string id { get; set; }
         
-      //  public string deductorId { get; set; }
+        public string deductorId { get; set; }
 
-      //  public virtual Deductor deductor { get; set; }
+        public virtual Deductor deductor { get; set; }
 
         public string contractorId { get; set; }
 
@@ -44,6 +45,13 @@ namespace tds.Models
         public Double cgstAmount { get; set; }
         public Double sgstAmount { get; set; }
         public Double itAmount { get; set; }
+        public Double labourCessAmount { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
+        public DateTime createDate { get; set; }
+
+        public Double deposit { get; set; }
+        public Double netAmount { get; set; }
 
 
 

@@ -3,7 +3,7 @@
 
 @{
     Layout = null;
-
+    String actionName = (String)TempData["actionStatus"];
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -49,24 +49,32 @@
                         <div class="col-12 grid-margin">
                             <div class="card">
                                 <div class="card-body">
-                                    <div class="alert alert-fill-danger" role="alert">
-                                        <i class="mdi mdi-alert-circle"></i> Oh snap! Change a few things up and try submitting again.
-                                    </div>
-                                    <div class="alert alert-fill-primary" role="alert">
-                                        <i class="mdi mdi-alert-circle"></i> There! This is a primary alert.
-                                    </div>
+                                    @if (TempData["MsgFail"] != null)
+                                    {
+
+                                        <div class="alert alert-fill-danger" role="alert">
+                                            <i class="mdi mdi-alert-circle"></i> @TempData["MsgFail"].
+                                        </div>
+                                    }
+                                    @if (TempData["MsgSuccess"] != null)
+                                    {
+
+                                        <div class="alert alert-fill-primary" role="alert">
+                                            <i class="mdi mdi-alert-circle"></i> @TempData["MsgSuccess"].
+                                        </div>
+                                    }
                                     <h4 class="card-title">Transaction</h4>
-                                    @using (Html.BeginForm("Post", "Transaction", Model, FormMethod.Post, new { @class = "form-sample", role = "form" }))
+                                    @using (Html.BeginForm(actionName, "Transaction", Model, FormMethod.Post, new { @class = "form-sample", role = "form" }))
                                     {
                                         @Html.ValidationSummary()
                                         @Html.AntiForgeryToken()
-                                    <p class="card-description">
-                                        Personal info
-                                        @if (actionName == "Put")
-                                        {
-                                            @Html.HiddenFor(model => model.entity.id)
-                                        }
-                                    </p>
+                                        <p class="card-description">
+                                            Personal info
+                                            @if (actionName == "Put")
+                                            {
+                                                @Html.HiddenFor(model => model.id)
+                                            }
+                                        </p>
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="form-group row">
@@ -75,7 +83,7 @@
                                                         @Html.DropDownListFor(m => m.contractorId,
                   new SelectList(ViewBag.Contractors,
                 "id", "name"), "Choose Contractor", new { @class = "form-control", @Id = "exampleFormControlSelect2" })
-                                                       
+
                                                     </div>
                                                 </div>
                                             </div>
@@ -139,10 +147,16 @@
                                             </div>
 
                                         </div>
-
-                                        <button type="submit" class="btn btn-primary mr-2">Submit</button>
+                                        if (actionName == "Post")
+                                        {
+                                            <button type="submit" class="btn btn-primary mr-2">Submit</button>
+                                        }
+                                        else
+                                        {
+                                            <button type="submit" class="btn btn-primary mr-2">Update</button>
+                                        }
                                     }
-                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

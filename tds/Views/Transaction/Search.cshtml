@@ -1,12 +1,9 @@
 ﻿@using tds.Models
-@using PagedList;
-
-
-@using PagedList.Mvc;
-@model EntityViewModel<Contractor>
+@model SearchViewModel
 @{
     Layout = null;
-    String actionName = (String)TempData["actionStatus"];
+   
+
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -20,7 +17,7 @@
     <link rel="stylesheet" href="~/Content/vendors/css/vendor.bundle.base.css">
     <link rel="stylesheet" href="~/Content/vendors/flag-icon-css/css/flag-icon.min.css">
     <!-- endinject -->
-    <!-- plugin css for this page -->
+    <!-- plugin css for this page -->s
     <link rel="stylesheet" href="~/Content/vendors/select2/select2.min.css">
     <link rel="stylesheet" href="~/Content/vendors/select2-bootstrap-theme/select2-bootstrap.min.css">
     <!-- End plugin css for this page -->
@@ -28,6 +25,14 @@
     <link rel="stylesheet" href="~/Content/css/vertical-layout-light/style.css">
     <!-- endinject -->
     <link rel="shortcut icon" href="~/Content/images/favicon.png" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <style>
+
+        #exampleFormControlSelect2 {
+            padding: 1rem .75rem !important;
+        }
+    </style>
 </head>
 <body>
     <div class="container-scroller">
@@ -46,50 +51,52 @@
                         <div class="col-12 grid-margin">
                             <div class="card">
                                 <div class="card-body">
-                                    @if (TempData["MsgFail"] != null)
+                                    <div class="alert alert-fill-danger" role="alert">
+                                        <i class="mdi mdi-alert-circle"></i> Oh snap! Change a few things up and try submitting again.
+                                    </div>
+                                    <div class="alert alert-fill-primary" role="alert">
+                                        <i class="mdi mdi-alert-circle"></i> There! This is a primary alert.
+                                    </div>
+                                    <h4 class="card-title">Search</h4>
+                                    @using (Html.BeginForm("Search", "Transaction", Model, FormMethod.Post, new { @class = "form-sample", role = "form" }))
                                     {
 
-                                        <div class="alert alert-fill-danger" role="alert">
-                                            <i class="mdi mdi-alert-circle"></i> @TempData["MsgFail"].
-                                        </div>
-                                    }
-                                    @if (TempData["MsgSuccess"] != null)
-                                    {
-
-                                        <div class="alert alert-fill-primary" role="alert">
-                                            <i class="mdi mdi-alert-circle"></i> @TempData["MsgSuccess"].
-                                        </div>
-                                    }
-                                    <h4 class="card-title">Contractor</h4>
-                                    @using (Html.BeginForm(actionName, "Contractor", Model.entity, FormMethod.Post, new { @class = "form-sample", role = "form" }))
-                                    {
-                                        @Html.ValidationSummary()
-                                        @Html.AntiForgeryToken()
                                         <p class="card-description">
                                             Personal info
                                         </p>
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="form-group row">
+                                                    <label class="col-sm-3 col-form-label">Type</label>
+                                                    <div class="col-sm-9">
+                                                        @Html.DropDownListFor(model => model.type,
+                                        new SelectList(ViewBag.types,
+                                        "", ""), "Choose Type", new { @class = "form-control", @Id = "exampleFormControlSelect1" })
+
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group row">
+                                                    <label class="col-sm-3 col-form-label">Contractor</label>
+                                                    <div class="col-sm-9">
+                                                        @Html.DropDownListFor(model => model.contractorIds,
+                  new SelectList(ViewBag.Contractors,
+                "id", "name"), new { @class = "form-control", @Id = "exampleFormControlSelect2", @Multiple = true })
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group row">
                                                     <label class="col-sm-3 col-form-label">GSTIN</label>
                                                     <div class="col-sm-9">
-                                                        @Html.Hidden("page", TempData["page"], new { name = "page" })
-                                                        @if (actionName == "Put")
-                                                        {
-                                                            @Html.HiddenFor(model => model.entity.id)
-                                                        }
-                                                        @Html.TextBoxFor(model => model.entity.GSTIN, new { placeholder = "GSTIN", @class = "form-control" })
-                                                        @Html.ValidationMessageFor(model => model.entity.GSTIN, "", new { @class = "text-danger" })
-
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="form-group row">
-                                                    <label class="col-sm-3 col-form-label">Name</label>
-                                                    <div class="col-sm-9">
-                                                        @Html.TextBoxFor(model => model.entity.name, new { placeholder = "Name", @class = "form-control" })
-                                                        @Html.ValidationMessageFor(model => model.entity.name, "", new { @class = "text-danger" })
+                                                        @Html.DropDownListFor(model => model.GSTIN,
+                  new SelectList(ViewBag.Contractors,
+                "id", "GSTIN"), new { @class = "form-control", @Id = "exampleFormControlSelect3", @Multiple=true })
 
                                                     </div>
                                                 </div>
@@ -98,51 +105,24 @@
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="form-group row">
-                                                    <label class="col-sm-3 col-form-label">Registration No</label>
+                                                    <label class="col-sm-3 col-form-label">From</label>
                                                     <div class="col-sm-9">
-                                                        @Html.TextBoxFor(model => model.entity.regNo, new { placeholder = "Registration No", @class = "form-control" })
-                                                        @Html.ValidationMessageFor(model => model.entity.regNo, "", new { @class = "text-danger" })
-
+                                                        <input class="form-control date" placeholder="dd-mm-yyyy" name="fromDate">
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="form-group row">
-                                                    <label for="exampleInputMobile" class="col-sm-3 col-form-label">Mobile</label>
+                                                    <label for="exampleInputMobile" class="col-sm-3 col-form-label">To</label>
                                                     <div class="col-sm-9">
-                                                        @Html.TextBoxFor(model => model.entity.phoneNo, new { placeholder = "Mobile Number", @class = "form-control", @Id = "exampleInputMobile" })
-                                                        @Html.ValidationMessageFor(model => model.entity.phoneNo, "", new { @class = "text-danger" })
-
-
+                                                        <input class="form-control date" placeholder="dd-mm-yyyy" name="toDate">
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <div class="form-group row">
-                                                    <label class="col-sm-3 col-form-label">Address</label>
-                                                    <div class="col-sm-9">
-                                                        @Html.TextBoxFor(model => model.entity.address, new { placeholder = "Address", @class = "form-control" })
-                                                        @Html.ValidationMessageFor(model => model.entity.address, "", new { @class = "text-danger" })
 
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                        </div>
-
-                                        if (actionName == "Post")
-                                        {
-                                            <button type="submit" class="btn btn-primary mr-2">Submit</button>
-
-                                        }
-                                        else
-                                        {
-                                            <button type="submit" class="btn btn-primary mr-2">Update</button>
-
-                                        }
                                     }
+                                    <button type="submit" class="btn btn-primary mr-2">Submit</button>
                                 </div>
                             </div>
                         </div>
@@ -157,86 +137,93 @@
                                     <div class="table-responsive pt-3">
                                         <table class="table table-bordered">
                                             <thead>
-
                                                 <tr>
                                                     <th>
                                                         S.No
                                                     </th>
+                                                    <th>
+                                                        Amount Paid
+                                                    </th>
+                                                    <th>
+                                                        Contractor
+                                                    </th>
 
-
                                                     <th>
-                                                        Name
+                                                        Date
                                                     </th>
                                                     <th>
-                                                        Phone No
+                                                        CGST
                                                     </th>
                                                     <th>
-                                                        GSTIN
+                                                        SGST
                                                     </th>
                                                     <th>
-                                                        Action
+                                                        IT
                                                     </th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                               
-                                                    @foreach (var item in Model.entityList.Select((x, i) => new { Data = x, Index = i }))
-                                                    {
                                                 <tr>
                                                     <td>
-                                                        @(item.Index + ((Model.entityList.PageNumber - 1) * Model.entityList.PageSize) + 1)
+                                                        1
                                                     </td>
                                                     <td>
-                                                        @Html.DisplayFor(modelitem => item.Data.name)
+                                                        $ 77.99
                                                     </td>
                                                     <td>
-                                                        @Html.DisplayFor(modelitem => item.Data.phoneNo)
+                                                        Herman Beck
                                                     </td>
                                                     <td>
-                                                        @Html.DisplayFor(modelitem => item.Data.GSTIN)
+                                                        May 15, 2015
                                                     </td>
                                                     <td>
-
-                                                        <a href="@Url.Action("Get", "Contractor", new { id = item.Data.id })">
-                                                            <i class="mdi mdi-circle-edit-outline"></i> &nbsp;
-                                                        </a>
-
-                                                        <a href="@Url.Action("Delete", "Contractor", new { id = item.Data.id })">
-                                                            <i class="mdi mdi-delete-circle"></i>
-                                                        </a>
+                                                        5 %
+                                                    </td>
+                                                    <td>
+                                                        5 %
+                                                    </td>
+                                                    <td>
+                                                        5 %
                                                     </td>
                                                 </tr>
-                                                    
-                                                }
+                                                <tr>
+                                                    <td>
+                                                        1
+                                                    </td>
+                                                    <td>
+                                                        $ 77.99
+                                                    </td>
+                                                    <td>
+                                                        Herman Beck
+                                                    </td>
+                                                    <td>
+                                                        May 15, 2015
+                                                    </td>
+                                                    <td>
+                                                        5 %
+                                                    </td>
+                                                    <td>
+                                                        5 %
+                                                    </td>
+                                                    <td>
+                                                        5 %
+                                                    </td>
+                                                </tr>
                                             </tbody>
                                         </table>
                                     </div>
 
                                 </div>
                                 <nav>
-                                    
-                                        <div id='Paging' style="text-align:center">
-                                            Page @(Model.entityList.PageCount < Model.entityList.PageNumber ? 0 : Model.entityList.PageNumber)
-                                            of @Model.entityList.PageCount
-                                            <ul class="pagination flex-wrap d-flex justify-content-center">
-
-                                                <li class="page-item">
-                                                    @Html.PagedListPager(Model.entityList, page => Url.Action("Get", new { page }), new PagedListRenderOptions() { LiElementClasses = new string[] { "page-link" } })
-
-                                                </li>
-
-                                            </ul>
-                                        </div>
-                                    
-                                        <!--  <ul class="pagination flex-wrap d-flex justify-content-center">
-            <li class="page-item"><a class="page-link" href="#"><i class="mdi mdi-chevron-left"></i></a></li>
-            <li class="page-item active"><a class="page-link" href="#">1</a></li>
-            <li class="page-item"><a class="page-link" href="#">2</a></li>
-            <li class="page-item"><a class="page-link" href="#">3</a></li>
-            <li class="page-item"><a class="page-link" href="#">4</a></li>
-            <li class="page-item"><a class="page-link" href="#"><i class="mdi mdi-chevron-right"></i></a></li>
-        </ul>-->
-                                    </nav>
+                                    <ul class="pagination flex-wrap d-flex justify-content-center">
+                                        <li class="page-item"><a class="page-link" href="#"><i class="mdi mdi-chevron-left"></i></a></li>
+                                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                        <li class="page-item"><a class="page-link" href="#">4</a></li>
+                                        <li class="page-item"><a class="page-link" href="#"><i class="mdi mdi-chevron-right"></i></a></li>
+                                    </ul>
+                                </nav>
                             </div>
                         </div>
                     </div>
@@ -275,6 +262,38 @@
     <script src="~/Content/js/file-upload.js"></script>
     <script src="~/Content/js/typeahead.js"></script>
     <script src="~/Content/js/select2.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#exampleFormControlSelect2").change(function () {
+                console.log($(this).prop('selected'));
+                if ($(this).val==" ") {
+                    alert('not selected')
+                } else {
+                    alert($(this).val())
+                }
+               // $("#exampleFormControlSelect3").empty();
+                $("#exampleFormControlSelect3").attr('disabled', true);
+               // var selectedCountry = $(this).children("option:selected").val();
+               // alert("You have selected the country - " + selectedCountry);
+            });
+            
+            $("#exampleFormControlSelect3").change(function () {
+               // $("#exampleFormControlSelect2").empty();
+                $("#exampleFormControlSelect2").attr('disabled', true);
+                
+            });
+        });
+
+    </script>
+    <script>
+        flatpickr(".date");
+        
+        
+        
+               
+       
+  
+    </script>
     <!-- End custom js for this page-->
 </body>
 </html>
