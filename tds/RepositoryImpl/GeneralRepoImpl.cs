@@ -79,5 +79,12 @@ namespace tds.RepositoryImpl
                 return false;
             }
         }
+
+        public List<Transaction> Search(SearchViewModel transCriteria, DateTime fromDate, DateTime toDate)
+        {
+           
+            // return db.Feedbacks.OrderByDescending(m => m.createDate).Where(m => m.checkStatus == Constants.ASSIGNED).ToList();
+           return dbContext.Transaction.OrderByDescending(m => fromDate).Where(m => m.createDate > fromDate && m.createDate < toDate).ToList();
+        }
     }
 }

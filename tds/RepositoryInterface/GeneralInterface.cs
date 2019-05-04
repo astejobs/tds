@@ -1,7 +1,7 @@
 ﻿using System;
 using PagedList;
 using System.Collections.Generic;
-
+using tds.Models;
 
 namespace tds.RepositoryInterface
 {
@@ -14,5 +14,6 @@ namespace tds.RepositoryInterface
         Boolean Update(TEntity entity);
         IPagedList<TEntity> pagedList(int num,string sortBy);
         Boolean Delete(string entityId);
+        List<Transaction> Search(SearchViewModel transCriteria, DateTime fromDate, DateTime toDate);
     }
 }

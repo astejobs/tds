@@ -1,8 +1,12 @@
 ﻿@using tds.Models
+@using PagedList;
+
+
+@using PagedList.Mvc;
 @model SearchViewModel
 @{
     Layout = null;
-   
+
 
 }
 <!DOCTYPE html>
@@ -121,8 +125,9 @@
                                             </div>
                                         </div>
 
+
+                                        <button type="submit" class="btn btn-primary mr-2">Submit</button>
                                     }
-                                    <button type="submit" class="btn btn-primary mr-2">Submit</button>
                                 </div>
                             </div>
                         </div>
@@ -163,52 +168,38 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr>
-                                                    <td>
-                                                        1
-                                                    </td>
-                                                    <td>
-                                                        $ 77.99
-                                                    </td>
-                                                    <td>
-                                                        Herman Beck
-                                                    </td>
-                                                    <td>
-                                                        May 15, 2015
-                                                    </td>
-                                                    <td>
-                                                        5 %
-                                                    </td>
-                                                    <td>
-                                                        5 %
-                                                    </td>
-                                                    <td>
-                                                        5 %
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        1
-                                                    </td>
-                                                    <td>
-                                                        $ 77.99
-                                                    </td>
-                                                    <td>
-                                                        Herman Beck
-                                                    </td>
-                                                    <td>
-                                                        May 15, 2015
-                                                    </td>
-                                                    <td>
-                                                        5 %
-                                                    </td>
-                                                    <td>
-                                                        5 %
-                                                    </td>
-                                                    <td>
-                                                        5 %
-                                                    </td>
-                                                </tr>
+                                                @if (ViewBag.transList != null)
+                                                {
+                                                foreach (var item in ViewBag.transList)
+                                                {
+                                                    <tr>
+                                                        <td>
+                                                            @item.amountPaid
+                                                           
+                                                        </td>
+                                                        <td>
+                                                            @item.contractor.name
+                                                        </td>
+                                                        <td>
+                                                            @item.createDate
+                                                        </td>
+                                                        <td>
+                                                            @item.cgstAmount
+                                                           
+                                                        </td>
+                                                        <td>
+                                                           @item.sgstAmount
+                                                        </td>
+                                                        <td>
+                                                           @item.itAmount
+                                                        </td>
+                                                        <td>
+                                                           @item.labourCessAmount
+                                                        </td>
+                                                    </tr>
+
+                                                }
+                                                }
                                             </tbody>
                                         </table>
                                     </div>
@@ -265,34 +256,34 @@
     <script type="text/javascript">
         $(document).ready(function () {
             $("#exampleFormControlSelect2").change(function () {
-                console.log($(this).prop('selected'));
-                if ($(this).val==" ") {
-                    alert('not selected')
+                console.log($(this).children("option:selected").prop("selected"));
+                if ($(this).children("option:selected").prop("selected")) {
+                    // alert('hhh');
                 } else {
-                    alert($(this).val())
+                    //  alert('gdfhgf')
                 }
-               // $("#exampleFormControlSelect3").empty();
+                // $("#exampleFormControlSelect3").empty();
                 $("#exampleFormControlSelect3").attr('disabled', true);
-               // var selectedCountry = $(this).children("option:selected").val();
-               // alert("You have selected the country - " + selectedCountry);
+                // var selectedCountry = $(this).children("option:selected").val();
+                // alert("You have selected the country - " + selectedCountry);
             });
-            
+
             $("#exampleFormControlSelect3").change(function () {
-               // $("#exampleFormControlSelect2").empty();
+                // $("#exampleFormControlSelect2").empty();
                 $("#exampleFormControlSelect2").attr('disabled', true);
-                
+
             });
         });
 
     </script>
     <script>
         flatpickr(".date");
-        
-        
-        
-               
-       
-  
+
+
+
+
+
+
     </script>
     <!-- End custom js for this page-->
 </body>
