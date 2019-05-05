@@ -1,16 +1,16 @@
 ﻿@using tds.Models
-@using PagedList;
-
-
-@using PagedList.Mvc;
 @model SearchViewModel
 @{
-    Layout = null;
+Layout=null;
+ var list = new SelectList(new[]
+{
+    new { Value = "Open", Name = "Open" },
+    new { Value = "Resolved", Name = "Resolved" },
+    new { Value = "Closed", Name = "Closed" },
+},
+"Value", "Name", 1);
+    ViewData["typelist"] = list;
 
-    var trandata = (GeneralTransaction)ViewBag.generalTransList;
-    var amountpaid = (GeneralTransaction)ViewBag.generalTransList;
-    var cgstamount = (GeneralTransaction)ViewBag.generalTransList;
-    var sgstamount = (GeneralTransaction)ViewBag.generalTransList;
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -36,7 +36,7 @@
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <style>
 
-        .exampleFormControlSelect2 {
+        #exampleFormControlSelect2 {
             padding: 1rem .75rem !important;
         }
     </style>
@@ -58,85 +58,84 @@
                         <div class="col-12 grid-margin">
                             <div class="card">
                                 <div class="card-body">
-                                    @if (TempData["MsgFail"] != null)
-                                    {
-                                        <div class="alert alert-fill-danger" role="alert">
-                                            <i class="mdi mdi-alert-circle"></i> Updation Failed! Enter details properly.
-                                        </div>
-                                    }
-                                    @if (TempData["MsgSuccess"] != null)
-                                    {
-                                        <div class="alert alert-fill-primary" role="alert">
-                                            <i class="mdi mdi-alert-circle"></i> Details Updated Successfully.
-                                        </div>
-                                    }
+                                    <div class="alert alert-fill-danger" role="alert">
+                                        <i class="mdi mdi-alert-circle"></i> Oh snap! Change a few things up and try submitting again.
+                                    </div>
+                                    <div class="alert alert-fill-primary" role="alert">
+                                        <i class="mdi mdi-alert-circle"></i> There! This is a primary alert.
+                                    </div>
                                     <h4 class="card-title">Search</h4>
                                     @using (Html.BeginForm("Search", "Transaction", Model, FormMethod.Post, new { @class = "form-sample", role = "form" }))
                                     {
 
-                                        <p class="card-description">
-                                            Personal info
-                                        </p>
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <div class="form-group row">
-                                                    <label class="col-sm-3 col-form-label">Type</label>
-                                                    <div class="col-sm-9">
-                                                        @Html.DropDownListFor(model => model.type,
-                                        new SelectList(ViewBag.types,
-                                        "", ""), "Choose Type", new { @class = "form-control exampleFormControlSelect2", @Id = "exampleFormControlSelect2" })
-
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <div class="form-group row">
-                                                    <label class="col-sm-3 col-form-label">Contractor</label>
-                                                    <div class="col-sm-9">
-                                                        @Html.DropDownListFor(model => model.contractorId,
-                  new SelectList(ViewBag.Contractors,
-                "id", "name"),"Select contractor", new { @class = "form-control exampleFormControlSelect2", @Id = "exampleFormControlSelect3"})
-
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="form-group row">
-                                                    <label class="col-sm-3 col-form-label">GSTIN</label>
-                                                    <div class="col-sm-9">
-                                                        @Html.DropDownListFor(model => model.GSTIN,
-                  new SelectList(ViewBag.Contractors,
-                "GSTIN", "GSTIN"),"Select GSTIN", new { @class = "form-control exampleFormControlSelect2", @Id = "exampleFormControlSelect4" })
-
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <div class="form-group row">
-                                                    <label class="col-sm-3 col-form-label">From</label>
-                                                    <div class="col-sm-9">
-                                                        <input class="form-control date" placeholder="dd-mm-yyyy" name="fromDate">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="form-group row">
-                                                    <label for="exampleInputMobile" class="col-sm-3 col-form-label">To</label>
-                                                    <div class="col-sm-9">
-                                                        <input class="form-control date" placeholder="dd-mm-yyyy" name="toDate">
-                                                    </div>
+                                    <p class="card-description">
+                                        Personal info
+                                    </p>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group row">
+                                                <label class="col-sm-3 col-form-label">Type</label>
+                                                <div class="col-sm-9">
+                                                    @Html.DropDownListFor(m => m.type,
+                                                    new SelectList(ViewBag.types,
+                                                    "", ""), "Choose Contractor", new { @class = "form-control", @Id = "exampleFormControlSelect2" })
+                                                   
                                                 </div>
                                             </div>
                                         </div>
 
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group row">
+                                                <label class="col-sm-3 col-form-label">Contractor</label>
+                                                <div class="col-sm-9">
+                                                    <select class="form-control" id="exampleFormControlSelect2">
+                                                        <option>1</option>
+                                                        <option>2</option>
+                                                        <option>3</option>
+                                                        <option>4</option>
+                                                        <option>5</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group row">
+                                                <label class="col-sm-3 col-form-label">GSTIN</label>
+                                                <div class="col-sm-9">
+                                                    <select class="form-control" id="exampleFormControlSelect2">
+                                                        <option>1</option>
+                                                        <option>2</option>
+                                                        <option>3</option>
+                                                        <option>4</option>
+                                                        <option>5</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group row">
+                                                <label class="col-sm-3 col-form-label">From</label>
+                                                <div class="col-sm-9">
+                                                    <input class="form-control date" placeholder="dd-mm-yyyy">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group row">
+                                                <label for="exampleInputMobile" class="col-sm-3 col-form-label">To</label>
+                                                <div class="col-sm-9">
+                                                    <input class="form-control date" placeholder="dd-mm-yyyy">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
 
-                                        <button type="submit" class="btn btn-primary mr-2">Submit</button>
                                     }
+                                    <button type="submit" class="btn btn-primary mr-2">Submit</button>
                                 </div>
                             </div>
                         </div>
@@ -153,19 +152,18 @@
                                             <thead>
                                                 <tr>
                                                     <th>
-                                                        Contractor
-                                                    </th>
-                                                    <th>
-                                                        GSTIN
-                                                    </th>
-                                                    <th>
-                                                        Date
+                                                        S.No
                                                     </th>
                                                     <th>
                                                         Amount Paid
                                                     </th>
+                                                    <th>
+                                                        Contractor
+                                                    </th>
 
-
+                                                    <th>
+                                                        Date
+                                                    </th>
                                                     <th>
                                                         CGST
                                                     </th>
@@ -175,63 +173,56 @@
                                                     <th>
                                                         IT
                                                     </th>
-                                                    <th>
-                                                        LabourCess
-                                                    </th>
-                                                    <th>
-                                                        Deposit
-                                                    </th>
-
-                                                    <th>
-                                                        NetAmount
-                                                    </th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                @if (ViewBag.transList != null)
-                                                {
-                                                    foreach (var item in ViewBag.transList)
-                                                    {
                                                 <tr>
                                                     <td>
-                                                        @item.contractor.name
+                                                        1
                                                     </td>
                                                     <td>
-                                                        @item.contractor.GSTIN
+                                                        $ 77.99
                                                     </td>
                                                     <td>
-                                                        @item.createDate
+                                                        Herman Beck
                                                     </td>
                                                     <td>
-                                                        @item.amountPaid
-
-                                                    </td>
-
-                                                    <td>
-                                                        @item.cgstAmount
-
+                                                        May 15, 2015
                                                     </td>
                                                     <td>
-                                                        @item.sgstAmount
+                                                        5 %
                                                     </td>
                                                     <td>
-                                                        @item.itAmount
+                                                        5 %
                                                     </td>
                                                     <td>
-                                                        @item.labourCessAmount
-                                                    </td>
-                                                    <td>
-                                                        @item.deposit
-                                                    </td>
-                                                    <td>
-                                                        @item.netAmount
+                                                        5 %
                                                     </td>
                                                 </tr>
-
-                                                    }
-                                                }
-
-                                                </tbody>
+                                                <tr>
+                                                    <td>
+                                                        1
+                                                    </td>
+                                                    <td>
+                                                        $ 77.99
+                                                    </td>
+                                                    <td>
+                                                        Herman Beck
+                                                    </td>
+                                                    <td>
+                                                        May 15, 2015
+                                                    </td>
+                                                    <td>
+                                                        5 %
+                                                    </td>
+                                                    <td>
+                                                        5 %
+                                                    </td>
+                                                    <td>
+                                                        5 %
+                                                    </td>
+                                                </tr>
+                                            </tbody>
                                         </table>
                                     </div>
 
@@ -284,38 +275,8 @@
     <script src="~/Content/js/file-upload.js"></script>
     <script src="~/Content/js/typeahead.js"></script>
     <script src="~/Content/js/select2.js"></script>
-    <script type="text/javascript">
-        $(document).ready(function () {
-            $("#exampleFormControlSelect3").change(function () {
-
-                if ($("#exampleFormControlSelect3").val() == "") {
-                    $("#exampleFormControlSelect4").attr('disabled', false);
-                } else {
-                    $("#exampleFormControlSelect4").attr('disabled', true);
-                }
-            });
-            $("#exampleFormControlSelect4").change(function () {
-
-                if ($("#exampleFormControlSelect4").val() == "") {
-                    $("#exampleFormControlSelect3").attr('disabled', false);
-
-                } else {
-                    $("#exampleFormControlSelect3").attr('disabled', true);
-                }
-            });
-
-            
-        });
-
-    </script>
     <script>
-        flatpickr(".date", {dateFormat: 'd-m-Y'});
-
-
-
-
-
-
+        flatpickr(".date");
     </script>
     <!-- End custom js for this page-->
 </body>

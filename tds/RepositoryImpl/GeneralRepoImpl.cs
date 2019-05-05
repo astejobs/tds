@@ -3,6 +3,7 @@ using PagedList;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Globalization;
 using System.Linq;
 using System.Web;
 using tds.Models;
@@ -82,9 +83,58 @@ namespace tds.RepositoryImpl
 
         public List<Transaction> Search(SearchViewModel transCriteria, DateTime fromDate, DateTime toDate)
         {
+            var g1 = Convert.ToDateTime(fromDate).ToString("yyyy-MM-dd HH:mm:ss.fff");
+            string g2 = Convert.ToDateTime(toDate).ToString("yyyy-MM-dd HH:mm:ss.fff");
+            var user_time = DateTime.Parse(g1);
+            System.Diagnostics.Debug.WriteLine(fromDate+"in repoooo");
+            System.Diagnostics.Debug.WriteLine(toDate + "in repoooo");
            
-            // return db.Feedbacks.OrderByDescending(m => m.createDate).Where(m => m.checkStatus == Constants.ASSIGNED).ToList();
-           return dbContext.Transaction.OrderByDescending(m => fromDate).Where(m => m.createDate > fromDate && m.createDate < toDate).ToList();
+                return dbContext.Transaction.OrderByDescending(m => fromDate).Where(m => m.contractorId == transCriteria.contractorId || m.contractor.GSTIN == transCriteria.GSTIN && m.createDate>= fromDate && m.createDate<=toDate).ToList();
+           
         }
+
+        public List<Transaction> SearchGeneral(SearchViewModel transCriteria, DateTime d1, DateTime d2)
+        {
+          
+            
+           // List<Transaction> distinctList = dbContext.Transaction..GroupBy(p => p.contractorId).Select(g => g.FirstOrDefault()).ToList();
+
+
+
+            var query = dbContext.Transaction
+    .GroupBy(t => t.contractorId)
+    .Select(t => new
+    {
+        contractor = t.FirstOrDefault().contractor,
+        amountPaid = t.Sum(c=> c.amountPaid),
+        cgstAmount = t.Sum(c => c.cgstAmount),
+        sgstAmount = t.Sum(c=>c.sgstAmount),
+        itAmount = t.Sum(c=>c.itAmount),
+        labourCessAmount =t.Sum(c=>c.labourCessAmount),
+        deposit = t.Sum(c=>c.deposit),
+        netAmount=t.Sum(c=>c.netAmount)
+    });
+        var transactions = query.ToList().Select(t => new Transaction
+            {
+                contractor = t.contractor,
+                amountPaid = t.amountPaid,
+                cgstAmount = t.cgstAmount,
+                sgstAmount = t.sgstAmount,
+                itAmount = t.itAmount,
+                labourCessAmount = t.labourCessAmount,
+                deposit = t.deposit,
+                netAmount=t.netAmount
+            }).ToList();
+
+
+            foreach (Transaction t in transactions)
+                {
+                System.Diagnostics.Debug.WriteLine("Transactions       "+t.ToString());
+
+                }
+
+                return transactions;
+            }
     }
+
 }

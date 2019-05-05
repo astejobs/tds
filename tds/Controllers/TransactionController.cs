@@ -2,6 +2,7 @@
 using Microsoft.AspNet.Identity.Owin;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -123,17 +124,47 @@ namespace tds.Controllers
         [Route("transaction/search")]
         public ActionResult Search(SearchViewModel transCriteria,string fromDate,string toDate,string btnName,string id)
         {
-            DateTime d1 = Convert.ToDateTime(Request["fromDate"]);
-            DateTime d2 = Convert.ToDateTime(Request["toDate"]);
-            List<Transaction> transList = generalInterface.Search(transCriteria,d1,d2);
-            ViewBag.transList = transList;
+
+            System.Diagnostics.Debug.WriteLine(Request["fromDate"] + "jjjjjjjjj");
+            System.Diagnostics.Debug.WriteLine(Request["toDate"] + "jjjj***jjjjj");
+
+            DateTime dt = DateTime.ParseExact(fromDate, "dd-MM-yyyy", CultureInfo.InvariantCulture);
+            DateTime dt2 = DateTime.ParseExact(toDate, "dd-MM-yyyy", CultureInfo.InvariantCulture);
+
+            System.Diagnostics.Debug.WriteLine(dt + "jjjjjjjjjd2"+DateTime.Today);
+            System.Diagnostics.Debug.WriteLine(dt2 + "jjjjjjjjjd2");
+            
+            string g1 = Convert.ToDateTime(dt).ToString("yyyy-MM-dd HH:mm:ss.fff");
+            string g2 = Convert.ToDateTime(dt2).ToString("yyyy-MM-dd HH:mm:ss.fff");
+
+            System.Diagnostics.Debug.WriteLine(g1+ "jjjj***jjjjj");
+            DateTime d1 = DateTime.ParseExact(g1, "yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture);
+            DateTime d2 = DateTime.ParseExact(g2, "yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture);
+            System.Diagnostics.Debug.WriteLine(d1 + "jjjjstarjjjjj");
+
+            List<Transaction> transList=null;
+
+            if (transCriteria.type == "Individual")
+            {
+                transList = generalInterface.Search(transCriteria, d1, d2);
+                ViewBag.transList = transList;
+            }
+            else
+            {
+              transList= generalInterface.SearchGeneral(transCriteria, d1, d2);
+                ViewBag.transList = transList;
+                
+             
+            }
+           
             ViewBag.Contractors = contractorInterface.listAll(id);
             ViewBag.types = Models.Constants.type;
             return View("Search");
         }
-
+    
         public void setAmounts(Transaction transaction)
         {
+
             var user = UserManager.FindById(User.Identity.GetUserId());
 
             transaction.sgstAmount = (dbContext.Tax.Find(transaction.sgstId).rate / 100 * transaction.amountPaid);

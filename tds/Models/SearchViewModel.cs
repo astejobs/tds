@@ -12,8 +12,8 @@ namespace tds.Models
         {
         }
         public string type { get; set; }
-       public IEnumerable<string> contractorIds { get; set; }
-       public IEnumerable<string> GSTIN;
+       public string contractorId { get; set; }
+       public string GSTIN { get; set; }
 
        
        public DateTime from { get; set; }

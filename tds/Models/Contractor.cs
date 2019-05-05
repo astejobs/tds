@@ -12,6 +12,7 @@ namespace tds.Models
         public Contractor()
         {
             this.id = Guid.NewGuid().ToString();
+            this.status = true;
         }
         public string id { get; set; }
 
@@ -28,6 +29,8 @@ namespace tds.Models
         public long phoneNo { get; set; }
 
         public string address { get; set; }
+
+        public Boolean status { get; set; }
 
     }
 }

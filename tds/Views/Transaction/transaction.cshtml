@@ -147,6 +147,20 @@
                                             </div>
 
                                         </div>
+
+                                        <div class="row">
+                                          
+                                            <div class="col-md-6">
+                                                <div class="form-group row">
+                                                    <label class="col-sm-3 col-form-label">Deposit</label>
+                                                    <div class="col-sm-9">
+                                                        @Html.TextBoxFor(model => model.amountPaid, new { placeholder = "Deposit", @class = "form-control" })
+                                                        @Html.ValidationMessageFor(model => model.deposit, "", new { @class = "text-danger" })
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                         if (actionName == "Post")
                                         {
                                             <button type="submit" class="btn btn-primary mr-2">Submit</button>

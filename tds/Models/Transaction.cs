@@ -14,7 +14,7 @@ namespace tds.Models
         {
            id = Guid.NewGuid().ToString();
 
-            createDate = DateTime.Now;
+            createDate = DateTime.Today;
         }
 
 
@@ -48,12 +48,14 @@ namespace tds.Models
         public Double labourCessAmount { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
-        public DateTime createDate { get; set; }
+        public DateTime? createDate { get; set; }
 
         public Double deposit { get; set; }
         public Double netAmount { get; set; }
 
-
-
+        public override string ToString()
+        {
+            return "Contractor "+contractor.name+" cgst  sgst  it lc dep"+cgstAmount+" "+sgstAmount+" "+itAmount+" "+labourCessAmount+" "+deposit;
+        }
     }
 }
