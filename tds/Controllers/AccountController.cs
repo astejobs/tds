@@ -10,6 +10,8 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using tds.Models;
 using Microsoft.AspNet.Identity.EntityFramework;
+using tds.RepositoryInterface;
+using tds.RepositoryImpl;
 
 namespace tds.Controllers
 {
@@ -18,9 +20,11 @@ namespace tds.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
+        private GeneralInterface<Deductor> deductorInterface;
 
         public AccountController()
         {
+            deductorInterface = new GeneralRepoImpl<Deductor>();
         }
 
         public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager )
@@ -90,9 +94,7 @@ namespace tds.Controllers
                       //  }
                         if (UserManager.IsInRole(user.Id, roleManager.FindByName("Admin").Name))
                         {
-                            return RedirectToAction("Index", "Admin");
-
-
+                            return RedirectToAction("Get", new { Controller = "Transaction" });
                         }
 
                         else
@@ -193,7 +195,10 @@ namespace tds.Controllers
                     // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
                     // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
-
+                    Deductor deductor = new Deductor();
+                    deductor.id = user.Id;
+                    deductor.legalName = user.UserName;
+                    deductorInterface.Save(deductor);
                     return RedirectToAction("Index", "Home");
                 }
                 AddErrors(result);
@@ -457,6 +462,7 @@ namespace tds.Controllers
         #region Helpers
         // Used for XSRF protection when adding external logins
         private const string XsrfKey = "XsrfId";
+        //private object deductorInterface;
 
         private IAuthenticationManager AuthenticationManager
         {
