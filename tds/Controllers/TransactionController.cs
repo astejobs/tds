@@ -115,22 +115,45 @@ namespace tds.Controllers
 
         [HttpGet]
         [Route("transaction/search")]
-        public ActionResult Search(int? page,string id)
-        {            
+        public ActionResult Search(int? page, string fromDate, string toDate,int? id)
+        {
+            String fromDatee = fromDate;
+            String toDatee = toDate;
+            SearchViewModel transCriteria = (SearchViewModel)Session["transCriteria"];
+
             int pageIndex = 1;
-            pageIndex = page.HasValue ? Convert.ToInt32(page) : 1;
-            SearchViewModel transCriteria = new SearchViewModel();
+            pageIndex = page.HasValue ? Convert.ToInt32(page) : 1; 
+            
             ViewBag.types = Models.Constants.type;
-            ViewBag.Contractors = contractorInterface.listAll(id);
+            ViewBag.Contractors = contractorInterface.listAll(id.ToString());
+            System.Diagnostics.Debug.WriteLine(fromDate + "----*******");
+            if (!(String.IsNullOrEmpty(fromDatee) || String.IsNullOrEmpty(toDatee)))
+            {
+                DateTime dt = DateTime.ParseExact(fromDate, "dd-MM-yyyy", CultureInfo.InvariantCulture);
+                DateTime dt2 = DateTime.ParseExact(toDate, "dd-MM-yyyy", CultureInfo.InvariantCulture);
+                string g1 = Convert.ToDateTime(dt).ToString("yyyy-MM-dd HH:mm:ss.fff");
+                string g2 = Convert.ToDateTime(dt2).ToString("yyyy-MM-dd HH:mm:ss.fff");
+
+                System.Diagnostics.Debug.WriteLine(g1 + "jjjj***jjjjj");
+                
+                DateTime d1 = DateTime.ParseExact(g1, "yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture);
+                DateTime d2 = DateTime.ParseExact(g2, "yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture);
+                ViewBag.transList = generalInterface.Search(transCriteria, d1, d2, pageIndex);
+               
+            }
+            ViewBag.startDate = fromDate;
+             ViewBag.endDate = toDate;
+            
             return View("Search", transCriteria);
         }
 
 
         [HttpPost]
         [Route("transaction/search")]
-        public ActionResult Search(SearchViewModel transCriteria,string fromDate,string toDate,string btnName,string id,int? page)
+        public ActionResult Search(int? page,SearchViewModel transCriteria,string fromDate,string toDate,string btnName,string id)
         {
 
+            Session["transCriteria"]= transCriteria;
             System.Diagnostics.Debug.WriteLine(Request["fromDate"] + "jjjjjjjjj");
             System.Diagnostics.Debug.WriteLine(Request["toDate"] + "jjjj***jjjjj");
 
@@ -152,21 +175,24 @@ namespace tds.Controllers
             if (transCriteria.type == "Individual")
             {
                 transList = generalInterface.Search(transCriteria, d1, d2,pageIndex);
-                transCriteria.transList= generalInterface.Search(transCriteria, d1, d2, pageIndex);
+              //  transCriteria.transList= generalInterface.Search(transCriteria, d1, d2, pageIndex);
                  ViewBag.transList = transList;
 
             }
             else
             {
               transList= generalInterface.SearchGeneral(transCriteria, d1, d2,pageIndex);
-               transCriteria.transList = generalInterface.SearchGeneral(transCriteria, d1, d2, pageIndex);
-              ViewBag.transList = transList;
+                //  transCriteria.transList = generalInterface.SearchGeneral(transCriteria, d1, d2, pageIndex);
+              ViewBag.transList= transList;
 
 
             }
            
             ViewBag.Contractors = contractorInterface.listAll(id);
             ViewBag.types = Models.Constants.type;
+            ViewBag.startDate = fromDate;
+            ViewBag.endDate = toDate;
+
             return View("Search",transCriteria);
         }
     

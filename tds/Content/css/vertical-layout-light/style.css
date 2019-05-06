@@ -30626,6 +30626,15 @@ div.tagsinput span.tag a {
   #settings-trigger {
     display: none;
   }
+
 }
+
+.preview-list .preview-item .preview-item-content {
+    line-height: 1;
+    padding-left: 15px;
+    padding-top: 8px;
+}
+
+
 
 /*# sourceMappingURL=../maps/vertical-layout-light/style.css.map */
