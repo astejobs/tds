@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Rotativa;
+using PagedList;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -19,6 +20,7 @@ namespace tds.Controllers
         ApplicationDbContext dbContext = new ApplicationDbContext();
         GeneralInterface<Transaction> generalInterface;
         GeneralInterface<Contractor> contractorInterface;
+        GeneralInterface<Deductor> deductorInterface;
         GeneralInterface<Tax> taxInterface;
 
         public TransactionController()
@@ -26,6 +28,7 @@ namespace tds.Controllers
             generalInterface = new GeneralRepoImpl<Transaction>();
             contractorInterface = new GeneralRepoImpl<Contractor>();
             taxInterface = new GeneralRepoImpl<Tax>();
+            deductorInterface = new GeneralRepoImpl<Deductor>();
         }
 
         private ApplicationUserManager _userManager;
@@ -61,6 +64,9 @@ namespace tds.Controllers
                 t=generalInterface.Find(id);                
                 TempData["actionStatus"] = "Put";
             }
+
+            if (TempData.ContainsKey("ModelState"))
+                ModelState.Merge((ModelStateDictionary)TempData["ModelState"]);
             
            
             
@@ -79,11 +85,17 @@ namespace tds.Controllers
             if (ModelState.IsValid)
             {
                 setAmounts(transaction);
-                generalInterface.Save(transaction);
-                TempData["MsgSuccess"] = "Transaction has been Saved Successfully";
-            }
+                if (generalInterface.Save(transaction))
+                {
+                    TempData["MsgSuccess"] = "Transaction has been Saved Successfully";
+                }
+                else {
+                    TempData["MsgFail"] = "Enter Valid Data";
+                }
+                }
             else
             {
+                TempData["ModelState"] = ModelState;
                 TempData["MsgFail"] = "Enter Valid Data";
                 return RedirectToAction("Get");
             }
@@ -96,71 +108,109 @@ namespace tds.Controllers
         public ActionResult Put(Transaction transaction)
         {
             var user = UserManager.FindById(User.Identity.GetUserId());
+
+            transaction.contractor = contractorInterface.Find(transaction.contractorId);
+            transaction.cgst = taxInterface.Find(transaction.cgstId);
+            transaction.sgst = taxInterface.Find(transaction.sgstId);
+            transaction.deductor = deductorInterface.Find(user.Id);
+            transaction.labourCess = taxInterface.Find(transaction.labourCessId);
             if (ModelState.IsValid)
             {
                 setAmounts(transaction);
-                generalInterface.Update(transaction);
+                if (generalInterface.Update(transaction)){ 
                 TempData["MsgSuccess"] = "Transaction has been Updated Successfully";
+                }
+                else
+                {
+                    TempData["MsgFail"] = "Updation Failed,Enter Valid data";
+                    TempData["ModelState"] = ModelState;
+                }
             }
             else
             {
                 TempData["MsgFail"] = "Updation Failed,Enter Valid data";
+                TempData["ModelState"] = ModelState;
             }
             return RedirectToAction("Get");
         }
 
         [HttpGet]
         [Route("transaction/search")]
-        public ActionResult Search(int? page,string id)
-        {            
+        public ActionResult Search(int? page, string fromDate, string toDate,int? id)
+        {
+            String fromDatee = fromDate;
+            String toDatee = toDate;
+            SearchViewModel transCriteria = (SearchViewModel)Session["transCriteria"];
+
             int pageIndex = 1;
-            pageIndex = page.HasValue ? Convert.ToInt32(page) : 1;
-            SearchViewModel transCriteria = new SearchViewModel();
+            pageIndex = page.HasValue ? Convert.ToInt32(page) : 1; 
+            
             ViewBag.types = Models.Constants.type;
-            ViewBag.Contractors = contractorInterface.listAll(id);
+            ViewBag.Contractors = contractorInterface.listAll(id.ToString());
+            System.Diagnostics.Debug.WriteLine(fromDate + "----*******");
+            if (!(String.IsNullOrEmpty(fromDatee) || String.IsNullOrEmpty(toDatee)))
+            {
+                DateTime dt = DateTime.ParseExact(fromDate, "dd-MM-yyyy", CultureInfo.InvariantCulture);
+                DateTime dt2 = DateTime.ParseExact(toDate, "dd-MM-yyyy", CultureInfo.InvariantCulture);
+                string g1 = Convert.ToDateTime(dt).ToString("yyyy-MM-dd HH:mm:ss.fff");
+                string g2 = Convert.ToDateTime(dt2).ToString("yyyy-MM-dd HH:mm:ss.fff");
+
+                System.Diagnostics.Debug.WriteLine(g1 + "jjjj***jjjjj");
+                
+                DateTime d1 = DateTime.ParseExact(g1, "yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture);
+                DateTime d2 = DateTime.ParseExact(g2, "yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture);
+                if(transCriteria.type== "Individual") 
+                ViewBag.transList = generalInterface.Search(transCriteria, d1, d2, pageIndex);
+               else
+                    ViewBag.transList = generalInterface.SearchGeneral(transCriteria, d1, d2, pageIndex);
+            }
+            ViewBag.startDate = fromDate;
+             ViewBag.endDate = toDate;
+            
             return View("Search", transCriteria);
         }
 
 
         [HttpPost]
         [Route("transaction/search")]
-        public ActionResult Search(SearchViewModel transCriteria,string fromDate,string toDate,string btnName,string id)
+        public ActionResult Search(int? page,SearchViewModel transCriteria,string fromDate,string toDate,string btnName,string id)
         {
 
-            System.Diagnostics.Debug.WriteLine(Request["fromDate"] + "jjjjjjjjj");
-            System.Diagnostics.Debug.WriteLine(Request["toDate"] + "jjjj***jjjjj");
+            Session["transCriteria"]= transCriteria;
 
             DateTime dt = DateTime.ParseExact(fromDate, "dd-MM-yyyy", CultureInfo.InvariantCulture);
             DateTime dt2 = DateTime.ParseExact(toDate, "dd-MM-yyyy", CultureInfo.InvariantCulture);
-
-            System.Diagnostics.Debug.WriteLine(dt + "jjjjjjjjjd2"+DateTime.Today);
-            System.Diagnostics.Debug.WriteLine(dt2 + "jjjjjjjjjd2");
-            
-            string g1 = Convert.ToDateTime(dt).ToString("yyyy-MM-dd HH:mm:ss.fff");
+             string g1 = Convert.ToDateTime(dt).ToString("yyyy-MM-dd HH:mm:ss.fff");
             string g2 = Convert.ToDateTime(dt2).ToString("yyyy-MM-dd HH:mm:ss.fff");
 
-            System.Diagnostics.Debug.WriteLine(g1+ "jjjj***jjjjj");
+       
             DateTime d1 = DateTime.ParseExact(g1, "yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture);
             DateTime d2 = DateTime.ParseExact(g2, "yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture);
-            System.Diagnostics.Debug.WriteLine(d1 + "jjjjstarjjjjj");
+           
 
-            List<Transaction> transList=null;
+            IPagedList<Transaction> transList=null;
 
+            int pageIndex = 1;
+            pageIndex = page.HasValue ? Convert.ToInt32(page) : 1;
             if (transCriteria.type == "Individual")
             {
-                transList = generalInterface.Search(transCriteria, d1, d2);
-                ViewBag.transList = transList;
+                transList = generalInterface.Search(transCriteria, d1, d2,pageIndex);
+                 ViewBag.transList = transList;
+
             }
             else
             {
-              transList= generalInterface.SearchGeneral(transCriteria, d1, d2);
-                ViewBag.transList = transList;
-                
-             
+              transList= generalInterface.SearchGeneral(transCriteria, d1, d2,pageIndex);
+              ViewBag.transList= transList;
+
+
             }
            
             ViewBag.Contractors = contractorInterface.listAll(id);
             ViewBag.types = Models.Constants.type;
+            ViewBag.startDate = fromDate;
+            ViewBag.endDate = toDate;
+
             return View("Search");
         }
     
