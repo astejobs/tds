@@ -138,8 +138,10 @@ namespace tds.Controllers
                 
                 DateTime d1 = DateTime.ParseExact(g1, "yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture);
                 DateTime d2 = DateTime.ParseExact(g2, "yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture);
+                if(transCriteria.type== "Individual") 
                 ViewBag.transList = generalInterface.Search(transCriteria, d1, d2, pageIndex);
-               
+               else
+                    ViewBag.transList = generalInterface.SearchGeneral(transCriteria, d1, d2, pageIndex);
             }
             ViewBag.startDate = fromDate;
              ViewBag.endDate = toDate;
@@ -175,14 +177,12 @@ namespace tds.Controllers
             if (transCriteria.type == "Individual")
             {
                 transList = generalInterface.Search(transCriteria, d1, d2,pageIndex);
-              //  transCriteria.transList= generalInterface.Search(transCriteria, d1, d2, pageIndex);
                  ViewBag.transList = transList;
 
             }
             else
             {
               transList= generalInterface.SearchGeneral(transCriteria, d1, d2,pageIndex);
-                //  transCriteria.transList = generalInterface.SearchGeneral(transCriteria, d1, d2, pageIndex);
               ViewBag.transList= transList;
 
 
