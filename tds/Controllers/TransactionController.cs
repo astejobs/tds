@@ -143,6 +143,10 @@ namespace tds.Controllers
                else
                     ViewBag.transList = generalInterface.SearchGeneral(transCriteria, d1, d2, pageIndex);
             }
+            else
+            {
+                ViewBag.MsgFail = "Select FromDate and ToDate";
+            }
             ViewBag.startDate = fromDate;
              ViewBag.endDate = toDate;
             
@@ -158,40 +162,51 @@ namespace tds.Controllers
             Session["transCriteria"]= transCriteria;
             System.Diagnostics.Debug.WriteLine(Request["fromDate"] + "jjjjjjjjj");
             System.Diagnostics.Debug.WriteLine(Request["toDate"] + "jjjj***jjjjj");
-
-            DateTime dt = DateTime.ParseExact(fromDate, "dd-MM-yyyy", CultureInfo.InvariantCulture);
-            DateTime dt2 = DateTime.ParseExact(toDate, "dd-MM-yyyy", CultureInfo.InvariantCulture);
-             string g1 = Convert.ToDateTime(dt).ToString("yyyy-MM-dd HH:mm:ss.fff");
-            string g2 = Convert.ToDateTime(dt2).ToString("yyyy-MM-dd HH:mm:ss.fff");
-
-            System.Diagnostics.Debug.WriteLine(g1+ "jjjj***jjjjj");
-
-            DateTime d1 = DateTime.ParseExact(g1, "yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture);
-            DateTime d2 = DateTime.ParseExact(g2, "yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture);
-            System.Diagnostics.Debug.WriteLine(d1 + "jjjjstarjjjjj");
-
-            IPagedList<Transaction> transList=null;
-
-            int pageIndex = 1;
-            pageIndex = page.HasValue ? Convert.ToInt32(page) : 1;
-            if (transCriteria.type == "Individual")
-            {
-                transList = generalInterface.Search(transCriteria, d1, d2,pageIndex);
-                 ViewBag.transList = transList;
-
-            }
-            else
-            {
-              transList= generalInterface.SearchGeneral(transCriteria, d1, d2,pageIndex);
-              ViewBag.transList= transList;
-
-
-            }
-           
             ViewBag.Contractors = contractorInterface.listAll(id);
             ViewBag.types = Models.Constants.type;
             ViewBag.startDate = fromDate;
             ViewBag.endDate = toDate;
+            if (!(String.IsNullOrEmpty(fromDate) || String.IsNullOrEmpty(toDate)))
+            {
+                DateTime dt = DateTime.ParseExact(fromDate, "dd-MM-yyyy", CultureInfo.InvariantCulture);
+                DateTime dt2 = DateTime.ParseExact(toDate, "dd-MM-yyyy", CultureInfo.InvariantCulture);
+                System.Diagnostics.Debug.WriteLine(dt + "justchecking");
+
+
+                System.Diagnostics.Debug.WriteLine(DateTime.ParseExact("10/01/2015 12:00:00 AM", "yyyy-MM-dd", CultureInfo.InvariantCulture) + "iiiii");
+
+                string g1 = Convert.ToDateTime(dt).ToString("yyyy-MM-dd HH:mm:ss.fff");
+                string g2 = Convert.ToDateTime(dt2).ToString("yyyy-MM-dd HH:mm:ss.fff");
+
+                System.Diagnostics.Debug.WriteLine(g1 + "jjjj***jjjjj");
+
+                DateTime d1 = DateTime.ParseExact(g1, "yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture);
+                DateTime d2 = DateTime.ParseExact(g2, "yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture);
+                System.Diagnostics.Debug.WriteLine(d1 + "jjjjstarjjjjj");
+
+                IPagedList<Transaction> transList = null;
+
+                int pageIndex = 1;
+                pageIndex = page.HasValue ? Convert.ToInt32(page) : 1;
+                if (transCriteria.type == "Individual")
+                {
+                    transList = generalInterface.Search(transCriteria, d1, d2, pageIndex);
+                    ViewBag.transList = transList;
+
+                }
+                else
+                {
+                    transList = generalInterface.SearchGeneral(transCriteria, d1, d2, pageIndex);
+                    ViewBag.transList = transList;
+
+
+                }
+            }
+            else
+            {
+                ViewBag.MsgFail = "Select FromDate and ToDate";
+            }
+           
 
             return View("Search",transCriteria);
         }
