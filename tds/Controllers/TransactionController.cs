@@ -1,12 +1,13 @@
 ﻿using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
-using PagedList;
+using Rotativa;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Script.Serialization;
 using tds.Models;
 using tds.RepositoryImpl;
 using tds.RepositoryInterface;
@@ -78,14 +79,9 @@ namespace tds.Controllers
             if (ModelState.IsValid)
             {
                 setAmounts(transaction);
-                if (generalInterface.Save(transaction))
-                {
-                    TempData["MsgSuccess"] = "Transaction has been Saved Successfully";
-                }
-                else {
-                    TempData["MsgFail"] = "Enter Valid Data";
-                }
-                }
+                generalInterface.Save(transaction);
+                TempData["MsgSuccess"] = "Transaction has been Saved Successfully";
+            }
             else
             {
                 TempData["MsgFail"] = "Enter Valid Data";
@@ -115,100 +111,57 @@ namespace tds.Controllers
 
         [HttpGet]
         [Route("transaction/search")]
-        public ActionResult Search(int? page, string fromDate, string toDate,int? id)
-        {
-            String fromDatee = fromDate;
-            String toDatee = toDate;
-            SearchViewModel transCriteria = (SearchViewModel)Session["transCriteria"];
-
+        public ActionResult Search(int? page,string id)
+        {            
             int pageIndex = 1;
-            pageIndex = page.HasValue ? Convert.ToInt32(page) : 1; 
-            
+            pageIndex = page.HasValue ? Convert.ToInt32(page) : 1;
+            SearchViewModel transCriteria = new SearchViewModel();
             ViewBag.types = Models.Constants.type;
-            ViewBag.Contractors = contractorInterface.listAll(id.ToString());
-            System.Diagnostics.Debug.WriteLine(fromDate + "----*******");
-            if (!(String.IsNullOrEmpty(fromDatee) || String.IsNullOrEmpty(toDatee)))
-            {
-                DateTime dt = DateTime.ParseExact(fromDate, "dd-MM-yyyy", CultureInfo.InvariantCulture);
-                DateTime dt2 = DateTime.ParseExact(toDate, "dd-MM-yyyy", CultureInfo.InvariantCulture);
-                string g1 = Convert.ToDateTime(dt).ToString("yyyy-MM-dd HH:mm:ss.fff");
-                string g2 = Convert.ToDateTime(dt2).ToString("yyyy-MM-dd HH:mm:ss.fff");
-
-                System.Diagnostics.Debug.WriteLine(g1 + "jjjj***jjjjj");
-                
-                DateTime d1 = DateTime.ParseExact(g1, "yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture);
-                DateTime d2 = DateTime.ParseExact(g2, "yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture);
-                if(transCriteria.type== "Individual") 
-                ViewBag.transList = generalInterface.Search(transCriteria, d1, d2, pageIndex);
-               else
-                    ViewBag.transList = generalInterface.SearchGeneral(transCriteria, d1, d2, pageIndex);
-            }
-            else
-            {
-                ViewBag.MsgFail = "Select FromDate and ToDate";
-            }
-            ViewBag.startDate = fromDate;
-             ViewBag.endDate = toDate;
-            
+            ViewBag.Contractors = contractorInterface.listAll(id);
             return View("Search", transCriteria);
         }
 
 
         [HttpPost]
         [Route("transaction/search")]
-        public ActionResult Search(int? page,SearchViewModel transCriteria,string fromDate,string toDate,string btnName,string id)
+        public ActionResult Search(SearchViewModel transCriteria,string fromDate,string toDate,string btnName,string id)
         {
 
-            Session["transCriteria"]= transCriteria;
             System.Diagnostics.Debug.WriteLine(Request["fromDate"] + "jjjjjjjjj");
             System.Diagnostics.Debug.WriteLine(Request["toDate"] + "jjjj***jjjjj");
-            ViewBag.Contractors = contractorInterface.listAll(id);
-            ViewBag.types = Models.Constants.type;
-            ViewBag.startDate = fromDate;
-            ViewBag.endDate = toDate;
-            if (!(String.IsNullOrEmpty(fromDate) || String.IsNullOrEmpty(toDate)))
+
+            DateTime dt = DateTime.ParseExact(fromDate, "dd-MM-yyyy", CultureInfo.InvariantCulture);
+            DateTime dt2 = DateTime.ParseExact(toDate, "dd-MM-yyyy", CultureInfo.InvariantCulture);
+
+            System.Diagnostics.Debug.WriteLine(dt + "jjjjjjjjjd2"+DateTime.Today);
+            System.Diagnostics.Debug.WriteLine(dt2 + "jjjjjjjjjd2");
+            
+            string g1 = Convert.ToDateTime(dt).ToString("yyyy-MM-dd HH:mm:ss.fff");
+            string g2 = Convert.ToDateTime(dt2).ToString("yyyy-MM-dd HH:mm:ss.fff");
+
+            System.Diagnostics.Debug.WriteLine(g1+ "jjjj***jjjjj");
+            DateTime d1 = DateTime.ParseExact(g1, "yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture);
+            DateTime d2 = DateTime.ParseExact(g2, "yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture);
+            System.Diagnostics.Debug.WriteLine(d1 + "jjjjstarjjjjj");
+
+            List<Transaction> transList=null;
+
+            if (transCriteria.type == "Individual")
             {
-                DateTime dt = DateTime.ParseExact(fromDate, "dd-MM-yyyy", CultureInfo.InvariantCulture);
-                DateTime dt2 = DateTime.ParseExact(toDate, "dd-MM-yyyy", CultureInfo.InvariantCulture);
-                System.Diagnostics.Debug.WriteLine(dt + "justchecking");
-
-
-                System.Diagnostics.Debug.WriteLine(DateTime.ParseExact("10/01/2015 12:00:00 AM", "yyyy-MM-dd", CultureInfo.InvariantCulture) + "iiiii");
-
-                string g1 = Convert.ToDateTime(dt).ToString("yyyy-MM-dd HH:mm:ss.fff");
-                string g2 = Convert.ToDateTime(dt2).ToString("yyyy-MM-dd HH:mm:ss.fff");
-
-                System.Diagnostics.Debug.WriteLine(g1 + "jjjj***jjjjj");
-
-                DateTime d1 = DateTime.ParseExact(g1, "yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture);
-                DateTime d2 = DateTime.ParseExact(g2, "yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture);
-                System.Diagnostics.Debug.WriteLine(d1 + "jjjjstarjjjjj");
-
-                IPagedList<Transaction> transList = null;
-
-                int pageIndex = 1;
-                pageIndex = page.HasValue ? Convert.ToInt32(page) : 1;
-                if (transCriteria.type == "Individual")
-                {
-                    transList = generalInterface.Search(transCriteria, d1, d2, pageIndex);
-                    ViewBag.transList = transList;
-
-                }
-                else
-                {
-                    transList = generalInterface.SearchGeneral(transCriteria, d1, d2, pageIndex);
-                    ViewBag.transList = transList;
-
-
-                }
+                transList = generalInterface.Search(transCriteria, d1, d2);
+                ViewBag.transList = transList;
             }
             else
             {
-                ViewBag.MsgFail = "Select FromDate and ToDate";
+              transList= generalInterface.SearchGeneral(transCriteria, d1, d2);
+                ViewBag.transList = transList;
+                
+             
             }
            
-
-            return View("Search",transCriteria);
+            ViewBag.Contractors = contractorInterface.listAll(id);
+            ViewBag.types = Models.Constants.type;
+            return View("Search");
         }
     
         public void setAmounts(Transaction transaction)
@@ -223,5 +176,29 @@ namespace tds.Controllers
             transaction.netAmount = transaction.amountPaid - transaction.sgstAmount - transaction.cgstAmount - transaction.labourCessAmount - transaction.itAmount;
             transaction.deductorId = user.Id;
         }
+
+        [AllowAnonymous]
+        public ActionResult Invoice(string trans)
+        {
+            List<Transaction> transList = new JavaScriptSerializer().Deserialize<List<Transaction>>(trans);
+
+            return View(transList);
+        }
+        public ActionResult ExportToPdf(string id, string fromDate, string toDate)
+        {
+
+         
+            SearchViewModel VM = new SearchViewModel();
+            VM.contractorId = id;
+            List<Transaction> transList = generalInterface.Search(VM, DateTime.Parse(fromDate), DateTime.Parse(toDate));
+            var trans = new JavaScriptSerializer().Serialize(transList);
+            var report = new ActionAsPdf("Invoice", new { trans = trans });
+            return report;
+        }
+
+
+       
+
+
     }
 }
