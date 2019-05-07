@@ -81,7 +81,7 @@ namespace tds.RepositoryImpl
             }
         }
 
-        public List<Transaction> Search(SearchViewModel transCriteria, DateTime fromDate, DateTime toDate)
+        public IPagedList<Transaction> Search(SearchViewModel transCriteria, DateTime fromDate, DateTime toDate,int pageIndex)
         {
             var g1 = Convert.ToDateTime(fromDate).ToString("yyyy-MM-dd HH:mm:ss.fff");
             string g2 = Convert.ToDateTime(toDate).ToString("yyyy-MM-dd HH:mm:ss.fff");
@@ -89,18 +89,12 @@ namespace tds.RepositoryImpl
             System.Diagnostics.Debug.WriteLine(fromDate+"in repoooo");
             System.Diagnostics.Debug.WriteLine(toDate + "in repoooo");
            
-                return dbContext.Transaction.OrderByDescending(m => fromDate).Where(m => m.contractorId == transCriteria.contractorId || m.contractor.GSTIN == transCriteria.GSTIN && m.createDate>= fromDate && m.createDate<=toDate).ToList();
+                return dbContext.Transaction.OrderByDescending(m => fromDate).Where(m => m.contractorId == transCriteria.contractorId || m.contractor.GSTIN == transCriteria.GSTIN && m.createDate>= fromDate && m.createDate<=toDate).ToPagedList(pageIndex,3);
            
         }
 
-        public List<Transaction> SearchGeneral(SearchViewModel transCriteria, DateTime d1, DateTime d2)
+        public IPagedList<Transaction> SearchGeneral(SearchViewModel transCriteria, DateTime d1, DateTime d2,int pageIndex)
         {
-          
-            
-           // List<Transaction> distinctList = dbContext.Transaction..GroupBy(p => p.contractorId).Select(g => g.FirstOrDefault()).ToList();
-
-
-
             var query = dbContext.Transaction
     .GroupBy(t => t.contractorId)
     .Select(t => new
@@ -129,11 +123,11 @@ namespace tds.RepositoryImpl
 
             foreach (Transaction t in transactions)
                 {
-                System.Diagnostics.Debug.WriteLine("Transactions       "+t.ToString());
+                System.Diagnostics.Debug.WriteLine("Transactions"+t.ToString());
 
                 }
 
-                return transactions;
+                return transactions.ToPagedList(pageIndex,3);
             }
     }
 

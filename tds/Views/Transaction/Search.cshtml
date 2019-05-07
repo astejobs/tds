@@ -7,10 +7,8 @@
 @{
     Layout = null;
 
-    var trandata = (GeneralTransaction)ViewBag.generalTransList;
-    var amountpaid = (GeneralTransaction)ViewBag.generalTransList;
-    var cgstamount = (GeneralTransaction)ViewBag.generalTransList;
-    var sgstamount = (GeneralTransaction)ViewBag.generalTransList;
+    var transl = (IPagedList<Transaction>)ViewBag.transList;
+   
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -82,16 +80,18 @@
                                                 <div class="form-group row">
                                                     <label class="col-sm-3 col-form-label">Type</label>
                                                     <div class="col-sm-9">
+                                                        @Html.Hidden("page", TempData["page"], new { name = "page" })
+
                                                         @Html.DropDownListFor(model => model.type,
                                         new SelectList(ViewBag.types,
-                                        "", ""), "Choose Type", new { @class = "form-control exampleFormControlSelect2", @Id = "exampleFormControlSelect2" })
+                                        "", ""), "Choose Type", new { @class = "form-control exampleFormControlSelect2", @Id = "exampleFormControlSelecttype" })
 
                                                     </div>
                                                 </div>
                                             </div>
 
                                         </div>
-                                        <div class="row">
+                                        <div class="row" id="divHide">
                                             <div class="col-md-6">
                                                 <div class="form-group row">
                                                     <label class="col-sm-3 col-form-label">Contractor</label>
@@ -120,7 +120,7 @@
                                                 <div class="form-group row">
                                                     <label class="col-sm-3 col-form-label">From</label>
                                                     <div class="col-sm-9">
-                                                        <input class="form-control date" placeholder="dd-mm-yyyy" name="fromDate">
+                                                        <input class="form-control date" placeholder="dd-mm-yyyy" value="@ViewBag.startDate" name="fromDate">
                                                     </div>
                                                 </div>
                                             </div>
@@ -128,7 +128,7 @@
                                                 <div class="form-group row">
                                                     <label for="exampleInputMobile" class="col-sm-3 col-form-label">To</label>
                                                     <div class="col-sm-9">
-                                                        <input class="form-control date" placeholder="dd-mm-yyyy" name="toDate">
+                                                        <input class="form-control date" value="@ViewBag.endDate" placeholder="dd-mm-yyyy" name="toDate">
                                                     </div>
                                                 </div>
                                             </div>
@@ -145,9 +145,7 @@
                             <div class="card">
                                 <div class="card-body">
                                     <h4 class="card-title">Search Result</h4>
-                                    <p class="card-description">
-                                        Add class <code>.table-bordered</code>
-                                    </p>
+                                    
                                     <div class="table-responsive pt-3">
                                         <table class="table table-bordered">
                                             <thead>
@@ -200,7 +198,8 @@
                                                         @item.contractor.GSTIN
                                                     </td>
                                                     <td>
-                                                        @item.createDate
+                                                       
+                                                        @item.createDate.ToString("dd-MM-yyyy")
                                                     </td>
                                                     <td>
                                                         @item.amountPaid
@@ -236,15 +235,23 @@
                                     </div>
 
                                 </div>
-                                <nav>
-                                    <ul class="pagination flex-wrap d-flex justify-content-center">
-                                        <li class="page-item"><a class="page-link" href="#"><i class="mdi mdi-chevron-left"></i></a></li>
-                                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                        <li class="page-item"><a class="page-link" href="#">4</a></li>
-                                        <li class="page-item"><a class="page-link" href="#"><i class="mdi mdi-chevron-right"></i></a></li>
-                                    </ul>
+                                <nav>@if (ViewBag.transList != null)
+                                {
+
+                                    <div id='Paging' style="text-align:center">
+                                         <ul class="pagination flex-wrap d-flex justify-content-center">
+
+                                             <li class="page-item">
+
+                                                 Page @(ViewBag.transList.PageCount < ViewBag.transList.PageNumber ? 0 : ViewBag.transList.PageNumber)
+                                                 of @ViewBag.transList.PageCount
+                                                 @Html.PagedListPager((IPagedList)ViewBag.transList, page => Url.Action("Search", new { page,fromDate= ViewBag.startDate,toDate= ViewBag.endDate }), new PagedListRenderOptions() { LiElementClasses = new string[] { "page-link" } })
+                                                 
+                                             </li>
+
+                                        </ul>
+                                    </div>
+                                }
                                 </nav>
                             </div>
                         </div>
@@ -286,6 +293,22 @@
     <script src="~/Content/js/select2.js"></script>
     <script type="text/javascript">
         $(document).ready(function () {
+           
+            $("#exampleFormControlSelecttype").change(function () {
+
+                
+                if ($("#exampleFormControlSelecttype").val() == "Individual") {
+                  
+                    $("#divHide").show();
+
+                }
+                if ($("#exampleFormControlSelecttype").val() == "General") {
+                    $("#divHide").hide();
+
+                }
+            });
+         
+
             $("#exampleFormControlSelect3").change(function () {
 
                 if ($("#exampleFormControlSelect3").val() == "") {
@@ -295,15 +318,13 @@
                 }
             });
             $("#exampleFormControlSelect4").change(function () {
-
                 if ($("#exampleFormControlSelect4").val() == "") {
                     $("#exampleFormControlSelect3").attr('disabled', false);
-
                 } else {
                     $("#exampleFormControlSelect3").attr('disabled', true);
                 }
             });
-
+            
             
         });
 

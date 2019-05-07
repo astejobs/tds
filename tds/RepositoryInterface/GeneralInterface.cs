@@ -14,7 +14,7 @@ namespace tds.RepositoryInterface
         Boolean Update(TEntity entity);
         IPagedList<TEntity> pagedList(int num,string sortBy);
         Boolean Delete(string entityId);
-        List<Transaction> Search(SearchViewModel transCriteria, DateTime fromDate, DateTime toDate);
-        List<Transaction> SearchGeneral(SearchViewModel transCriteria, DateTime d1, DateTime d2);
+        IPagedList<Transaction> Search(SearchViewModel transCriteria, DateTime fromDate, DateTime toDate, int pageIndex);
+        IPagedList<Transaction> SearchGeneral(SearchViewModel transCriteria, DateTime d1, DateTime d2, int pageIndex);
     }
 }
