@@ -240,7 +240,7 @@ namespace tds.Controllers
          
             SearchViewModel VM = new SearchViewModel();
             VM.contractorId = id;
-            List<Transaction> transList = generalInterface.Search(VM, DateTime.Parse(fromDate), DateTime.Parse(toDate));
+            List<Transaction> transList = generalInterface.SearchForPdf(VM, DateTime.Parse(fromDate), DateTime.Parse(toDate)).ToList();
             var trans = new JavaScriptSerializer().Serialize(transList);
             var report = new ActionAsPdf("Invoice", new { trans = trans });
             return report;

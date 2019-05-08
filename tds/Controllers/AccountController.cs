@@ -199,7 +199,7 @@ namespace tds.Controllers
                     deductor.id = user.Id;
                     deductor.legalName = user.UserName;
                     deductorInterface.Save(deductor);
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Login", "Account");
                 }
                 AddErrors(result);
             }

@@ -93,6 +93,19 @@ namespace tds.RepositoryImpl
            
         }
 
+        public IEnumerable<Transaction> SearchForPdf(SearchViewModel transCriteria, DateTime fromDate, DateTime toDate)
+        {
+            var g1 = Convert.ToDateTime(fromDate).ToString("yyyy-MM-dd HH:mm:ss.fff");
+            string g2 = Convert.ToDateTime(toDate).ToString("yyyy-MM-dd HH:mm:ss.fff");
+            var user_time = DateTime.Parse(g1);
+            System.Diagnostics.Debug.WriteLine(fromDate + "in repoooo");
+            System.Diagnostics.Debug.WriteLine(toDate + "in repoooo");
+
+            return dbContext.Transaction.OrderByDescending(m => fromDate).Where(m => m.contractorId == transCriteria.contractorId || m.contractor.GSTIN == transCriteria.GSTIN && m.createDate >= fromDate && m.createDate <= toDate);
+
+        }
+
+
         public IPagedList<Transaction> SearchGeneral(SearchViewModel transCriteria, DateTime d1, DateTime d2,int pageIndex)
         {
             var query = dbContext.Transaction

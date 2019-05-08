@@ -145,9 +145,18 @@
                             <div class="card">
                                 <div class="card-body">
                                     <h4 class="card-title">Search Result</h4>
-                                    
+                                    @if (ViewBag.id != null)
+                                    {
+                                        @Html.ActionLink("Export to pdf", "ExportToPdf", new {id=ViewBag.transList,fromDate=ViewBag.fromDate, ToDate=ViewBag.toDate});
+
+                                    }
+                                    else
+                                    {
+
+                                        <a href="#" id="buttonXL">Export To Excel</a>
+                                    }
                                     <div class="table-responsive pt-3">
-                                        <table class="table table-bordered">
+                                        <table class="table table-bordered" id="table2excel">
                                             <thead>
                                                 <tr>
                                                     <th>
@@ -332,8 +341,15 @@
     <script>
         flatpickr(".date", {dateFormat: 'd-m-Y'});
 
+        $("#buttonXL").click(function () {
 
+            $("#table2excel").table2excel({
+                exclude: ".noExl",
+                name: "Worksheet Name",
+                filename: "Report"
+            });
 
+        });
 
 
 

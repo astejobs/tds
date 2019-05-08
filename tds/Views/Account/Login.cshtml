@@ -67,6 +67,15 @@
                                 </div>
                                 <div class="my-3">
                                     <input type="submit" class="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn" value="Login" />
+                                    
+
+                                       @if (ViewBag.Message != null)
+                                       {
+                                        <div class="alert alert-danger">
+                                            @ViewBag.Message
+                                        </div>
+                                       }
+                                      
                                 </div>
 
                                 <div class="text-center mt-4 font-weight-light">
