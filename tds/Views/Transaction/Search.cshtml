@@ -136,6 +136,16 @@
 
 
                                         <button type="submit" class="btn btn-primary mr-2">Submit</button>
+                                        if(ViewBag.id != null)
+                                        {
+                                            @Html.ActionLink("Export to Pdf", "ExportToPdf", new { id = ViewBag.id, fromDate = ViewBag.fromDate, ToDate = ViewBag.toDate },new  { @class = "btn btn-primary mr-2" })
+
+                                        }
+                                        else
+                                        {
+
+                                            <a href="#" class="btn btn-primary mr-2" id="buttonXL">Export To Excel</a>
+                                        }
                                     }
                                 </div>
                             </div>
@@ -145,16 +155,7 @@
                             <div class="card">
                                 <div class="card-body">
                                     <h4 class="card-title">Search Result</h4>
-                                    @if (ViewBag.id != null)
-                                    {
-                                        @Html.ActionLink("Export to pdf", "ExportToPdf", new {id=ViewBag.transList,fromDate=ViewBag.fromDate, ToDate=ViewBag.toDate});
-
-                                    }
-                                    else
-                                    {
-
-                                        <a href="#" id="buttonXL">Export To Excel</a>
-                                    }
+                                   
                                     <div class="table-responsive pt-3">
                                         <table class="table table-bordered" id="table2excel">
                                             <thead>
@@ -300,6 +301,8 @@
     <script src="~/Content/js/file-upload.js"></script>
     <script src="~/Content/js/typeahead.js"></script>
     <script src="~/Content/js/select2.js"></script>
+    @* ///////////new changes//// *@
+    <script src="~/Scripts/jquery.table2excel.js"></script>
     <script type="text/javascript">
         $(document).ready(function () {
            
@@ -340,7 +343,7 @@
     </script>
     <script>
         flatpickr(".date", {dateFormat: 'd-m-Y'});
-
+        ////////new changes////////////
         $("#buttonXL").click(function () {
 
             $("#table2excel").table2excel({
