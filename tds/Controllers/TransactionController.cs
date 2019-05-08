@@ -196,6 +196,17 @@ namespace tds.Controllers
             {
                 transList = generalInterface.Search(transCriteria, d1, d2,pageIndex);
                  ViewBag.transList = transList;
+                ////////new changes////////////
+                if (transList != null)
+                {
+                    ViewBag.id = transList.FirstOrDefault().contractorId;
+                    ViewBag.fromDate = d1;
+                    ViewBag.toDate = d2;
+
+                }
+              
+
+
 
             }
             else
