@@ -18,6 +18,7 @@ namespace tds.Controllers
     public class TransactionController : Controller
     {
         ApplicationDbContext dbContext = new ApplicationDbContext();
+        static List<Transaction> _transactions = new List<Transaction>();
         GeneralInterface<Transaction> generalInterface;
         GeneralInterface<Contractor> contractorInterface;
         GeneralInterface<Deductor> deductorInterface;
@@ -239,11 +240,11 @@ namespace tds.Controllers
         }
 
         [AllowAnonymous]
-        public ActionResult Invoice(string trans)
+        public ActionResult Invoice()
         {
-            List<Transaction> transList = new JavaScriptSerializer().Deserialize<List<Transaction>>(trans);
+            //List<Transaction> transList = new JavaScriptSerializer().Deserialize<List<Transaction>>(trans);
 
-            return View(transList);
+            return View(_transactions);
         }
         public ActionResult ExportToPdf(string id, string fromDate, string toDate)
         {
@@ -251,9 +252,9 @@ namespace tds.Controllers
          
             SearchViewModel VM = new SearchViewModel();
             VM.contractorId = id;
-            List<Transaction> transList = generalInterface.SearchForPdf(VM, DateTime.Parse(fromDate), DateTime.Parse(toDate)).ToList();
-            var trans = new JavaScriptSerializer().Serialize(transList);
-            var report = new ActionAsPdf("Invoice", new { trans = trans });
+          _transactions = generalInterface.SearchForPdf(VM, DateTime.Parse(fromDate), DateTime.Parse(toDate)).ToList();
+            //var trans = new JavaScriptSerializer().Serialize(transList);
+            var report = new ActionAsPdf("Invoice");
             return report;
         }
 
