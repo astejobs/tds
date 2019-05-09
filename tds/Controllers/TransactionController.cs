@@ -18,7 +18,7 @@ namespace tds.Controllers
     public class TransactionController : Controller
     {
         ApplicationDbContext dbContext = new ApplicationDbContext();
-        static List<Transaction> _transactions = new List<Transaction>();
+        static TransactionVM _transactions = null;
         GeneralInterface<Transaction> generalInterface;
         GeneralInterface<Contractor> contractorInterface;
         GeneralInterface<Deductor> deductorInterface;
@@ -195,25 +195,26 @@ namespace tds.Controllers
             pageIndex = page.HasValue ? Convert.ToInt32(page) : 1;
             if (transCriteria.type == "Individual")
             {
+                ////////new changes////////////
                 transList = generalInterface.Search(transCriteria, d1, d2,pageIndex);
                  ViewBag.transList = transList;
-                ////////new changes////////////
                 if (transList != null)
                 {
                     ViewBag.id = transList.FirstOrDefault().contractorId;
                     ViewBag.fromDate = d1;
                     ViewBag.toDate = d2;
+                    ViewBag.type = "Individual";
 
                 }
-              
-
-
-
             }
             else
             {
-              transList= generalInterface.SearchGeneral(transCriteria, d1, d2,pageIndex);
-              ViewBag.transList= transList;
+                ////////new changes////////////
+                transList = generalInterface.SearchGeneral(transCriteria, d1, d2,pageIndex);
+               ViewBag.transList= transList;
+                ViewBag.fromDate = d1;
+                ViewBag.toDate = d2;
+                ViewBag.type = "General";
 
 
             }
@@ -248,18 +249,68 @@ namespace tds.Controllers
         }
         public ActionResult ExportToPdf(string id, string fromDate, string toDate)
         {
-
-         
+               ////new changes/////
             SearchViewModel VM = new SearchViewModel();
             VM.contractorId = id;
-          _transactions = generalInterface.SearchForPdf(VM, DateTime.Parse(fromDate), DateTime.Parse(toDate)).ToList();
+          List<Transaction> trans = generalInterface.SearchForPdf(VM, DateTime.Parse(fromDate), DateTime.Parse(toDate)).ToList();
+            _transactions = new TransactionVM();
+            //foreach(var item in trans)
+            //{
+            //    _transactions.TotalAmountPaid += item.amountPaid;
+            //    _transactions.TotalcgstAmount += item.cgstAmount;
+            //    _transactions.Totaldeposit += item.deposit;
+            //    _transactions.TotalitAmount += item.itAmount;
+            //    _transactions.TotallabourCessAmount += item.labourCessAmount;
+            //    _transactions.TotalnetAmount += item.netAmount;
+            //    _transactions.TotalsgstAmount += item.sgstAmount;
+            //}
+            _transactions.Transactions = trans;
+
+            Transaction total = new Transaction
+            {
+                
+                amountPaid = trans.Sum(item => item.amountPaid),
+                sgstAmount = trans.Sum(item => item.sgstAmount),
+                cgstAmount = trans.Sum(item => item.cgstAmount),
+                itAmount = trans.Sum(item => item.itAmount),
+                deposit = trans.Sum(item => item.deposit),
+                netAmount = trans.Sum(item => item.netAmount),
+                labourCessAmount = trans.Sum(item => item.labourCessAmount),
+
+            };
+            trans.Add(total);
             //var trans = new JavaScriptSerializer().Serialize(transList);
             var report = new ActionAsPdf("Invoice");
             return report;
         }
+    
+        public ActionResult ExportToExcel(string fromDate, string toDate)
+        {
+              //////new changes//////
+           List<Transaction> excel = generalInterface.SearchGeneralExcel(DateTime.Parse(fromDate), DateTime.Parse(toDate)).ToList();
+
+           
+           
+
+            Transaction total = new Transaction
+            {
+                contractor = new Contractor { name = "Total" },
+                amountPaid = excel.Sum(item => item.amountPaid),
+                sgstAmount = excel.Sum(item => item.sgstAmount),
+                cgstAmount = excel.Sum(item => item.cgstAmount),
+                itAmount = excel.Sum(item => item.itAmount),
+                deposit = excel.Sum(item => item.deposit),
+                netAmount = excel.Sum(item => item.netAmount),
+                labourCessAmount = excel.Sum(item => item.labourCessAmount),
+
+            };
+            excel.Add(total);
+
+            return View(excel);
+        }
 
 
-       
+
 
 
     }

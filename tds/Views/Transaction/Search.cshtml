@@ -136,15 +136,15 @@
 
 
                                         <button type="submit" class="btn btn-primary mr-2">Submit</button>
-                                        if(ViewBag.id != null)
+                                        if(ViewBag.type == "Individual")
                                         {
-                                            @Html.ActionLink("Export to Pdf", "ExportToPdf", new { id = ViewBag.id, fromDate = ViewBag.fromDate, ToDate = ViewBag.toDate },new  { @class = "btn btn-primary mr-2" })
+                                            @Html.ActionLink("Export to Pdf", "ExportToPdf", new { id = ViewBag.id, fromDate = ViewBag.fromDate, ToDate = ViewBag.toDate },new  { @class = "btn btn-primary mr-2",target="_blank" })
 
                                         }
-                                        else
+                                        else if(ViewBag.type == "General")
                                         {
 
-                                            <a href="#" class="btn btn-primary mr-2" id="buttonXL">Export To Excel</a>
+                                            @Html.ActionLink("Export to Excel", "ExportToExcel", new { fromDate = ViewBag.fromDate, ToDate = ViewBag.toDate }, new { @class = "btn btn-primary mr-2", target = "_blank" })
                                         }
                                     }
                                 </div>
@@ -201,6 +201,7 @@
                                                     foreach (var item in ViewBag.transList)
                                                     {
                                                 <tr>
+                                                    
                                                     <td>
                                                         @item.contractor.name
                                                     </td>
@@ -344,16 +345,7 @@
     <script>
         flatpickr(".date", {dateFormat: 'd-m-Y'});
         ////////new changes////////////
-        $("#buttonXL").click(function () {
-
-            $("#table2excel").table2excel({
-                exclude: ".noExl",
-                name: "Worksheet Name",
-                filename: "Report"
-            });
-
-        });
-
+       
 
 
     </script>

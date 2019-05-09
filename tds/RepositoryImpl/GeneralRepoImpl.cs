@@ -98,8 +98,6 @@ namespace tds.RepositoryImpl
             var g1 = Convert.ToDateTime(fromDate).ToString("yyyy-MM-dd HH:mm:ss.fff");
             string g2 = Convert.ToDateTime(toDate).ToString("yyyy-MM-dd HH:mm:ss.fff");
             var user_time = DateTime.Parse(g1);
-            System.Diagnostics.Debug.WriteLine(fromDate + "in repoooo");
-            System.Diagnostics.Debug.WriteLine(toDate + "in repoooo");
 
             return dbContext.Transaction.OrderByDescending(m => fromDate).Where(m => m.contractorId == transCriteria.contractorId || m.contractor.GSTIN == transCriteria.GSTIN && m.createDate >= fromDate && m.createDate <= toDate);
 
@@ -121,6 +119,8 @@ namespace tds.RepositoryImpl
         deposit = t.Sum(c=>c.deposit),
         netAmount=t.Sum(c=>c.netAmount)
     });
+
+
         var transactions = query.ToList().Select(t => new Transaction
             {
                 contractor = t.contractor,
@@ -142,6 +142,46 @@ namespace tds.RepositoryImpl
 
                 return transactions.ToPagedList(pageIndex,3);
             }
+
+        public IEnumerable<Transaction> SearchGeneralExcel(DateTime d1, DateTime d2)
+        {        ///new changes////
+            var query = dbContext.Transaction
+            .GroupBy(t => t.contractorId)
+            .Select(t => new
+            {
+                contractor = t.FirstOrDefault().contractor,
+                amountPaid = t.Sum(c => c.amountPaid),
+                cgstAmount = t.Sum(c => c.cgstAmount),
+                sgstAmount = t.Sum(c => c.sgstAmount),
+                itAmount = t.Sum(c => c.itAmount),
+                labourCessAmount = t.Sum(c => c.labourCessAmount),
+                deposit = t.Sum(c => c.deposit),
+                netAmount = t.Sum(c => c.netAmount)
+            });
+
+
+            var transactions = query.ToList().Select(t => new Transaction
+            {
+                contractor = t.contractor,
+                amountPaid = t.amountPaid,
+                cgstAmount = t.cgstAmount,
+                sgstAmount = t.sgstAmount,
+                itAmount = t.itAmount,
+                labourCessAmount = t.labourCessAmount,
+                deposit = t.deposit,
+                netAmount = t.netAmount
+            }).ToList();
+
+
+            foreach (Transaction t in transactions)
+            {
+                System.Diagnostics.Debug.WriteLine("Transactions" + t.ToString());
+
+            }
+
+            return transactions.ToList();
+        }
+
     }
 
 }

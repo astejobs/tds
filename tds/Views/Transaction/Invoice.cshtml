@@ -1,4 +1,4 @@
-﻿@model IEnumerable<tds.Models.Transaction>
+﻿@model tds.Models.TransactionVM
 @{  
 
 Layout=null;
@@ -19,28 +19,26 @@ Layout=null;
                                     <div class="container-fluid d-flex justify-content-between">
                                         <div class="col-lg-3 pl-0">
                                            
-                                          <h3 style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;margin-bottom:60px">OFFICE OF THE EXECUTIVE ENGINEER SPECIAL SUBDIVISION TANGDAR</h3>
-                                            <h4  style="margin-bottom:10px;text-decoration:underline"class="mb-0 mt-5 text-bold">Name : @Model.FirstOrDefault().contractor.name</h4>
-                  
-                                            <h4 style="margin-bottom:10px;text-decoration:underline" class="text-bold">GSTIN : @Model.FirstOrDefault().contractor.GSTIN</h4>
+                                          <h3 style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;margin-bottom:60px;text-decoration:underline;text-align:center"><b>OFFICE OF THE EXECUTIVE ENGINEER SPECIAL SUBDIVISION TANGDAR</b></h3>
+                                            <h4  style="margin-bottom:10px;display:inline-block" class="mb-0 mt-5 text-bold"><b>Name : </b></h4>  <h4 style="border-bottom:1px solid;display:inline-block">@Model.Transactions.FirstOrDefault().contractor.name</h4>
+                  <br />
+                                            <h4 style="margin-bottom:10px;display:inline-block;" class="text-bold"><b>GSTIN : </b></h4>  <h4 style="border-bottom:1px solid;display:inline-block"> @Model.Transactions.FirstOrDefault().contractor.GSTIN</h4>
                                         </div>
                                     </div>
                                     <div class="container-fluid mt-5 d-flex justify-content-center w-100">
-                                        <div class="table-bordered w-100">
+                                        <div class=" w-100">
                                             <table class="table table-bordered table-condensed">
                                                 <thead>
                                                     <tr>
                                                         <th>
-                                                            Contractor
+
                                                         </th>
+                                                       
                                                         <th>
-                                                            GSTIN
+                                                            Amount Paid
                                                         </th>
                                                         <th>
                                                             Date
-                                                        </th>
-                                                        <th>
-                                                            Amount Paid
                                                         </th>
 
 
@@ -67,23 +65,24 @@ Layout=null;
                                                 </thead>
                                                 <tbody>
                                                   
-                                                    @foreach (var item in Model)
+                                                    @foreach (var item in Model.Transactions)
                                                     {
                                                     <tr>
-                                                        <td>
-                                                            @item.contractor.name
-                                                           
+                                                       <td>
+                                                           <b> @(item.Equals(Model.Transactions.Last()) ? "Total" : "")</b>
+
                                                         </td>
-                                                        <td>
-                                                            @item.contractor.GSTIN
-                                                        </td>
-                                                        <td>
-                                                            @item.createDate
-                                                        </td>
+                                                        
                                                         <td>
                                                             @item.amountPaid
 
                                                         </td>
+
+                                                        <td>
+                                                            
+                                                            @(!item.Equals(Model.Transactions.Last()) ? item.createDate.Value.ToString("dd-MM-yyyy") : "")
+                                                        </td>
+                                                       
 
                                                         <td>
                                                             @item.cgstAmount
@@ -107,10 +106,12 @@ Layout=null;
                                                     </tr>
 
                                                     }
-                                                    
+                                                                        
 
                                                 </tbody>
                                             </table>
+                                           
+
                                         </div>
                                     </div>
                                    

@@ -1,0 +1,106 @@
+﻿@model IEnumerable<tds.Models.Transaction>
+@{
+
+    Layout = null;
+
+
+}
+<table id="tableToExcel" class="table table-bordered table-condensed">
+    <thead>
+        <tr>
+            <th>
+                <b>Contractor</b>
+            </th>
+            <th>
+                <b> GSTIN</b>
+            </th>
+            @*<th>
+                Date
+            </th>*@
+            <th>
+                <b>Amount Paid</b>
+            </th>
+
+
+            <th>
+                <b> CGST</b>
+            </th>
+            <th>
+                <b> SGST</b>
+            </th>
+            <th>
+                <b>IT</b>
+            </th>
+            <th>
+                <b>LabourCess</b>
+            </th>
+            <th>
+               <b>Deposit</b> 
+            </th>
+
+            <th>
+                <b>NetAmount</b>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                
+                <td>
+                  @(item.Equals(Model.Last()) ? @Html.Raw(" <b> " + @item.contractor.name +"</ b >") : @Html.Raw( @item.contractor.name))
+                </td>
+                <td>
+                    @item.contractor.GSTIN
+                </td>
+                @*<td>
+                    @item.createDate.Value.ToString("dd-MM-yyyy")
+                </td>*@
+                <td>
+                    @(item.Equals(Model.Last()) ? @Html.Raw(" <b> " +@item.amountPaid+ "</ b >") : @Html.Raw(@item.amountPaid))
+                </td>
+
+                <td>
+                    @(item.Equals(Model.Last()) ? @Html.Raw(" <b> " + @item.cgstAmount + "</ b >") : @Html.Raw(@item.cgstAmount))
+                </td>
+                <td>
+                    @(item.Equals(Model.Last()) ? @Html.Raw(" <b> " + @item.sgstAmount + "</ b >") : @Html.Raw(@item.sgstAmount))
+                </td>
+                <td>
+                    @(item.Equals(Model.Last()) ? @Html.Raw(" <b> " + @item.itAmount + "</ b >") : @Html.Raw(@item.itAmount))
+                </td>
+                <td>
+                    @(item.Equals(Model.Last()) ? @Html.Raw(" <b> " + @item.labourCessAmount + "</ b >") : @Html.Raw(@item.labourCessAmount))
+                </td>
+                <td>
+                    @(item.Equals(Model.Last()) ? @Html.Raw(" <b> " + @item.deposit + "</ b >" ): @Html.Raw(@item.deposit))
+                </td>
+                <td>
+                    @(item.Equals(Model.Last()) ? @Html.Raw(" <b> " + @item.netAmount + "</ b >" ): @Html.Raw(@item.netAmount))
+                </td>
+            </tr>
+
+        }
+
+
+
+
+    </tbody>
+</table>
+<script src="~/Scripts/jquery-3.3.1.min.js"></script>
+<script src="~/Scripts/jquery.table2excel.js"></script>
+<script>
+    
+$(document).ready(function(){
+    
+    $("#tableToExcel").table2excel({
+                exclude: ".noExl",
+                name: "Worksheet Name",
+                filename: "Report"
+    });
+    window.top.close();
+
+});
+</script>
