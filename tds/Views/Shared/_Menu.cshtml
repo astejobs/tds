@@ -1,4 +1,9 @@
-﻿<nav class="sidebar sidebar-offcanvas" id="sidebar">
+﻿@using tds.Models
+@{
+    var data = (ApplicationUser)Session["userdata"];
+
+}
+<nav class="sidebar sidebar-offcanvas" id="sidebar">
     <ul class="nav">
         <li class="nav-item nav-profile">
             <div class="nav-link d-flex">
@@ -7,16 +12,16 @@
                 </div>
                 <div class="profile-name">
                     <p class="name">
-                        Edwin Harring
-                    </p>
+                        @data.UserName
+                        </p>
                     <p class="designation">
-                        Manager
+                        
                     </p>
                 </div>
             </div>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="@Url.Action("Get","Transaction")">
+            <a class="nav-link" href="@Url.Action("DashBoard","Transaction")">
                 <i class="mdi mdi-shield-check menu-icon"></i>
                 <span class="menu-title">Dashboard</span>
             </a>

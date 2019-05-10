@@ -24,10 +24,12 @@ namespace tds.Models
 
         public virtual Deductor deductor { get; set; }
 
+        [Required(ErrorMessage = "Contractor is required")]
         public string contractorId { get; set; }
 
         public virtual Contractor contractor { get; set; }
 
+        [Required(ErrorMessage = "Amount is required")]
         public Double amountPaid { get; set; }
 
         public string cgstId { get; set; }
@@ -50,6 +52,7 @@ namespace tds.Models
         [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
         public DateTime? createDate { get; set; }
 
+        [Required(ErrorMessage = "Deposit is required")]
         public Double deposit { get; set; }
         public Double netAmount { get; set; }
 

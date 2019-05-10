@@ -63,7 +63,7 @@
                                     <h4 class="card-title">Contractor</h4>
                                     @using (Html.BeginForm(actionName, "Contractor", Model.entity, FormMethod.Post, new { @class = "form-sample", role = "form" }))
                                     {
-                                        @Html.ValidationSummary()
+                                        
                                         @Html.AntiForgeryToken()
                                         <p class="card-description">
                                             Personal info
@@ -124,13 +124,28 @@
                                                     <label class="col-sm-3 col-form-label">Address</label>
                                                     <div class="col-sm-9">
                                                         @Html.TextBoxFor(model => model.entity.address, new { placeholder = "Address", @class = "form-control" })
-                                                        @Html.ValidationMessageFor(model => model.entity.address, "", new { @class = "text-danger" })
 
                                                     </div>
                                                 </div>
                                             </div>
+                                            @if (actionName == "Put")
+                                            {
+                                            <div class="col-md-6">
+                                                <div class="form-group row">
+                                                    <label class="col-sm-3 col-form-label">Status</label>
+                                                    <div class="col-sm-9">
+                                                        @Html.RadioButtonFor(model=> model.entity.status, true)
+                                                        &nbsp;Active &nbsp; &nbsp;
+                                                        @Html.RadioButtonFor(model => model.entity.status, false)InActive
+                                                       
 
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            }
                                         </div>
+
+
 
                                         if (actionName == "Post")
                                         {
@@ -151,9 +166,7 @@
                             <div class="card">
                                 <div class="card-body">
                                     <h4 class="card-title">Search Result</h4>
-                                    <p class="card-description">
-                                        Add class <code>.table-bordered</code>
-                                    </p>
+                                    
                                     <div class="table-responsive pt-3">
                                         <table class="table table-bordered">
                                             <thead>
@@ -201,9 +214,7 @@
                                                             <i class="mdi mdi-circle-edit-outline"></i> &nbsp;
                                                         </a>
 
-                                                        <a href="@Url.Action("Delete", "Contractor", new { id = item.Data.id })">
-                                                            <i class="mdi mdi-delete-circle"></i>
-                                                        </a>
+                                                       
                                                     </td>
                                                 </tr>
                                                     

@@ -4,6 +4,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System.Collections.Generic;
+using tds.RepositoryInterface;
+using tds.RepositoryImpl;
 
 namespace tds.Models
 {
@@ -39,9 +41,10 @@ namespace tds.Models
 
         public class MyDBInitializer : CreateDatabaseIfNotExists<ApplicationDbContext>
         {
+        GeneralInterface<Deductor> deductorInterface;
             protected override void Seed(ApplicationDbContext context)
             {
-                // Initialize default identity roles
+            deductorInterface = new GeneralRepoImpl<Deductor>();
                 var store = new RoleStore<IdentityRole>(context);
                 var manager = new RoleManager<IdentityRole>(store);
                 // RoleTypes is a class containing constant string values for different roles
@@ -60,6 +63,10 @@ namespace tds.Models
                 umanager.AddToRole(admin.Id, "Admin");
 
                 // Add code to initialize context tables
+            Deductor deductor = new Deductor();
+            deductor.id = admin.Id;
+            deductor.legalName = admin.UserName;
+            deductorInterface.Save(deductor);
 
                 base.Seed(context);
 
