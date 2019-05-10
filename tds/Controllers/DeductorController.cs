@@ -42,6 +42,8 @@ namespace tds.Controllers
         [Route("deductor/")]
         public ActionResult Get()
         {
+            ModelState.Merge((ModelStateDictionary)TempData["ModelState"]);
+
             var user = UserManager.FindById(User.Identity.GetUserId());
             Deductor deductor = deductorInterface.Find(user.Id);      
             return View("deductor",deductor);
@@ -60,6 +62,7 @@ namespace tds.Controllers
             }
             else
             {
+                TempData["ModelState"] = ModelState;
                 TempData["MsgFail"] = "true";   
             } 
 

@@ -45,6 +45,8 @@ namespace tds.Controllers
             pageIndex = page.HasValue ? Convert.ToInt32(page) : 1;
             IPagedList<Contractor> conList = generalInterface.pagedList(pageIndex, id);     
             contractor.entityList = conList;
+            
+            ModelState.Merge((ModelStateDictionary)TempData["ModelState"]);
             return View("contractor",contractor);
             
         }
@@ -69,6 +71,7 @@ namespace tds.Controllers
             }
             else
             {
+                TempData["ModelState"] = ModelState;
                 TempData["MsgFail"] = "Enter valid data";
             }
             return RedirectToAction("Get");
@@ -88,35 +91,12 @@ namespace tds.Controllers
             }
             else
             {
+                TempData["ModelState"] = ModelState;
                 TempData["MsgFail"] = "Updation Failed,Enter Valid data";
             }
             return RedirectToAction("Get", new { id = contractor.entity.id});
         }
 
-
-        [HttpGet]
-        [Route("contractor/delete/")]
-        public ActionResult Delete(string id)
-        {
-
-
-            if (id == null)
-            {
-                HttpNotFound();
-                TempData["MsgFail"] = "Deletion Failed";
-            }
-            else
-            {
-                if (generalInterface.Delete(id))
-                {
-                    TempData["MsgSuccess"] = "Record Deleted Successfully";
-                }
-                else
-                {
-                    TempData["MsgSuccess"] = "Deletion Failed";
-                }
-            }
-            return RedirectToAction("Get");
-        }
+        
     }
 }

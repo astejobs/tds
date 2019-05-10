@@ -41,7 +41,9 @@ namespace tds.Controllers
             }
 
             int pageIndex = 1;
+            ModelState.Merge((ModelStateDictionary)TempData["ModelState"]);
             pageIndex = page.HasValue ? Convert.ToInt32(page) : 1;
+            ViewBag.types = Models.Constants.type_of_tax;
             IPagedList<Tax> taxList= generaInterface.pagedList(pageIndex, id);
             tax.entityList = taxList;
             return View("tax",tax);
@@ -59,8 +61,11 @@ namespace tds.Controllers
 
                     TempData["MsgSuccess"] = "Tax has been Saved Successfully";
                 }
-                else { TempData["MsgFail"] = "Enter valid data"; }
+                else {
+                   
+                    TempData["MsgFail"] = "Enter valid data"; }
             }else{
+                TempData["ModelState"] = ModelState;
                 TempData["MsgFail"] = "Enter valid data";
             }
             return RedirectToAction("Get");
@@ -79,6 +84,7 @@ namespace tds.Controllers
             }
             else
             {
+                TempData["ModelState"] = ModelState;
                 TempData["MsgFail"] = "Updation Failed,Enter Valid data";
             }
             return RedirectToAction("Get");

@@ -94,7 +94,9 @@ namespace tds.Controllers
                       //  }
                         if (UserManager.IsInRole(user.Id, roleManager.FindByName("Admin").Name))
                         {
-                            return RedirectToAction("Get", new { Controller = "Transaction" });
+                            Session["userdata"]= UserManager.FindById(User.Identity.GetUserId());
+
+                            return RedirectToAction("DashBoard", new { Controller = "Transaction" });
                         }
 
                         else
@@ -195,10 +197,7 @@ namespace tds.Controllers
                     // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
                     // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
-                    Deductor deductor = new Deductor();
-                    deductor.id = user.Id;
-                    deductor.legalName = user.UserName;
-                    deductorInterface.Save(deductor);
+                    
                     return RedirectToAction("Login", "Account");
                 }
                 AddErrors(result);

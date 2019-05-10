@@ -12,6 +12,7 @@ using System.Web.Script.Serialization;
 using tds.Models;
 using tds.RepositoryImpl;
 using tds.RepositoryInterface;
+using Constants = tds.Models.Constants;
 
 namespace tds.Controllers
 {[Authorize(Roles ="Admin")]
@@ -51,6 +52,7 @@ namespace tds.Controllers
             return View();
         }
 
+        [HttpGet]
         [Route("transaction/")]
         public ActionResult Get(string id)
         {
@@ -62,7 +64,14 @@ namespace tds.Controllers
             }
             else
             {
-                t=generalInterface.Find(id);                
+                var user = UserManager.FindById(User.Identity.GetUserId());
+
+                t = generalInterface.Find(id);
+                t.contractor =(Contractor) contractorInterface.Find(t.contractorId);
+                t.cgst =(Tax) taxInterface.Find(t.cgstId);
+                t.sgst = (Tax)taxInterface.Find(t.sgstId);
+                t.deductor = (Deductor)deductorInterface.Find(user.Id);
+                t.labourCess = (Tax)taxInterface.Find(t.labourCessId);
                 TempData["actionStatus"] = "Put";
             }
 
@@ -72,8 +81,11 @@ namespace tds.Controllers
            
             
             ViewBag.contractors = contractorInterface.listAll(id);
-            ViewBag.taxes = taxInterface.listAll(id).OrderBy(m => m.rate).ToList();
-            return View("transaction",t);
+            ViewBag.cgstTaxes = taxInterface.listTaxes(Constants.type_of_tax[0]).OrderBy(m => m.rate).ToList();
+            ViewBag.sgstTaxes= taxInterface.listTaxes(Constants.type_of_tax[1]).OrderBy(m => m.rate).ToList();
+            ViewBag.itTaxes= taxInterface.listTaxes(Constants.type_of_tax[2]).OrderBy(m => m.rate).ToList();
+            ViewBag.labourTaxes= taxInterface.listTaxes(Constants.type_of_tax[3]).OrderBy(m => m.rate).ToList();
+            return View("transaction", t);
         }
 
         [HttpPost]
@@ -106,20 +118,22 @@ namespace tds.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("transaction/update")]
-        public ActionResult Put(Transaction transaction)
+        public ActionResult Put(Transaction transac)
         {
             var user = UserManager.FindById(User.Identity.GetUserId());
 
-            transaction.contractor = contractorInterface.Find(transaction.contractorId);
-            transaction.cgst = taxInterface.Find(transaction.cgstId);
-            transaction.sgst = taxInterface.Find(transaction.sgstId);
-            transaction.deductor = deductorInterface.Find(user.Id);
-            transaction.labourCess = taxInterface.Find(transaction.labourCessId);
-            if (ModelState.IsValid)
-            {
-                setAmounts(transaction);
-                if (generalInterface.Update(transaction)){ 
-                TempData["MsgSuccess"] = "Transaction has been Updated Successfully";
+             transac.contractor =(Contractor) contractorInterface.Find(transac.contractorId);
+             transac.cgst = taxInterface.Find(transac.cgstId);
+             transac.sgst = taxInterface.Find(transac.sgstId);
+             transac.deductor = deductorInterface.Find(user.Id);
+            
+              transac.labourCess = taxInterface.Find(transac.labourCessId);
+            if (ModelState["deposit"].Errors.Count == 0 && ModelState["amountPaid"].Errors.Count == 0 && ModelState["contractorId"].Errors.Count == 0)
+            {      
+                setAmounts(transac);
+                if (generalInterface.Update(transac))
+                {
+                    TempData["MsgSuccess"] = "Transaction has been Updated Successfully";
                 }
                 else
                 {
@@ -132,10 +146,17 @@ namespace tds.Controllers
                 TempData["MsgFail"] = "Updation Failed,Enter Valid data";
                 TempData["ModelState"] = ModelState;
             }
-            return RedirectToAction("Get");
+            ViewBag.Contractors = contractorInterface.listAll(transac.id);
+           // ViewBag.taxes = taxInterface.listAll(transac.id).OrderBy(m => m.rate).ToList();
+            ViewBag.cgstTaxes = taxInterface.listTaxes(Constants.type_of_tax[0]).OrderBy(m => m.rate).ToList();
+            ViewBag.sgstTaxes = taxInterface.listTaxes(Constants.type_of_tax[1]).OrderBy(m => m.rate).ToList();
+            ViewBag.itTaxes = taxInterface.listTaxes(Constants.type_of_tax[2]).OrderBy(m => m.rate).ToList();
+            ViewBag.labourTaxes = taxInterface.listTaxes(Constants.type_of_tax[3]).OrderBy(m => m.rate).ToList();
+            TempData["actionStatus"] = "Put";
+            return View("transaction");
         }
 
-        [HttpGet]
+       /* [HttpGet]
         [Route("transaction/search")]
         public ActionResult Search(int? page, string fromDate, string toDate,int? id)
         {
@@ -225,8 +246,84 @@ namespace tds.Controllers
             ViewBag.endDate = toDate;
 
             return View("Search");
-        }
+        }*/
     
+        [HttpGet]
+        [Route("transaction/search/")]
+        public ActionResult search(int? page, string type,string contractorId,string GSTIN, string fromDate, string toDate, int? id)
+        {
+            string fromDatee = fromDate;
+            string toDatee = toDate;
+           
+            ViewBag.Contractors = contractorInterface.listAll(id.ToString());
+            ViewBag.types = Models.Constants.type;
+            ViewBag.type = type;
+            ViewBag.contractorId = contractorId;
+            ViewBag.GSTN = GSTIN;
+            IPagedList<Transaction> transList = null;
+            
+
+            if ((String.IsNullOrEmpty(fromDatee) || String.IsNullOrEmpty(toDatee)))
+            {
+                
+                ViewData["DateMsg"] = "Please Select StartDate And EndDate";
+                
+                return View("Search");
+            }
+            else
+            {
+                DateTime dt = DateTime.ParseExact(fromDatee, "dd-MM-yyyy", CultureInfo.InvariantCulture);
+                DateTime dt2 = DateTime.ParseExact(toDatee, "dd-MM-yyyy", CultureInfo.InvariantCulture);
+                string g1 = Convert.ToDateTime(dt).ToString("yyyy-MM-dd HH:mm:ss.fff");
+                string g2 = Convert.ToDateTime(dt2).ToString("yyyy-MM-dd HH:mm:ss.fff");
+                DateTime d1 = DateTime.ParseExact(g1, "yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture);
+                DateTime d2 = DateTime.ParseExact(g2, "yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture);
+             
+                ViewBag.startDate = fromDate;
+                ViewBag.endDate = toDate;
+                int pageIndex = 1;
+
+
+                pageIndex = page.HasValue ? Convert.ToInt32(page) : 1;
+
+                SearchViewModel transCriteria=new SearchViewModel();
+                transCriteria.contractorId = contractorId;
+                transCriteria.GSTIN = GSTIN;
+                transCriteria.type = type;
+                
+                if (type == Constants.type[1])
+                {
+                   ViewBag.transList= generalInterface.Search(transCriteria, d1, d2, pageIndex);
+                    ViewBag.typo = Constants.type[1];
+                }
+                else
+                {
+                    ViewBag.transList = generalInterface.SearchGeneral(transCriteria, d1, d2, pageIndex);
+                    ViewBag.typo =Constants.type[0];
+                }
+                
+                return View("Search");
+            }
+          
+
+        }
+
+        [HttpGet]
+        [Route("transactions/")]
+          public ActionResult DashBoard(int? page,string id)
+          {
+            ViewBag.check = "true";
+            ViewBag.Contractors = contractorInterface.listAll(id);
+            ViewBag.types = Models.Constants.type;
+            ViewBag.type = Constants.type[1];
+            int pageIndex = 1;
+            pageIndex = page.HasValue ? Convert.ToInt32(page) : 1;
+            SearchViewModel transCriteria = new SearchViewModel();
+            ViewBag.transList = generalInterface.listAll(id).ToPagedList(pageIndex,10);
+            
+            return View("Search");
+        }
+
         public void setAmounts(Transaction transaction)
         {
 
