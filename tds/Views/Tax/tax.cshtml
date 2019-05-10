@@ -51,59 +51,70 @@
                                     @if (TempData["MsgFail"] != null)
                                     {
 
-                                    <div class="alert alert-fill-danger" role="alert">
-                                        <i class="mdi mdi-alert-circle"></i> @TempData["MsgFail"].
-                                    </div>
+                                        <div class="alert alert-fill-danger" role="alert">
+                                            <i class="mdi mdi-alert-circle"></i> @TempData["MsgFail"].
+                                        </div>
                                     }
                                     @if (TempData["MsgSuccess"] != null)
                                     {
 
-                                    <div class="alert alert-fill-primary" role="alert">
-                                        <i class="mdi mdi-alert-circle"></i> @TempData["MsgSuccess"].
-                                    </div>
+                                        <div class="alert alert-fill-primary" role="alert">
+                                            <i class="mdi mdi-alert-circle"></i> @TempData["MsgSuccess"].
+                                        </div>
                                     }
-                                        <h4 class="card-title">Tax/Labour_Cess</h4>
-                                    
-                                        @using (Html.BeginForm(actionName, "Tax", Model.entity, FormMethod.Post, new { @class = "form-sample", role = "form" }))
-                                        {
-                                            @Html.ValidationSummary()
-                                            @Html.AntiForgeryToken()
-                                            <p class="card-description">
-                                                Details
-                                            </p>
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <div class="form-group row">
-                                                        <label class="col-sm-3 col-form-label">Rate(%)</label>
-                                                        <div class="col-sm-9">
-                                                            @Html.TextBoxFor(model => model.entity.rate, new { placeholder = "Rate", @class = "form-control" })
-                                                            @Html.ValidationMessageFor(model => model.entity.rate, "", new { @class = "text-danger" })
-                                                            @Html.Hidden("page", TempData["page"], new { name = "page" })
-                                                            @if (actionName == "Put")
-                                                            {
-                                                                @Html.HiddenFor(model => model.entity.id)
-                                                            }
+                                    <h4 class="card-title">Tax/Labour_Cess</h4>
+
+                                    @using (Html.BeginForm(actionName, "Tax", Model.entity, FormMethod.Post, new { @class = "form-sample", role = "form" }))
+                                    {
+
+                                        @Html.AntiForgeryToken()
+                                        <p class="card-description">
+                                            Details
+                                        </p> 
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group row">
+                                                    <label class="col-sm-3 col-form-label">Rate(%)</label>
+                                                    <div class="col-sm-9">
+                                                        @Html.TextBoxFor(model => model.entity.rate, new { placeholder = "Rate", @class = "form-control" })
+                                                        @Html.ValidationMessageFor(model => model.entity.rate, "", new { @class = "text-danger" })
+                                                        @Html.Hidden("page", TempData["page"], new { name = "page" })
+                                                        @if (actionName == "Put")
+                                                        {
+                                                            @Html.HiddenFor(model => model.entity.id)
+                                                        }
 
 
-                                                        </div>
                                                     </div>
                                                 </div>
-
                                             </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group row">
+                                                    <label class="col-sm-3 col-form-label">Type</label>
+                                                    <div class="col-sm-9">
 
-                                            if (actionName == "Post")
-                                            {
-                                                <button type="submit" class="btn btn-primary mr-2">Submit</button>
+                                                        @Html.DropDownListFor(model => model.entity.type,
+new SelectList(ViewBag.types,
+"", ""), "Choose Type", new { @class = "form-control exampleFormControlSelect2", @Id = "exampleFormControlSelecttype",name="type" })
 
-                                            }
-                                            else
-                                            {
-                                                <button type="submit" class="btn btn-primary mr-2">Update</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
 
-                                            }
+                                        if (actionName == "Post")
+                                        {
+                                            <button type="submit" class="btn btn-primary mr-2">Submit</button>
 
                                         }
-                                    </div>
+                                        else
+                                        {
+                                            <button type="submit" class="btn btn-primary mr-2">Update</button>
+
+                                        }
+
+                                    }
+                                </div>
                             </div>
                         </div>
 
@@ -111,9 +122,7 @@
                             <div class="card">
                                 <div class="card-body">
                                     <h4 class="card-title">Search Result</h4>
-                                    <p class="card-description">
-                                        Add class <code>.table-bordered</code>
-                                    </p>
+
                                     <div class="table-responsive pt-3">
                                         <table class="table table-bordered">
                                             <thead>
@@ -123,7 +132,9 @@
                                                         S.No
                                                     </th>
 
-
+                                                    <th>
+                                                        Type
+                                                    </th>
                                                     <th>
                                                         Rate
                                                     </th>
@@ -133,26 +144,31 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
+
                                                 @foreach (var item in Model.entityList.Select((x, i) => new { Data = x, Index = i }))
                                                 {
-                                                    <tr>
-                                                        <td>
-                                                            @(item.Index + ((Model.entityList.PageNumber - 1) * Model.entityList.PageSize) + 1)
-                                                        </td>
-                                                        <td>
-                                                            @Html.DisplayFor(modelitem => item.Data.rate)
-                                                        </td>
-                                                        <td>
+                                                <tr>
+                                                    <td>
+                                                        @(item.Index + ((Model.entityList.PageNumber - 1) * Model.entityList.PageSize) + 1)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelitem => item.Data.type)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelitem => item.Data.rate) %
+                                                    </td>
 
-                                                            <a href="@Url.Action("Get", "Tax",new {id=item.Data.id})">
-                                                                <i class="mdi mdi-circle-edit-outline"></i> &nbsp;
-                                                            </a>
-                                                            
-                                                            <a href="@Url.Action("Delete", "Tax",new {id=item.Data.id })">
-                                                                <i class="mdi mdi-delete-circle"></i>
-                                                            </a>
-                                                        </td>
-                                                    </tr>
+                                                    <td>
+
+                                                        <a href="@Url.Action("Get", "Tax",new {id=item.Data.id})">
+                                                            <i class="mdi mdi-circle-edit-outline"></i> &nbsp;
+                                                        </a>
+
+                                                        <a href="@Url.Action("Delete", "Tax",new {id=item.Data.id })">
+                                                            <i class="mdi mdi-delete-circle"></i>
+                                                        </a>
+                                                    </td>
+                                                </tr>
                                                 }
                                             </tbody>
                                         </table>

@@ -66,15 +66,16 @@
                                     <h4 class="card-title">Transaction</h4>
                                     @using (Html.BeginForm(actionName, "Transaction", Model, FormMethod.Post, new { @class = "form-sample", role = "form" }))
                                     {
-                                        @Html.ValidationSummary()
+                                   
                                         @Html.AntiForgeryToken()
-                                        <p class="card-description">
-                                            Personal info
-                                            @if (actionName == "Put")
-                                            {
-                                                @Html.HiddenFor(model => model.id)
-                                            }
-                                        </p>
+                                    <p class="card-description">
+                                        Personal info
+                                        @if (actionName == "Put")
+                                        {
+                                            @Html.HiddenFor(model => model.id)
+                                          
+                                        }
+                                    </p>
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="form-group row">
@@ -83,6 +84,7 @@
                                                         @Html.DropDownListFor(m => m.contractorId,
                   new SelectList(ViewBag.Contractors,
                 "id", "name"), "Choose Contractor", new { @class = "form-control", @Id = "exampleFormControlSelect2" })
+                                                        @Html.ValidationMessageFor(model => model.contractorId, "", new { @class = "text-danger" })
 
                                                     </div>
                                                 </div>
@@ -104,8 +106,8 @@
                                                     <label class="col-sm-3 col-form-label">Labour_Cess %</label>
                                                     <div class="col-sm-9">
                                                         @Html.DropDownListFor(m => m.labourCessId,
-                  new SelectList(ViewBag.Taxes,
-                "id", "rate"), new { @class = "form-control", @Id = "exampleFormControlSelect2" })
+                  new SelectList(ViewBag.labourTaxes,
+                "id", "rate"),"Select", new { @class = "form-control", @Id = "exampleFormControlSelect2", @required = "required" })
 
                                                     </div>
                                                 </div>
@@ -115,8 +117,8 @@
                                                     <label for="exampleInputMobile" class="col-sm-3 col-form-label">CGST %</label>
                                                     <div class="col-sm-9">
                                                         @Html.DropDownListFor(m => m.cgstId,
-                                                                         new SelectList(ViewBag.Taxes,
-                                                                       "id", "rate"), new { @class = "form-control", @Id = "exampleFormControlSelect2" })
+                                                                         new SelectList(ViewBag.cgstTaxes,
+                                                                       "id", "rate"),"Select", new { @class = "form-control", @Id = "exampleFormControlSelect2", @required = "required" })
 
                                                     </div>
                                                 </div>
@@ -128,8 +130,8 @@
                                                     <label class="col-sm-3 col-form-label">SGST %</label>
                                                     <div class="col-sm-9">
                                                         @Html.DropDownListFor(m => m.sgstId,
-                 new SelectList(ViewBag.Taxes,
-               "id", "rate"), new { @class = "form-control", @Id = "exampleFormControlSelect2" })
+                 new SelectList(ViewBag.sgstTaxes,
+               "id", "rate"),"Select", new { @class = "form-control", @Id = "exampleFormControlSelect2", @required = "required" })
 
                                                     </div>
                                                 </div>
@@ -139,8 +141,8 @@
                                                     <label class="col-sm-3 col-form-label">IT %</label>
                                                     <div class="col-sm-9">
                                                         @Html.DropDownListFor(m => m.incometaxtId,
-                  new SelectList(ViewBag.Taxes,
-                "id", "rate"), new { @class = "form-control", @Id = "exampleFormControlSelect2" })
+                  new SelectList(ViewBag.itTaxes,
+                "id", "rate"),"Select", new { @class = "form-control", @Id = "exampleFormControlSelect2",@required="required"})
 
                                                     </div>
                                                 </div>

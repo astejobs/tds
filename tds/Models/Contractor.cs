@@ -16,16 +16,17 @@ namespace tds.Models
         }
         public string id { get; set; }
 
-      //  [Required(ErrorMessage = "Name is required")]
+        [Required(ErrorMessage = "Name is required")]
         public string name { get; set; }
 
-       // [Required(ErrorMessage = "GSTIN is required")]
+       [Required(ErrorMessage = "GSTIN is required")]
         public string GSTIN { get; set; }
         
 
-        //[Required(ErrorMessage = "Registration No. is required")]
+        [Required(ErrorMessage = "Registration No. is required")]
         public string regNo { get; set; }
 
+        [Required(ErrorMessage = "Phone No. is required")]
         public long phoneNo { get; set; }
 
         public string address { get; set; }

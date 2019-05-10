@@ -18,5 +18,7 @@ namespace tds.RepositoryInterface
         IEnumerable<Transaction> SearchForPdf(SearchViewModel transCriteria, DateTime fromDate, DateTime toDate);
 
         IPagedList<Transaction> SearchGeneral(SearchViewModel transCriteria, DateTime d1, DateTime d2, int pageIndex);
+        List<Tax> listTaxes(string type);
+        IEnumerable<Transaction> SearchGeneralExcel(DateTime dateTime1, DateTime dateTime2);
     }
 }

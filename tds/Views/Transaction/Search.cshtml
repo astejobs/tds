@@ -7,8 +7,9 @@
 @{
     Layout = null;
 
-    var transl = (IPagedList<Transaction>)ViewBag.transList;
-   
+   var transl = (IPagedList<Transaction>)ViewBag.transList;
+    
+
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -69,7 +70,7 @@
                                         </div>
                                     }
                                     <h4 class="card-title">Search</h4>
-                                    @using (Html.BeginForm("Search", "Transaction", Model, FormMethod.Post, new { @class = "form-sample", role = "form" }))
+                                    @using (Html.BeginForm("Search", "Transaction", Model, FormMethod.Get, new { @class = "form-sample", role = "form" }))
                                     {
 
                                         <p class="card-description">
@@ -80,12 +81,11 @@
                                                 <div class="form-group row">
                                                     <label class="col-sm-3 col-form-label">Type</label>
                                                     <div class="col-sm-9">
-                                                        @Html.Hidden("page", TempData["page"], new { name = "page" })
 
                                                         @Html.DropDownListFor(model => model.type,
-                                        new SelectList(ViewBag.types,
-                                        "", ""), "Choose Type", new { @class = "form-control exampleFormControlSelect2", @Id = "exampleFormControlSelecttype" })
-
+new SelectList(ViewBag.types,
+"", ""), "Choose Type", new { @class = "form-control exampleFormControlSelect2", @Id = "exampleFormControlSelecttype",name="type" })
+                                                        
                                                     </div>
                                                 </div>
                                             </div>
@@ -97,8 +97,8 @@
                                                     <label class="col-sm-3 col-form-label">Contractor</label>
                                                     <div class="col-sm-9">
                                                         @Html.DropDownListFor(model => model.contractorId,
-                  new SelectList(ViewBag.Contractors,
-                "id", "name"),"Select contractor", new { @class = "form-control exampleFormControlSelect2", @Id = "exampleFormControlSelect3"})
+new SelectList(ViewBag.Contractors,
+"id", "name"), "Select contractor", new { @class = "form-control exampleFormControlSelect2", @Id = "exampleFormControlSelect3",name= "contractorId" })
 
                                                     </div>
                                                 </div>
@@ -108,8 +108,8 @@
                                                     <label class="col-sm-3 col-form-label">GSTIN</label>
                                                     <div class="col-sm-9">
                                                         @Html.DropDownListFor(model => model.GSTIN,
-                  new SelectList(ViewBag.Contractors,
-                "GSTIN", "GSTIN"),"Select GSTIN", new { @class = "form-control exampleFormControlSelect2", @Id = "exampleFormControlSelect4" })
+new SelectList(ViewBag.Contractors,
+"GSTIN", "GSTIN"), "Select GSTIN", new { @class = "form-control exampleFormControlSelect2", @Id = "exampleFormControlSelect4",name="GSTN" })
 
                                                     </div>
                                                 </div>
@@ -136,12 +136,12 @@
 
 
                                         <button type="submit" class="btn btn-primary mr-2">Submit</button>
-                                        if(ViewBag.type == "Individual")
+                                        if(ViewBag.typo == "Individual")
                                         {
                                             @Html.ActionLink("Export to Pdf", "ExportToPdf", new { id = ViewBag.id, fromDate = ViewBag.fromDate, ToDate = ViewBag.toDate },new  { @class = "btn btn-primary mr-2",target="_blank" })
 
                                         }
-                                        else if(ViewBag.type == "General")
+                                        else if(ViewBag.typo == "General")
                                         {
 
                                             @Html.ActionLink("Export to Excel", "ExportToExcel", new { fromDate = ViewBag.fromDate, ToDate = ViewBag.toDate }, new { @class = "btn btn-primary mr-2", target = "_blank" })
@@ -193,23 +193,35 @@
                                                     <th>
                                                         NetAmount
                                                     </th>
+
                                                 </tr>
                                             </thead>
                                             <tbody>
+                                                
                                                 @if (ViewBag.transList != null)
                                                 {
                                                     foreach (var item in ViewBag.transList)
                                                     {
                                                 <tr>
-                                                    
+                                                    @if(ViewBag.type=="Individual"){
                                                     <td>
-                                                        @item.contractor.name
+                                                        <a href="@Url.Action("Get", "Transaction",new {id=item.id})">
+                                                            @item.contractor.name
+
+                                                        </a>
                                                     </td>
+                                                    }else{
+                                                    <td>
+                                                            @item.contractor.name
+
+                                                       
+                                                    </td>
+                                                    }
                                                     <td>
                                                         @item.contractor.GSTIN
                                                     </td>
                                                     <td>
-                                                       
+
                                                         @item.createDate.ToString("dd-MM-yyyy")
                                                     </td>
                                                     <td>
@@ -236,6 +248,7 @@
                                                     <td>
                                                         @item.netAmount
                                                     </td>
+
                                                 </tr>
 
                                                     }
@@ -246,24 +259,43 @@
                                     </div>
 
                                 </div>
-                                <nav>@if (ViewBag.transList != null)
-                                {
+                                <nav>
+                                    @if (ViewBag.transList != null && ViewBag.check ==null)
+                                                                
+                                    {
 
-                                    <div id='Paging' style="text-align:center">
-                                         <ul class="pagination flex-wrap d-flex justify-content-center">
+                                        <div id='Paging' style="text-align:center">
+                                            <ul class="pagination flex-wrap d-flex justify-content-center">
 
-                                             <li class="page-item">
+                                                <li class="page-item">
 
-                                                 Page @(ViewBag.transList.PageCount < ViewBag.transList.PageNumber ? 0 : ViewBag.transList.PageNumber)
-                                                 of @ViewBag.transList.PageCount
-                                                 @Html.PagedListPager((IPagedList)ViewBag.transList, page => Url.Action("Search", new { page,fromDate= ViewBag.startDate,toDate= ViewBag.endDate }), new PagedListRenderOptions() { LiElementClasses = new string[] { "page-link" } })
-                                                 
-                                             </li>
+                                                    Page @(ViewBag.transList.PageCount < ViewBag.transList.PageNumber ? 0 : ViewBag.transList.PageNumber)
+                                                    of @ViewBag.transList.PageCount
+                                                    @Html.PagedListPager((IPagedList)ViewBag.transList, page => Url.Action("Search", new { page, type = ViewBag.type, contractorId = ViewBag.contractorId, GSTIN = ViewBag.GSTN, fromDate = ViewBag.startDate, toDate = ViewBag.endDate }), new PagedListRenderOptions() { LiElementClasses = new string[] { "page-link" } })
 
-                                        </ul>
-                                    </div>
-                                }
-                                </nav>
+                                                </li>
+
+                                            </ul>
+                                        </div>
+                                    }
+                                                                @if (ViewBag.check == "true")
+                                                                {
+
+                                                                    <div id='Paging' style="text-align:center">
+                                                                        <ul class="pagination flex-wrap d-flex justify-content-center">
+
+                                                                            <li class="page-item">
+
+                                                                                Page @(ViewBag.transList.PageCount < ViewBag.transList.PageNumber ? 0 : ViewBag.transList.PageNumber)
+                                                                                of @ViewBag.transList.PageCount
+                                                                                @Html.PagedListPager((IPagedList)ViewBag.transList, page => Url.Action("DashBoard", new { page }), new PagedListRenderOptions() { LiElementClasses = new string[] { "page-link" } })
+
+                                                                            </li>
+
+                                                                        </ul>
+                                                                    </div>
+                                                                }
+                                                            </nav>
                             </div>
                         </div>
                     </div>
@@ -306,6 +338,21 @@
     <script src="~/Scripts/jquery.table2excel.js"></script>
     <script type="text/javascript">
         $(document).ready(function () {
+            $("#exampleFormControlSelecttype").attr("required", true);
+
+
+            if ($("#exampleFormControlSelecttype").val() == "Individual") {
+
+                $("#exampleFormControlSelect4").attr('required', true);
+                $("#exampleFormControlSelect3").attr('required', true);
+                if ($("#exampleFormControlSelect3") != "") {
+                    $("#exampleFormControlSelect4").attr('required', false);
+                }
+                if ($("#exampleFormControlSelect4") != "") {
+                    $("#exampleFormControlSelect3").attr('required', false);
+                }
+            }
+
            
             $("#exampleFormControlSelecttype").change(function () {
 
@@ -316,6 +363,8 @@
 
                 }
                 if ($("#exampleFormControlSelecttype").val() == "General") {
+                    $("#exampleFormControlSelect4").attr('required', false);
+                    $("#exampleFormControlSelect3").attr('required', false);
                     $("#divHide").hide();
 
                 }
@@ -326,14 +375,18 @@
 
                 if ($("#exampleFormControlSelect3").val() == "") {
                     $("#exampleFormControlSelect4").attr('disabled', false);
+                    $("#exampleFormControlSelect4").attr('required', false);
                 } else {
                     $("#exampleFormControlSelect4").attr('disabled', true);
+                    $("#exampleFormControlSelect4").attr('required', true);
                 }
             });
             $("#exampleFormControlSelect4").change(function () {
                 if ($("#exampleFormControlSelect4").val() == "") {
+                    $("#exampleFormControlSelect3").attr('required', false);
                     $("#exampleFormControlSelect3").attr('disabled', false);
                 } else {
+                    $("#exampleFormControlSelect3").attr('required', true);
                     $("#exampleFormControlSelect3").attr('disabled', true);
                 }
             });

@@ -61,7 +61,7 @@ namespace tds.RepositoryImpl
 
         public IPagedList<TEntity> pagedList(int num,string sortBy)
         {
-            return dbContext.Set<TEntity>().OrderBy(m => sortBy).ToPagedList(num, 3);
+            return dbContext.Set<TEntity>().OrderBy(m => sortBy).ToPagedList(num, 10);
         }
 
         public Boolean Delete(string  entityId)
@@ -88,8 +88,7 @@ namespace tds.RepositoryImpl
             var user_time = DateTime.Parse(g1);
             System.Diagnostics.Debug.WriteLine(fromDate+"in repoooo");
             System.Diagnostics.Debug.WriteLine(toDate + "in repoooo");
-           
-                return dbContext.Transaction.OrderByDescending(m => fromDate).Where(m => m.contractorId == transCriteria.contractorId || m.contractor.GSTIN == transCriteria.GSTIN && m.createDate>= fromDate && m.createDate<=toDate).ToPagedList(pageIndex,3);
+            return dbContext.Transaction.OrderByDescending(m => m.createDate).Where(m => (m.contractorId == transCriteria.contractorId || m.contractor.GSTIN == transCriteria.GSTIN) && DbFunctions.TruncateTime(m.createDate) >= DbFunctions.TruncateTime(fromDate) && DbFunctions.TruncateTime(m.createDate) <= DbFunctions.TruncateTime(toDate)).ToPagedList(pageIndex, 10);
            
         }
 
@@ -106,19 +105,20 @@ namespace tds.RepositoryImpl
 
         public IPagedList<Transaction> SearchGeneral(SearchViewModel transCriteria, DateTime d1, DateTime d2,int pageIndex)
         {
-            var query = dbContext.Transaction
-    .GroupBy(t => t.contractorId)
-    .Select(t => new
-    {
-        contractor = t.FirstOrDefault().contractor,
-        amountPaid = t.Sum(c=> c.amountPaid),
-        cgstAmount = t.Sum(c => c.cgstAmount),
-        sgstAmount = t.Sum(c=>c.sgstAmount),
-        itAmount = t.Sum(c=>c.itAmount),
-        labourCessAmount =t.Sum(c=>c.labourCessAmount),
-        deposit = t.Sum(c=>c.deposit),
-        netAmount=t.Sum(c=>c.netAmount)
-    });
+ var query = dbContext.Transaction.Where(m => DbFunctions.TruncateTime(m.createDate) >= DbFunctions.TruncateTime(d1) && DbFunctions.TruncateTime(m.createDate) <= DbFunctions.TruncateTime(d2))
+            .GroupBy(t => t.contractorId)
+            .Select(t => new
+            {
+                contractor = t.FirstOrDefault().contractor,
+                amountPaid = t.Sum(c => c.amountPaid),
+                cgstAmount = t.Sum(c => c.cgstAmount),
+                sgstAmount = t.Sum(c => c.sgstAmount),
+                itAmount = t.Sum(c => c.itAmount),
+                labourCessAmount = t.Sum(c => c.labourCessAmount),
+                deposit = t.Sum(c => c.deposit),
+                netAmount = t.Sum(c => c.netAmount)
+            });
+
 
 
         var transactions = query.ToList().Select(t => new Transaction
@@ -140,7 +140,7 @@ namespace tds.RepositoryImpl
 
                 }
 
-                return transactions.ToPagedList(pageIndex,3);
+            return transactions.ToPagedList(pageIndex, 10);            
             }
 
         public IEnumerable<Transaction> SearchGeneralExcel(DateTime d1, DateTime d2)
@@ -181,7 +181,13 @@ namespace tds.RepositoryImpl
 
             return transactions.ToList();
         }
+public List<Tax> listTaxes(string type)
+        {
+            return dbContext.Tax.Where(m => m.type==type).ToList();
 
+        }
+
+        
     }
 
 }
