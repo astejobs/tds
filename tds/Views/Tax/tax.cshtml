@@ -104,7 +104,7 @@
 
                                                         @Html.DropDownListFor(model => model.entity.type,
 new SelectList(ViewBag.types,
-"", ""), "Choose Type", new { @class = "form-control exampleFormControlSelect2", @Id = "exampleFormControlSelecttype",name="type" })
+"", ""), "Choose Type", new { @class = "form-control exampleFormControlSelect2", @Id = "exampleFormControlSelecttype",name="type",@required="required" })
 
                                                     </div>
                                                 </div>

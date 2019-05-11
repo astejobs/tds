@@ -221,12 +221,13 @@
                             <div class="col-12 grid-margin">
                                 <div class="card">
                                     <div class="card-body">
+                                       
                                         @if (TempData["MsgFail"] != null)
                                         {
                                             <div class="alert alert-fill-danger" role="alert">
                                                 <i class="mdi mdi-alert-circle"></i> Updation Failed! Enter details properly.
                                             </div>
-                                        }
+                                        } 
                                         @if (TempData["MsgSuccess"] != null)
                                         {
                                             <div class="alert alert-fill-primary" role="alert">

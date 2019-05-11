@@ -20,5 +20,6 @@ namespace tds.RepositoryInterface
         IPagedList<Transaction> SearchGeneral(SearchViewModel transCriteria, DateTime d1, DateTime d2, int pageIndex);
         List<Tax> listTaxes(string type);
         IEnumerable<Transaction> SearchGeneralExcel(DateTime dateTime1, DateTime dateTime2);
+        List<Contractor> listActiveContractors();
     }
 }

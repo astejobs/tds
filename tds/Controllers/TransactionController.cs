@@ -80,7 +80,7 @@ namespace tds.Controllers
             
            
             
-            ViewBag.contractors = contractorInterface.listAll(id);
+            ViewBag.contractors = contractorInterface.listActiveContractors();
             ViewBag.cgstTaxes = taxInterface.listTaxes(Constants.type_of_tax[0]).OrderBy(m => m.rate).ToList();
             ViewBag.sgstTaxes= taxInterface.listTaxes(Constants.type_of_tax[1]).OrderBy(m => m.rate).ToList();
             ViewBag.itTaxes= taxInterface.listTaxes(Constants.type_of_tax[2]).OrderBy(m => m.rate).ToList();
@@ -146,7 +146,7 @@ namespace tds.Controllers
                 TempData["MsgFail"] = "Updation Failed,Enter Valid data";
                 TempData["ModelState"] = ModelState;
             }
-            ViewBag.Contractors = contractorInterface.listAll(transac.id);
+            ViewBag.Contractors = contractorInterface.listActiveContractors();
            // ViewBag.taxes = taxInterface.listAll(transac.id).OrderBy(m => m.rate).ToList();
             ViewBag.cgstTaxes = taxInterface.listTaxes(Constants.type_of_tax[0]).OrderBy(m => m.rate).ToList();
             ViewBag.sgstTaxes = taxInterface.listTaxes(Constants.type_of_tax[1]).OrderBy(m => m.rate).ToList();
@@ -255,7 +255,7 @@ namespace tds.Controllers
             string fromDatee = fromDate;
             string toDatee = toDate;
            
-            ViewBag.Contractors = contractorInterface.listAll(id.ToString());
+            ViewBag.Contractors = contractorInterface.listActiveContractors();
             ViewBag.types = Models.Constants.type;
             ViewBag.type = type;
             ViewBag.contractorId = contractorId;
@@ -265,8 +265,8 @@ namespace tds.Controllers
 
             if ((String.IsNullOrEmpty(fromDatee) || String.IsNullOrEmpty(toDatee)))
             {
-                
-                ViewData["DateMsg"] = "Please Select StartDate And EndDate";
+
+                ViewBag.DateMsg = "Please Select StartDate And EndDate";
                 
                 return View("Search");
             }
@@ -314,7 +314,7 @@ namespace tds.Controllers
           public ActionResult DashBoard(int? page,string id)
           {
             ViewBag.check = "true";
-            ViewBag.Contractors = contractorInterface.listAll(id);
+            ViewBag.Contractors = contractorInterface.listActiveContractors();
             ViewBag.types = Models.Constants.type;
             ViewBag.type = Constants.type[1];
             int pageIndex = 1;

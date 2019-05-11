@@ -107,7 +107,7 @@ namespace tds.RepositoryImpl
 
         public IPagedList<Transaction> SearchGeneral(SearchViewModel transCriteria, DateTime d1, DateTime d2,int pageIndex)
         {
- var query = dbContext.Transaction.Where(m => DbFunctions.TruncateTime(m.createDate) >= DbFunctions.TruncateTime(d1) && DbFunctions.TruncateTime(m.createDate) <= DbFunctions.TruncateTime(d2))
+ var query = dbContext.Transaction.Where(m => DbFunctions.TruncateTime(m.createDate) >= DbFunctions.TruncateTime(d1) && DbFunctions.TruncateTime(m.createDate) <= DbFunctions.TruncateTime(d2) &&m.contractor.status==true)
             .GroupBy(t => t.contractorId)
             .Select(t => new
             {
@@ -188,7 +188,10 @@ public List<Tax> listTaxes(string type)
 
         }
 
-        
+        public List<Contractor> listActiveContractors()
+        {
+            return dbContext.Contractor.Where(m => m.status == true).ToList();
+        }
     }
 
 }
