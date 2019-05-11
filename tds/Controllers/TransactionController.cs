@@ -281,6 +281,7 @@ namespace tds.Controllers
              
                 ViewBag.startDate = fromDate;
                 ViewBag.endDate = toDate;
+                ViewBag.id = contractorId;
                 int pageIndex = 1;
 
 
@@ -349,7 +350,13 @@ namespace tds.Controllers
                ////new changes/////
             SearchViewModel VM = new SearchViewModel();
             VM.contractorId = id;
-          List<Transaction> trans = generalInterface.SearchForPdf(VM, DateTime.Parse(fromDate), DateTime.Parse(toDate)).ToList();
+            DateTime dt = DateTime.ParseExact(fromDate, "dd-MM-yyyy", CultureInfo.InvariantCulture);
+            DateTime dt2 = DateTime.ParseExact(toDate, "dd-MM-yyyy", CultureInfo.InvariantCulture);
+            string g1 = Convert.ToDateTime(dt).ToString("yyyy-MM-dd HH:mm:ss.fff");
+            string g2 = Convert.ToDateTime(dt2).ToString("yyyy-MM-dd HH:mm:ss.fff");
+            DateTime d1 = DateTime.ParseExact(g1, "yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture);
+            DateTime d2 = DateTime.ParseExact(g2, "yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture);
+            List<Transaction> trans = generalInterface.SearchForPdf(VM, d1, d2).ToList();
             _transactions = new TransactionVM();
             //foreach(var item in trans)
             //{
@@ -383,8 +390,16 @@ namespace tds.Controllers
     
         public ActionResult ExportToExcel(string fromDate, string toDate)
         {
-              //////new changes//////
-           List<Transaction> excel = generalInterface.SearchGeneralExcel(DateTime.Parse(fromDate), DateTime.Parse(toDate)).ToList();
+            DateTime dt = DateTime.ParseExact(fromDate, "dd-MM-yyyy", CultureInfo.InvariantCulture);
+            DateTime dt2 = DateTime.ParseExact(toDate, "dd-MM-yyyy", CultureInfo.InvariantCulture);
+            string g1 = Convert.ToDateTime(dt).ToString("yyyy-MM-dd HH:mm:ss.fff");
+            string g2 = Convert.ToDateTime(dt2).ToString("yyyy-MM-dd HH:mm:ss.fff");
+            DateTime d1 = DateTime.ParseExact(g1, "yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture);
+
+            DateTime d2 = DateTime.ParseExact(g2, "yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture);
+
+            //////new changes//////
+            List<Transaction> excel = generalInterface.SearchGeneralExcel(d1 ,d2).ToList();
 
            
            

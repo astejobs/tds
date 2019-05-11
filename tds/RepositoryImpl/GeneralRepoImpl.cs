@@ -97,8 +97,10 @@ namespace tds.RepositoryImpl
             var g1 = Convert.ToDateTime(fromDate).ToString("yyyy-MM-dd HH:mm:ss.fff");
             string g2 = Convert.ToDateTime(toDate).ToString("yyyy-MM-dd HH:mm:ss.fff");
             var user_time = DateTime.Parse(g1);
+            //newchange
+            return dbContext.Transaction.OrderByDescending(m => m.createDate).Where(m => (m.contractorId == transCriteria.contractorId || m.contractor.GSTIN == transCriteria.GSTIN) && DbFunctions.TruncateTime(m.createDate) >= DbFunctions.TruncateTime(fromDate) && DbFunctions.TruncateTime(m.createDate) <= DbFunctions.TruncateTime(toDate)).ToList();
 
-            return dbContext.Transaction.OrderByDescending(m => fromDate).Where(m => m.contractorId == transCriteria.contractorId || m.contractor.GSTIN == transCriteria.GSTIN && m.createDate >= fromDate && m.createDate <= toDate);
+          //  return dbContext.Transaction.OrderByDescending(m => fromDate).Where(m => m.contractorId == transCriteria.contractorId || m.contractor.GSTIN == transCriteria.GSTIN && m.createDate >= fromDate && m.createDate <= toDate);
 
         }
 
@@ -145,7 +147,7 @@ namespace tds.RepositoryImpl
 
         public IEnumerable<Transaction> SearchGeneralExcel(DateTime d1, DateTime d2)
         {        ///new changes////
-            var query = dbContext.Transaction
+            var query = dbContext.Transaction.Where(m => DbFunctions.TruncateTime(m.createDate) >= DbFunctions.TruncateTime(d1) && DbFunctions.TruncateTime(m.createDate) <= DbFunctions.TruncateTime(d2))
             .GroupBy(t => t.contractorId)
             .Select(t => new
             {
@@ -158,7 +160,6 @@ namespace tds.RepositoryImpl
                 deposit = t.Sum(c => c.deposit),
                 netAmount = t.Sum(c => c.netAmount)
             });
-
 
             var transactions = query.ToList().Select(t => new Transaction
             {

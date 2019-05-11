@@ -54,250 +54,413 @@
             <div class="main-panel">
                 <div class="content-wrapper">
                     <div class="row">
-                        <div class="col-12 grid-margin">
-                            <div class="card">
-                                <div class="card-body">
-                                    @if (TempData["MsgFail"] != null)
-                                    {
-                                        <div class="alert alert-fill-danger" role="alert">
-                                            <i class="mdi mdi-alert-circle"></i> Updation Failed! Enter details properly.
-                                        </div>
-                                    }
-                                    @if (TempData["MsgSuccess"] != null)
-                                    {
-                                        <div class="alert alert-fill-primary" role="alert">
-                                            <i class="mdi mdi-alert-circle"></i> Details Updated Successfully.
-                                        </div>
-                                    }
-                                    <h4 class="card-title">Search</h4>
-                                    @using (Html.BeginForm("Search", "Transaction", Model, FormMethod.Get, new { @class = "form-sample", role = "form" }))
-                                    {
-
-                                        <p class="card-description">
-                                            Personal info
-                                        </p>
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <div class="form-group row">
-                                                    <label class="col-sm-3 col-form-label">Type</label>
-                                                    <div class="col-sm-9">
-
-                                                        @Html.DropDownListFor(model => model.type,
-new SelectList(ViewBag.types,
-"", ""), "Choose Type", new { @class = "form-control exampleFormControlSelect2", @Id = "exampleFormControlSelecttype",name="type" })
-                                                        
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                        <div class="row" id="divHide">
-                                            <div class="col-md-6">
-                                                <div class="form-group row">
-                                                    <label class="col-sm-3 col-form-label">Contractor</label>
-                                                    <div class="col-sm-9">
-                                                        @Html.DropDownListFor(model => model.contractorId,
-new SelectList(ViewBag.Contractors,
-"id", "name"), "Select contractor", new { @class = "form-control exampleFormControlSelect2", @Id = "exampleFormControlSelect3",name= "contractorId" })
-
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="form-group row">
-                                                    <label class="col-sm-3 col-form-label">GSTIN</label>
-                                                    <div class="col-sm-9">
-                                                        @Html.DropDownListFor(model => model.GSTIN,
-new SelectList(ViewBag.Contractors,
-"GSTIN", "GSTIN"), "Select GSTIN", new { @class = "form-control exampleFormControlSelect2", @Id = "exampleFormControlSelect4",name="GSTN" })
-
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <div class="form-group row">
-                                                    <label class="col-sm-3 col-form-label">From</label>
-                                                    <div class="col-sm-9">
-                                                        <input class="form-control date" placeholder="dd-mm-yyyy" value="@ViewBag.startDate" name="fromDate">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="form-group row">
-                                                    <label for="exampleInputMobile" class="col-sm-3 col-form-label">To</label>
-                                                    <div class="col-sm-9">
-                                                        <input class="form-control date" value="@ViewBag.endDate" placeholder="dd-mm-yyyy" name="toDate">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+                        @if (ViewBag.check == "true")
+                        {
 
 
-                                        <button type="submit" class="btn btn-primary mr-2">Submit</button>
-                                        if(ViewBag.typo == "Individual")
-                                        {
-                                            @Html.ActionLink("Export to Pdf", "ExportToPdf", new { id = ViewBag.id, fromDate = ViewBag.fromDate, ToDate = ViewBag.toDate },new  { @class = "btn btn-primary mr-2",target="_blank" })
+                            <div class="col-lg-12 grid-margin stretch-card">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h4 class="card-title">All Transactions </h4>
 
-                                        }
-                                        else if(ViewBag.typo == "General")
-                                        {
-
-                                            @Html.ActionLink("Export to Excel", "ExportToExcel", new { fromDate = ViewBag.fromDate, ToDate = ViewBag.toDate }, new { @class = "btn btn-primary mr-2", target = "_blank" })
-                                        }
-                                    }
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-lg-12 grid-margin stretch-card">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h4 class="card-title">Search Result</h4>
-                                   
-                                    <div class="table-responsive pt-3">
-                                        <table class="table table-bordered" id="table2excel">
-                                            <thead>
-                                                <tr>
-                                                    <th>
-                                                        Contractor
-                                                    </th>
-                                                    <th>
-                                                        GSTIN
-                                                    </th>
-                                                    <th>
-                                                        Date
-                                                    </th>
-                                                    <th>
-                                                        Amount Paid
-                                                    </th>
+                                        <div class="table-responsive pt-3">
+                                            <table class="table table-bordered" id="table2excel">
+                                                <thead>
+                                                    <tr>
+                                                        <th>
+                                                            Contractor
+                                                        </th>
+                                                        <th>
+                                                            GSTIN
+                                                        </th>
+                                                        <th>
+                                                            Date
+                                                        </th>
+                                                        <th>
+                                                            Amount Paid
+                                                        </th>
 
 
-                                                    <th>
-                                                        CGST
-                                                    </th>
-                                                    <th>
-                                                        SGST
-                                                    </th>
-                                                    <th>
-                                                        IT
-                                                    </th>
-                                                    <th>
-                                                        LabourCess
-                                                    </th>
-                                                    <th>
-                                                        Deposit
-                                                    </th>
+                                                        <th>
+                                                            CGST
+                                                        </th>
+                                                        <th>
+                                                            SGST
+                                                        </th>
+                                                        <th>
+                                                            IT
+                                                        </th>
+                                                        <th>
+                                                            LabourCess
+                                                        </th>
+                                                        <th>
+                                                            Deposit
+                                                        </th>
 
-                                                    <th>
-                                                        NetAmount
-                                                    </th>
+                                                        <th>
+                                                            NetAmount
+                                                        </th>
 
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                
-                                                @if (ViewBag.transList != null)
-                                                {
-                                                    foreach (var item in ViewBag.transList)
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+
+                                                    @if (ViewBag.transList != null)
                                                     {
-                                                <tr>
-                                                    @if(ViewBag.type=="Individual"){
-                                                    <td>
-                                                        <a href="@Url.Action("Get", "Transaction",new {id=item.id})">
-                                                            @item.contractor.name
+                                                        foreach (var item in ViewBag.transList)
+                                                        {
+                                                            <tr>
+                                                                @if (ViewBag.type == "Individual")
+                                                                {
+                                                                    <td>
+                                                                        <a href="@Url.Action("Get", "Transaction", new { id = item.id })">
+                                                                            @item.contractor.name
 
-                                                        </a>
-                                                    </td>
-                                                    }else{
-                                                    <td>
-                                                            @item.contractor.name
+                                                                        </a>
+                                                                    </td>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <td>
+                                                                        @item.contractor.name
 
-                                                       
-                                                    </td>
+
+                                                                    </td>
+                                                                }
+                                                                <td>
+                                                                    @item.contractor.GSTIN
+                                                                </td>
+                                                                <td>
+
+                                                                    @item.createDate.ToString("dd-MM-yyyy")
+                                                                </td>
+                                                                <td>
+                                                                    @item.amountPaid
+
+                                                                </td>
+
+                                                                <td>
+                                                                    @item.cgstAmount
+
+                                                                </td>
+                                                                <td>
+                                                                    @item.sgstAmount
+                                                                </td>
+                                                                <td>
+                                                                    @item.itAmount
+                                                                </td>
+                                                                <td>
+                                                                    @item.labourCessAmount
+                                                                </td>
+                                                                <td>
+                                                                    @item.deposit
+                                                                </td>
+                                                                <td>
+                                                                    @item.netAmount
+                                                                </td>
+
+                                                            </tr>
+
+                                                        }
                                                     }
-                                                    <td>
-                                                        @item.contractor.GSTIN
-                                                    </td>
-                                                    <td>
-
-                                                        @item.createDate.ToString("dd-MM-yyyy")
-                                                    </td>
-                                                    <td>
-                                                        @item.amountPaid
-
-                                                    </td>
-
-                                                    <td>
-                                                        @item.cgstAmount
-
-                                                    </td>
-                                                    <td>
-                                                        @item.sgstAmount
-                                                    </td>
-                                                    <td>
-                                                        @item.itAmount
-                                                    </td>
-                                                    <td>
-                                                        @item.labourCessAmount
-                                                    </td>
-                                                    <td>
-                                                        @item.deposit
-                                                    </td>
-                                                    <td>
-                                                        @item.netAmount
-                                                    </td>
-
-                                                </tr>
-
-                                                    }
-                                                }
 
                                                 </tbody>
-                                        </table>
-                                    </div>
-
-                                </div>
-                                <nav>
-                                    @if (ViewBag.transList != null && ViewBag.check ==null)
-                                                                
-                                    {
-
-                                        <div id='Paging' style="text-align:center">
-                                            <ul class="pagination flex-wrap d-flex justify-content-center">
-
-                                                <li class="page-item">
-
-                                                    Page @(ViewBag.transList.PageCount < ViewBag.transList.PageNumber ? 0 : ViewBag.transList.PageNumber)
-                                                    of @ViewBag.transList.PageCount
-                                                    @Html.PagedListPager((IPagedList)ViewBag.transList, page => Url.Action("Search", new { page, type = ViewBag.type, contractorId = ViewBag.contractorId, GSTIN = ViewBag.GSTN, fromDate = ViewBag.startDate, toDate = ViewBag.endDate }), new PagedListRenderOptions() { LiElementClasses = new string[] { "page-link" } })
-
-                                                </li>
-
-                                            </ul>
+                                            </table>
                                         </div>
-                                    }
-                                                                @if (ViewBag.check == "true")
-                                                                {
 
-                                                                    <div id='Paging' style="text-align:center">
-                                                                        <ul class="pagination flex-wrap d-flex justify-content-center">
+                                    </div>
+                                    <nav>
+                                        @if (ViewBag.transList != null && ViewBag.check == null)
 
-                                                                            <li class="page-item">
+                                        {
 
-                                                                                Page @(ViewBag.transList.PageCount < ViewBag.transList.PageNumber ? 0 : ViewBag.transList.PageNumber)
-                                                                                of @ViewBag.transList.PageCount
-                                                                                @Html.PagedListPager((IPagedList)ViewBag.transList, page => Url.Action("DashBoard", new { page }), new PagedListRenderOptions() { LiElementClasses = new string[] { "page-link" } })
+                                            <div id='Paging' style="text-align:center">
+                                                <ul class="pagination flex-wrap d-flex justify-content-center">
 
-                                                                            </li>
+                                                    <li class="page-item">
 
-                                                                        </ul>
-                                                                    </div>
-                                                                }
-                                                            </nav>
+                                                        Page @(ViewBag.transList.PageCount < ViewBag.transList.PageNumber ? 0 : ViewBag.transList.PageNumber)
+                                                        of @ViewBag.transList.PageCount
+                                                        @Html.PagedListPager((IPagedList)ViewBag.transList, page => Url.Action("Search", new { page, type = ViewBag.type, contractorId = ViewBag.contractorId, GSTIN = ViewBag.GSTN, fromDate = ViewBag.startDate, toDate = ViewBag.endDate }), new PagedListRenderOptions() { LiElementClasses = new string[] { "page-link" } })
+
+                                                    </li>
+
+                                                </ul>
+                                            </div>
+                                        }
+                                        @if (ViewBag.check == "true")
+                                        {
+
+                                            <div id='Paging' style="text-align:center">
+                                                <ul class="pagination flex-wrap d-flex justify-content-center">
+
+                                                    <li class="page-item">
+
+                                                        Page @(ViewBag.transList.PageCount < ViewBag.transList.PageNumber ? 0 : ViewBag.transList.PageNumber)
+                                                        of @ViewBag.transList.PageCount
+                                                        @Html.PagedListPager((IPagedList)ViewBag.transList, page => Url.Action("DashBoard", new { page }), new PagedListRenderOptions() { LiElementClasses = new string[] { "page-link" } })
+
+                                                    </li>
+
+                                                </ul>
+                                            </div>
+                                        }
+                                    </nav>
+                                </div>
                             </div>
-                        </div>
+                            
+                        }
+                        else
+                        {
+
+                            <div class="col-12 grid-margin">
+                                <div class="card">
+                                    <div class="card-body">
+                                        @if (TempData["MsgFail"] != null)
+                                        {
+                                            <div class="alert alert-fill-danger" role="alert">
+                                                <i class="mdi mdi-alert-circle"></i> Updation Failed! Enter details properly.
+                                            </div>
+                                        }
+                                        @if (TempData["MsgSuccess"] != null)
+                                        {
+                                            <div class="alert alert-fill-primary" role="alert">
+                                                <i class="mdi mdi-alert-circle"></i> Details Updated Successfully.
+                                            </div>
+                                        }
+                                        <h4 class="card-title">Search</h4>
+                                        @using (Html.BeginForm("Search", "Transaction", Model, FormMethod.Get, new { @class = "form-sample", role = "form" }))
+                                        {
+
+                                            <p class="card-description">
+                                                Personal info
+                                            </p>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-3 col-form-label">Type</label>
+                                                        <div class="col-sm-9">
+
+                                                            @Html.DropDownListFor(model => model.type,
+new SelectList(ViewBag.types,
+"", ""), "Choose Type", new { @class = "form-control exampleFormControlSelect2", @Id = "exampleFormControlSelecttype", name = "type" })
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                            <div class="row" id="divHide">
+                                                <div class="col-md-6">
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-3 col-form-label">Contractor</label>
+                                                        <div class="col-sm-9">
+                                                            @Html.DropDownListFor(model => model.contractorId,
+new SelectList(ViewBag.Contractors,
+"id", "name"), "Select contractor", new { @class = "form-control exampleFormControlSelect2", @Id = "exampleFormControlSelect3", name = "contractorId" })
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-3 col-form-label">GSTIN</label>
+                                                        <div class="col-sm-9">
+                                                            @Html.DropDownListFor(model => model.GSTIN,
+new SelectList(ViewBag.Contractors,
+"GSTIN", "GSTIN"), "Select GSTIN", new { @class = "form-control exampleFormControlSelect2", @Id = "exampleFormControlSelect4", name = "GSTN" })
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-3 col-form-label">From</label>
+                                                        <div class="col-sm-9">
+                                                            <input class="form-control date" placeholder="dd-mm-yyyy" value="@ViewBag.startDate" name="fromDate">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group row">
+                                                        <label for="exampleInputMobile" class="col-sm-3 col-form-label">To</label>
+                                                        <div class="col-sm-9">
+                                                            <input class="form-control date" value="@ViewBag.endDate" placeholder="dd-mm-yyyy" name="toDate">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+                                            <button type="submit" class="btn btn-primary mr-2">Submit</button>
+
+                                            if (ViewBag.typo == "Individual")
+                                            {
+                                                @Html.ActionLink("Export to Pdf", "ExportToPdf", new { id = ViewBag.id, fromDate = ViewBag.startDate, ToDate = ViewBag.endDate }, new { @class = "btn btn-primary mr-2", target = "_blank" })
+
+                                            }
+                                            else if (ViewBag.typo == "General")
+                                            {
+
+                                                @Html.ActionLink("Export to Excel", "ExportToExcel", new { fromDate = ViewBag.startDate, ToDate = ViewBag.endDate }, new { @class = "btn btn-primary mr-2", target = "_blank" })
+                                            }
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-12 grid-margin stretch-card">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h4 class="card-title">Search Result</h4>
+
+                                        <div class="table-responsive pt-3">
+                                            <table class="table table-bordered" id="table2excel">
+                                                <thead>
+                                                    <tr>
+                                                        <th>
+                                                            Contractor
+                                                        </th>
+                                                        <th>
+                                                            GSTIN
+                                                        </th>
+                                                        <th>
+                                                            Date
+                                                        </th>
+                                                        <th>
+                                                            Amount Paid
+                                                        </th>
+
+
+                                                        <th>
+                                                            CGST
+                                                        </th>
+                                                        <th>
+                                                            SGST
+                                                        </th>
+                                                        <th>
+                                                            IT
+                                                        </th>
+                                                        <th>
+                                                            LabourCess
+                                                        </th>
+                                                        <th>
+                                                            Deposit
+                                                        </th>
+
+                                                        <th>
+                                                            NetAmount
+                                                        </th>
+
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+
+                                                    @if (ViewBag.transList != null)
+                                                    {
+                                                        foreach (var item in ViewBag.transList)
+                                                        {
+                                                            <tr>
+                                                                @if (ViewBag.type == "Individual")
+                                                                {
+                                                                    <td>
+                                                                        <a href="@Url.Action("Get", "Transaction", new { id = item.id })">
+                                                                            @item.contractor.name
+
+                                                                        </a>
+                                                                    </td>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <td>
+                                                                        @item.contractor.name
+
+
+                                                                    </td>
+                                                                }
+                                                                <td>
+                                                                    @item.contractor.GSTIN
+                                                                </td>
+                                                                <td>
+
+                                                                    @item.createDate.ToString("dd-MM-yyyy")
+                                                                </td>
+                                                                <td>
+                                                                    @item.amountPaid
+
+                                                                </td>
+
+                                                                <td>
+                                                                    @item.cgstAmount
+
+                                                                </td>
+                                                                <td>
+                                                                    @item.sgstAmount
+                                                                </td>
+                                                                <td>
+                                                                    @item.itAmount
+                                                                </td>
+                                                                <td>
+                                                                    @item.labourCessAmount
+                                                                </td>
+                                                                <td>
+                                                                    @item.deposit
+                                                                </td>
+                                                                <td>
+                                                                    @item.netAmount
+                                                                </td>
+
+                                                            </tr>
+
+                                                        }
+                                                    }
+
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+                                    </div>
+                                    <nav>
+                                        @if (ViewBag.transList != null && ViewBag.check == null)
+
+                                        {
+
+                                            <div id='Paging' style="text-align:center">
+                                                <ul class="pagination flex-wrap d-flex justify-content-center">
+
+                                                    <li class="page-item">
+
+                                                        Page @(ViewBag.transList.PageCount < ViewBag.transList.PageNumber ? 0 : ViewBag.transList.PageNumber)
+                                                        of @ViewBag.transList.PageCount
+                                                        @Html.PagedListPager((IPagedList)ViewBag.transList, page => Url.Action("Search", new { page, type = ViewBag.type, contractorId = ViewBag.contractorId, GSTIN = ViewBag.GSTN, fromDate = ViewBag.startDate, toDate = ViewBag.endDate }), new PagedListRenderOptions() { LiElementClasses = new string[] { "page-link" } })
+
+                                                    </li>
+
+                                                </ul>
+                                            </div>
+                                        }
+                                        @if (ViewBag.check == "true")
+                                        {
+
+                                            <div id='Paging' style="text-align:center">
+                                                <ul class="pagination flex-wrap d-flex justify-content-center">
+
+                                                    <li class="page-item">
+
+                                                        Page @(ViewBag.transList.PageCount < ViewBag.transList.PageNumber ? 0 : ViewBag.transList.PageNumber)
+                                                        of @ViewBag.transList.PageCount
+                                                        @Html.PagedListPager((IPagedList)ViewBag.transList, page => Url.Action("DashBoard", new { page }), new PagedListRenderOptions() { LiElementClasses = new string[] { "page-link" } })
+
+                                                    </li>
+
+                                                </ul>
+                                            </div>
+                                        }
+                                    </nav>
+                                </div>
+                            </div>
+                        }
                     </div>
                 </div>
                 <!-- content-wrapper ends -->
