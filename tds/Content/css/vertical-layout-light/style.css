@@ -30636,5 +30636,11 @@ div.tagsinput span.tag a {
 }
 
 
-
+.navbar .navbar-brand-wrapper .navbar-brand img {
+    width: calc(189px - 56px);
+    max-width: 100%;
+    height: 33px;
+    margin: auto;
+    vertical-align: middle;
+}
 /*# sourceMappingURL=../maps/vertical-layout-light/style.css.map */
