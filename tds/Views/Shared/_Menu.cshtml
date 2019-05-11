@@ -1,7 +1,7 @@
 ﻿@using tds.Models
 @{
-    var data = (ApplicationUser)Session["userdata"];
-
+    var data = System.Web.HttpContext.Current.User.Identity.Name;
+    //   FindById(User.Identity.GetUserId())
 }
 <nav class="sidebar sidebar-offcanvas" id="sidebar">
     <ul class="nav">
@@ -12,7 +12,7 @@
                 </div>
                 <div class="profile-name">
                     <p class="name">
-                        @data.UserName
+                        @data
                     </p>
                     <p class="designation">
 

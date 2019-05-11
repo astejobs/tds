@@ -94,7 +94,6 @@ namespace tds.Controllers
                       //  }
                         if (UserManager.IsInRole(user.Id, roleManager.FindByName("Admin").Name))
                         {
-                            Session["userdata"]= UserManager.FindById(User.Identity.GetUserId());
 
                             return RedirectToAction("DashBoard", new { Controller = "Transaction" });
                         }
