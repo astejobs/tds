@@ -33,6 +33,7 @@
     <link rel="shortcut icon" href="~/Content/images/favicon.png" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
     <style>
 
         .exampleFormControlSelect2 {
@@ -285,7 +286,7 @@ new SelectList(ViewBag.Contractors,
                                                     <div class="form-group row">
                                                         <label class="col-sm-3 col-form-label">From</label>
                                                         <div class="col-sm-9">
-                                                            <input class="form-control date" placeholder="dd-mm-yyyy" value="@ViewBag.startDate" name="fromDate">
+                                                            <input class="form-control date" placeholder="dd-mm-yyyy" value="@ViewBag.startDate" name="fromDate" id="fromDate">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -293,14 +294,14 @@ new SelectList(ViewBag.Contractors,
                                                     <div class="form-group row">
                                                         <label for="exampleInputMobile" class="col-sm-3 col-form-label">To</label>
                                                         <div class="col-sm-9">
-                                                            <input class="form-control date" value="@ViewBag.endDate" placeholder="dd-mm-yyyy" name="toDate">
+                                                            <input class="form-control date" value="@ViewBag.endDate" placeholder="dd-mm-yyyy" name="toDate" id="toDate">
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
 
 
-                                            <button type="submit" class="btn btn-primary mr-2">Submit</button>
+                                            <button type="submit" class="btn btn-primary mr-2" >Submit</button>
 
                                             if (ViewBag.typo == "Individual")
                                             {
@@ -507,11 +508,35 @@ new SelectList(ViewBag.Contractors,
     <script src="~/Scripts/jquery.table2excel.js"></script>
     <script type="text/javascript">
         $(document).ready(function () {
+            $(".btn").click(function () {
+                if ($("#fromDate").val() == "") {
+                    $('.errr1').remove();
+                    
+                    $("#fromDate").after("<i class='errr1 text-danger'> Select the date </i>");
+                   
+                    console.log("svvdsv");
+                    return false;
+                }
+                else {
+                    $('.errr1').remove();
+                }
+                if ($("#toDate").val() == "") {
+                    $('.errr2').remove();
+                    $("#toDate").after("<i class='errr2 text-danger'> Select the date </i>");
+                    return false;
+                } else {
+                    $('.errr2').remove();
+                }
+            });
             $("#exampleFormControlSelecttype").attr("required", true);
 
-
+            if ($("#exampleFormControlSelecttype").val() == "General") {
+                $("#exampleFormControlSelect4").attr('required', false);
+                $("#exampleFormControlSelect3").attr('required', false);
+                $("#divHide").hide();
+            }
             if ($("#exampleFormControlSelecttype").val() == "Individual") {
-
+                $("#divHide").show();
                 $("#exampleFormControlSelect4").attr('required', true);
                 $("#exampleFormControlSelect3").attr('required', true);
                 if ($("#exampleFormControlSelect3") != "") {
@@ -521,13 +546,21 @@ new SelectList(ViewBag.Contractors,
                     $("#exampleFormControlSelect3").attr('required', false);
                 }
             }
-
+            if ($("#exampleFormControlSelect4").val() !== "") {
+                $("#exampleFormControlSelect3").attr('required', false);
+                $("#exampleFormControlSelect3").attr('disabled', true);
+            }
+            if ($("#exampleFormControlSelect3").val() !== "") {
+                $("#exampleFormControlSelect4").attr('required', false);
+                $("#exampleFormControlSelect4").attr('disabled', true);
+            }
            
             $("#exampleFormControlSelecttype").change(function () {
 
                 
                 if ($("#exampleFormControlSelecttype").val() == "Individual") {
-                  
+                    $("#exampleFormControlSelect4").attr('required', true);
+                    $("#exampleFormControlSelect3").attr('required', true);
                     $("#divHide").show();
 
                 }
@@ -555,6 +588,7 @@ new SelectList(ViewBag.Contractors,
                     $("#exampleFormControlSelect3").attr('required', false);
                     $("#exampleFormControlSelect3").attr('disabled', false);
                 } else {
+                    
                     $("#exampleFormControlSelect3").attr('required', true);
                     $("#exampleFormControlSelect3").attr('disabled', true);
                 }
