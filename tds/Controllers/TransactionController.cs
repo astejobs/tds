@@ -153,7 +153,7 @@ namespace tds.Controllers
             ViewBag.itTaxes = taxInterface.listTaxes(Constants.type_of_tax[2]).OrderBy(m => m.rate).ToList();
             ViewBag.labourTaxes = taxInterface.listTaxes(Constants.type_of_tax[3]).OrderBy(m => m.rate).ToList();
             TempData["actionStatus"] = "Put";
-            return View("transaction");
+            return RedirectToAction("Get",new {id=transac.id});
         }
 
        /* [HttpGet]
