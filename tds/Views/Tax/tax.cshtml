@@ -85,7 +85,7 @@
                                                 <div class="form-group row">
                                                     <label class="col-sm-3 col-form-label">Rate(%)</label>
                                                     <div class="col-sm-9">
-                                                        @Html.TextBoxFor(model => model.entity.rate, new { placeholder = "Rate", @class = "form-control" })
+                                                        @Html.TextBoxFor(model => model.entity.rate, new { placeholder = "Rate", @class = "form-control", @type = "number", @step = "0.01" })
                                                         @Html.ValidationMessageFor(model => model.entity.rate, "", new { @class = "text-danger" })
                                                         @Html.Hidden("page", TempData["page"], new { name = "page" })
                                                         @if (actionName == "Put")
