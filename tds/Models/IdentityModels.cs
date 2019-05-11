@@ -59,10 +59,11 @@ namespace tds.Models
                 var ustore = new UserStore<ApplicationUser>(context);
                 var umanager = new UserManager<ApplicationUser>(ustore);
                 var admin = new ApplicationUser {Email="admin@admin.com",PhoneNumber="123456789",UserName="admin"};
-                umanager.Create(admin, "123456");
+                umanager.Create(admin, "Admin@123");
                 umanager.AddToRole(admin.Id, "Admin");
-
-                // Add code to initialize context tables
+            context.Roles.Add(new IdentityRole() { Name = "Admin" });
+            context.Users.Add(admin);
+            // Add code to initialize context tables
             Deductor deductor = new Deductor();
             deductor.id = admin.Id;
             deductor.legalName = admin.UserName;
