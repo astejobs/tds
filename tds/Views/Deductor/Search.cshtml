@@ -1,0 +1,283 @@
+﻿@using tds.Models
+@model SearchViewModel
+@{
+Layout=null;
+ var list = new SelectList(new[]
+{
+    new { Value = "Open", Name = "Open" },
+    new { Value = "Resolved", Name = "Resolved" },
+    new { Value = "Closed", Name = "Closed" },
+},
+"Value", "Name", 1);
+    ViewData["typelist"] = list;
+
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Admin</title>
+    <!-- base:css -->
+    <link rel="stylesheet" href="~/Content/vendors/mdi/css/materialdesignicons.min.css">
+    <link rel="stylesheet" href="~/Content/vendors/css/vendor.bundle.base.css">
+    <link rel="stylesheet" href="~/Content/vendors/flag-icon-css/css/flag-icon.min.css">
+    <!-- endinject -->
+    <!-- plugin css for this page -->s
+    <link rel="stylesheet" href="~/Content/vendors/select2/select2.min.css">
+    <link rel="stylesheet" href="~/Content/vendors/select2-bootstrap-theme/select2-bootstrap.min.css">
+    <!-- End plugin css for this page -->
+    <!-- inject:css -->
+    <link rel="stylesheet" href="~/Content/css/vertical-layout-light/style.css">
+    <!-- endinject -->
+    <link rel="shortcut icon" href="~/Content/images/favicon.png" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <style>
+
+        #exampleFormControlSelect2 {
+            padding: 1rem .75rem !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-scroller">
+        <!-- partial:../../partials/_navbar.html -->
+        @Html.Partial("_Header")
+        <!-- partial -->
+        <div class="container-fluid page-body-wrapper">
+            <!-- partial:../../partials/_settings-panel.html -->
+            <!-- partial -->
+            <!-- partial:../../partials/_sidebar.html -->
+            @Html.Partial("_Menu")
+            <!-- partial -->
+            <div class="main-panel">
+                <div class="content-wrapper">
+                    <div class="row">
+                        <div class="col-12 grid-margin">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="alert alert-fill-danger" role="alert">
+                                        <i class="mdi mdi-alert-circle"></i> Oh snap! Change a few things up and try submitting again.
+                                    </div>
+                                    <div class="alert alert-fill-primary" role="alert">
+                                        <i class="mdi mdi-alert-circle"></i> There! This is a primary alert.
+                                    </div>
+                                    <h4 class="card-title">Search</h4>
+                                    @using (Html.BeginForm("Search", "Transaction", Model, FormMethod.Post, new { @class = "form-sample", role = "form" }))
+                                    {
+
+                                    <p class="card-description">
+                                        Personal info
+                                    </p>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group row">
+                                                <label class="col-sm-3 col-form-label">Type</label>
+                                                <div class="col-sm-9">
+                                                    @Html.DropDownListFor(m => m.type,
+                                                    new SelectList(ViewBag.types,
+                                                    "", ""), "Choose Contractor", new { @class = "form-control", @Id = "exampleFormControlSelect2" })
+                                                   
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group row">
+                                                <label class="col-sm-3 col-form-label">Contractor</label>
+                                                <div class="col-sm-9">
+                                                    <select class="form-control" id="exampleFormControlSelect2">
+                                                        <option>1</option>
+                                                        <option>2</option>
+                                                        <option>3</option>
+                                                        <option>4</option>
+                                                        <option>5</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group row">
+                                                <label class="col-sm-3 col-form-label">GSTIN</label>
+                                                <div class="col-sm-9">
+                                                    <select class="form-control" id="exampleFormControlSelect2">
+                                                        <option>1</option>
+                                                        <option>2</option>
+                                                        <option>3</option>
+                                                        <option>4</option>
+                                                        <option>5</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group row">
+                                                <label class="col-sm-3 col-form-label">From</label>
+                                                <div class="col-sm-9">
+                                                    <input class="form-control date" placeholder="dd-mm-yyyy">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group row">
+                                                <label for="exampleInputMobile" class="col-sm-3 col-form-label">To</label>
+                                                <div class="col-sm-9">
+                                                    <input class="form-control date" placeholder="dd-mm-yyyy">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    }
+                                    <button type="submit" class="btn btn-primary mr-2">Submit</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-12 grid-margin stretch-card">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h4 class="card-title">Search Result</h4>
+                                    <p class="card-description">
+                                        Add class <code>.table-bordered</code>
+                                    </p>
+                                    <div class="table-responsive pt-3">
+                                        <table class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th>
+                                                        S.No
+                                                    </th>
+                                                    <th>
+                                                        Amount Paid
+                                                    </th>
+                                                    <th>
+                                                        Contractor
+                                                    </th>
+
+                                                    <th>
+                                                        Date
+                                                    </th>
+                                                    <th>
+                                                        CGST
+                                                    </th>
+                                                    <th>
+                                                        SGST
+                                                    </th>
+                                                    <th>
+                                                        IT
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>
+                                                        1
+                                                    </td>
+                                                    <td>
+                                                        $ 77.99
+                                                    </td>
+                                                    <td>
+                                                        Herman Beck
+                                                    </td>
+                                                    <td>
+                                                        May 15, 2015
+                                                    </td>
+                                                    <td>
+                                                        5 %
+                                                    </td>
+                                                    <td>
+                                                        5 %
+                                                    </td>
+                                                    <td>
+                                                        5 %
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        1
+                                                    </td>
+                                                    <td>
+                                                        $ 77.99
+                                                    </td>
+                                                    <td>
+                                                        Herman Beck
+                                                    </td>
+                                                    <td>
+                                                        May 15, 2015
+                                                    </td>
+                                                    <td>
+                                                        5 %
+                                                    </td>
+                                                    <td>
+                                                        5 %
+                                                    </td>
+                                                    <td>
+                                                        5 %
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                </div>
+                                <nav>
+                                    <ul class="pagination flex-wrap d-flex justify-content-center">
+                                        <li class="page-item"><a class="page-link" href="#"><i class="mdi mdi-chevron-left"></i></a></li>
+                                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                        <li class="page-item"><a class="page-link" href="#">4</a></li>
+                                        <li class="page-item"><a class="page-link" href="#"><i class="mdi mdi-chevron-right"></i></a></li>
+                                    </ul>
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- content-wrapper ends -->
+                <!-- partial:../../partials/_footer.html -->
+                <div class="footer-wrapper">
+                    <footer class="footer">
+                        <div class="d-sm-flex justify-content-center justify-content-sm-between">
+                            <span class="text-center text-sm-left d-block d-sm-inline-block">Copyright &copy; 2019. All rights reserved. </span>
+                        </div>
+                    </footer>
+                </div>
+                <!-- partial -->
+            </div>
+            <!-- main-panel ends -->
+        </div>
+        <!-- page-body-wrapper ends -->
+    </div>
+    <!-- container-scroller -->
+    <!-- base:js -->
+    <script src="~/Content/vendors/js/vendor.bundle.base.js"></script>
+    <!-- endinject -->
+    <!-- inject:js -->
+    <script src="~/Content/js/off-canvas.js"></script>
+    <script src="~/Content/js/hoverable-collapse.js"></script>
+    <script src="~/Content/js/template.js"></script>
+    <script src="~/Content/js/settings.js"></script>
+    <script src="~/Content/js/todolist.js"></script>
+    <!-- endinject -->
+    <!-- plugin js for this page -->
+    <script src="~/Content/vendors/typeahead.js/typeahead.bundle.min.js"></script>
+    <script src="~/Content/vendors/select2/select2.min.js"></script>
+    <!-- End plugin js for this page -->
+    <!-- Custom js for this page-->
+    <script src="~/Content/js/file-upload.js"></script>
+    <script src="~/Content/js/typeahead.js"></script>
+    <script src="~/Content/js/select2.js"></script>
+    <script>
+        flatpickr(".date");
+    </script>
+    <!-- End custom js for this page-->
+</body>
+</html>

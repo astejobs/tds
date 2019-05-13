@@ -1,0 +1,61 @@
+﻿@using tds.Models
+@{
+    var data = System.Web.HttpContext.Current.User.Identity.Name;
+    //   FindById(User.Identity.GetUserId())
+}
+<nav class="sidebar sidebar-offcanvas" id="sidebar">
+    <ul class="nav">
+        <li class="nav-item nav-profile">
+            <div class="nav-link d-flex">
+                <div class="profile-image">
+                    <img src="~/Content/images/faces/face28.png" alt="image">
+                </div>
+                <div class="profile-name">
+                    <p class="name">
+                        @data
+                    </p>
+                    <p class="designation">
+
+                    </p>
+                </div>
+            </div>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="@Url.Action("DashBoard","Transaction")">
+                <i class="mdi mdi-shield-check menu-icon"></i>
+                <span class="menu-title">Dashboard</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="@Url.Action("Get","Deductor")">
+                <i class="mdi mdi-puzzle menu-icon"></i>
+                <span class="menu-title">Deductor</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="@Url.Action("Get","Contractor")">
+                <i class="mdi mdi-puzzle menu-icon"></i>
+                <span class="menu-title">Contractor</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="@Url.Action("Get","Transaction")">
+                <i class="mdi mdi-puzzle menu-icon"></i>
+                <span class="menu-title">Transaction</span>
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link" href="@Url.Action("Get","Tax")">
+                <i class="mdi mdi-puzzle menu-icon"></i>
+                <span class="menu-title">Tax</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="@Url.Action("Search","Transaction")">
+                <i class="mdi mdi-puzzle menu-icon"></i>
+                <span class="menu-title">Search</span>
+            </a>
+        </li>
+    </ul>
+</nav>

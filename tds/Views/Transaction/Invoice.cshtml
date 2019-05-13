@@ -1,0 +1,129 @@
+﻿@model List<tds.Models.Transaction>
+@{
+
+    Layout = null;
+
+
+}
+<link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+<div class="main-panel">
+    <div class="content-wrapper">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card px-2">
+                    <div class="card-body">
+                        <div class="container-fluid">
+
+
+                        </div>
+                        <div class="container-fluid d-flex justify-content-between">
+                            <div class="col-lg-3 pl-0">
+
+                                <h3 style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;margin-bottom:60px;text-decoration:underline;text-align:center"><b>OFFICE OF THE EXECUTIVE ENGINEER SPECIAL SUBDIVISION TANGDAR</b></h3>
+                                <h4 style="margin-bottom:10px;display:inline-block" class="mb-0 mt-5 text-bold"><b>Name : </b></h4>  <h4 style="border-bottom:1px solid;display:inline-block">@Model.FirstOrDefault().contractor.name</h4>
+                                <br />
+                                <h4 style="margin-bottom:10px;display:inline-block;" class="text-bold"><b>GSTIN : </b></h4>  <h4 style="border-bottom:1px solid;display:inline-block"> @Model.FirstOrDefault().contractor.GSTIN</h4>
+                            </div>
+                        </div>
+                        <div class="container-fluid mt-5 d-flex justify-content-center w-100">
+                            <div class=" w-100">
+                                <table class="table table-bordered table-condensed">
+                                    <thead>
+                                        <tr>
+                                            <th>
+
+                                            </th>
+
+                                            <th>
+                                                Amount Paid
+                                            </th>
+                                            <th>
+                                                Date
+                                            </th>
+
+
+                                            <th>
+                                                CGST
+                                            </th>
+                                            <th>
+                                                SGST
+                                            </th>
+                                            <th>
+                                                IT
+                                            </th>
+                                            <th>
+                                                LabourCess
+                                            </th>
+                                            <th>
+                                                Deposit
+                                            </th>
+
+                                            <th>
+                                                NetAmount
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        @foreach (var item in Model)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    <b> @(item.Equals(Model.Last()) ? "Total" : "")</b>
+
+                                                </td>
+
+                                                <td>
+                                                    @item.amountPaid
+
+                                                </td>
+
+                                                <td>
+
+                                                    @(!item.Equals(Model.Last()) ? item.createDate.Value.ToString("dd-MM-yyyy") : "")
+                                                </td>
+
+
+                                                <td>
+                                                    @item.cgstAmount
+
+                                                </td>
+                                                <td>
+                                                    @item.sgstAmount
+                                                </td>
+                                                <td>
+                                                    @item.itAmount
+                                                </td>
+                                                <td>
+                                                    @item.labourCessAmount
+                                                </td>
+                                                <td>
+                                                    @item.deposit
+                                                </td>
+                                                <td>
+                                                    @item.netAmount
+                                                </td>
+                                            </tr>
+
+                                        }
+
+
+                                    </tbody>
+                                </table>
+
+
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- content-wrapper ends -->
+    <!-- partial:../../partials/_footer.html -->
+    <!-- partial -->
+</div>
+
+
