@@ -19,7 +19,7 @@ namespace tds.RepositoryInterface
 
         IPagedList<Transaction> SearchGeneral(SearchViewModel transCriteria, DateTime d1, DateTime d2, int pageIndex);
         List<Tax> listTaxes(string type);
-        IEnumerable<Transaction> SearchGeneralExcel(DateTime dateTime1, DateTime dateTime2);
+        IEnumerable<Transaction> SearchGeneralExcel(System.Linq.Expressions.Expression<Func<Transaction, bool>> predicate);
         List<Contractor> listActiveContractors();
         IPagedList<Transaction> SearchGeneralJSon(System.Linq.Expressions.Expression<Func<Transaction, bool>> predicate, int pageIndex);
         IPagedList<Transaction> SearchIndividual(System.Linq.Expressions.Expression<Func<Transaction, bool>> predicate, int pageIndex);

@@ -323,7 +323,7 @@ new SelectList(ViewBag.Contractors,
                                             else if (ViewBag.typo == "General")
                                             {
 
-                                                @Html.ActionLink("Export to Excel", "ExportToExcel", new { fromDate = ViewBag.startDate, ToDate = ViewBag.endDate }, new { @class = "btn btn-primary mr-2", target = "_blank" })
+                                                @Html.ActionLink("Export to Excel", "ExportToExcel", new { fromDate = ViewBag.startDate, ToDate = ViewBag.endDate,activeType = ViewBag.activeType }, new { @class = "btn btn-primary mr-2", target = "_blank" })
                                             }
                                         }
                                     </div>

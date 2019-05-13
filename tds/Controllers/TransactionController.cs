@@ -294,16 +294,10 @@ namespace tds.Controllers
                 transCriteria.GSTIN = GSTIN;
                 transCriteria.Type = type;
                 
-                if (type == Constants.type[1])
-                {
-                   ViewBag.transList= generalInterface.Search(transCriteria, d1, d2, pageIndex);
-                    ViewBag.typo = Constants.type[1];
-                }
-                else
-                {
-                    if (type == Constants.type[1])
+             if (type == Constants.type[1])
                     {
-                        ViewBag.transList = generalInterface.SearchIndividual(m => (m.contractorId == contractorId || m.contractor.GSTIN == GSTIN) && DbFunctions.TruncateTime(m.createDate) >= DbFunctions.TruncateTime(d1) && DbFunctions.TruncateTime(m.createDate) <= DbFunctions.TruncateTime(d2), pageIndex);
+                    ViewBag.typo = Constants.type[1];
+                    ViewBag.transList = generalInterface.SearchIndividual(m => (m.contractorId == contractorId || m.contractor.GSTIN == GSTIN) && DbFunctions.TruncateTime(m.createDate) >= DbFunctions.TruncateTime(d1) && DbFunctions.TruncateTime(m.createDate) <= DbFunctions.TruncateTime(d2), pageIndex);
                     }
                     else
                     {
@@ -319,10 +313,11 @@ namespace tds.Controllers
                         {
                             ViewBag.transList = generalInterface.SearchGeneralJSon(m => DbFunctions.TruncateTime(m.createDate) >= DbFunctions.TruncateTime(d1) && DbFunctions.TruncateTime(m.createDate) <= DbFunctions.TruncateTime(d2), pageIndex);
                         }
-
-                    }
-                    ViewBag.typo =Constants.type[0];
+                    ViewBag.typo = Constants.type[0];
+                    ViewBag.activeType = isActive;
                 }
+                    
+             
                 
                 return View("Search");
             }
@@ -448,7 +443,7 @@ namespace tds.Controllers
             return report;
         }
     
-        public ActionResult ExportToExcel(string fromDate, string toDate)
+        public ActionResult ExportToExcel(string fromDate, string toDate,string activeType)
         {
             DateTime dt = DateTime.ParseExact(fromDate, "dd-MM-yyyy", CultureInfo.InvariantCulture);
             DateTime dt2 = DateTime.ParseExact(toDate, "dd-MM-yyyy", CultureInfo.InvariantCulture);
@@ -459,10 +454,22 @@ namespace tds.Controllers
             DateTime d2 = DateTime.ParseExact(g2, "yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture);
 
             //////new changes//////
-            List<Transaction> excel = generalInterface.SearchGeneralExcel(d1 ,d2).ToList();
+            ///
+            List<Transaction> excel = new List<Transaction>();
+            if (activeType == "Active")
+            {
+                 excel = generalInterface.SearchGeneralExcel(m => DbFunctions.TruncateTime(m.createDate) >= DbFunctions.TruncateTime(d1) && DbFunctions.TruncateTime(m.createDate) <= DbFunctions.TruncateTime(d2) && m.contractor.status == true).ToList();
+            }
+            else if (activeType == "InActive")
+            {
+                excel = generalInterface.SearchGeneralExcel(m => DbFunctions.TruncateTime(m.createDate) >= DbFunctions.TruncateTime(d1) && DbFunctions.TruncateTime(m.createDate) <= DbFunctions.TruncateTime(d2) && m.contractor.status == false).ToList();
+            }
+            else 
+            {
+               excel = generalInterface.SearchGeneralExcel(m => DbFunctions.TruncateTime(m.createDate) >= DbFunctions.TruncateTime(d1) && DbFunctions.TruncateTime(m.createDate) <= DbFunctions.TruncateTime(d2)).ToList();
+            }
 
-           
-           
+
 
             Transaction total = new Transaction
             {
