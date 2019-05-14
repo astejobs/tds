@@ -180,27 +180,27 @@
 
                                         {
 
-                                            <div id='Paging' style="text-align:center">
-                                                <ul class="pagination flex-wrap d-flex justify-content-center">
+                                        <div id='Paging' style="text-align:center">
+                                            <ul class="flex-wrap d-flex justify-content-center">
 
-                                                    <li class="page-item">
+                                                <li class="page-item" style="list-style:none">
 
-                                                        Page @(ViewBag.transList.PageCount < ViewBag.transList.PageNumber ? 0 : ViewBag.transList.PageNumber)
-                                                        of @ViewBag.transList.PageCount
-                                                        @Html.PagedListPager((IPagedList)ViewBag.transList, page => Url.Action("Search", new { page, type = ViewBag.type, contractorId = ViewBag.contractorId, GSTIN = ViewBag.GSTN, fromDate = ViewBag.startDate, toDate = ViewBag.endDate }), new PagedListRenderOptions() { LiElementClasses = new string[] { "page-link" } })
+                                                    Page @(ViewBag.transList.PageCount < ViewBag.transList.PageNumber ? 0 : ViewBag.transList.PageNumber)
+                                                    of @ViewBag.transList.PageCount
+                                                    @Html.PagedListPager((IPagedList)ViewBag.transList, page => Url.Action("Search", new { page, type = ViewBag.type, contractorId = ViewBag.contractorId, GSTIN = ViewBag.GSTN, fromDate = ViewBag.startDate, toDate = ViewBag.endDate }), new PagedListRenderOptions() { LiElementClasses = new string[] { "page-link" } })
 
-                                                    </li>
+                                                </li>
 
-                                                </ul>
-                                            </div>
+                                            </ul>
+                                        </div>
                                         }
                                         @if (ViewBag.check == "true")
                                         {
 
                                             <div id='Paging' style="text-align:center">
-                                                <ul class="pagination flex-wrap d-flex justify-content-center">
+                                                <ul class="flex-wrap d-flex justify-content-center">
 
-                                                    <li class="page-item">
+                                                    <li class="page-item" style="list-style:none">
 
                                                         Page @(ViewBag.transList.PageCount < ViewBag.transList.PageNumber ? 0 : ViewBag.transList.PageNumber)
                                                         of @ViewBag.transList.PageCount
@@ -445,36 +445,35 @@ new SelectList(ViewBag.Contractors,
 
                                         {
 
-                                            <div id='Paging' style="text-align:center">
-                                                <ul class="pagination flex-wrap d-flex justify-content-center">
+                                        <div id='Paging' style="text-align:center">
+                                            <ul class="flex-wrap d-flex justify-content-center">
 
-                                                    <li class="page-item">
+                                                <li class="page-item" style="list-style:none">
+                                                    Page @(ViewBag.transList.PageCount < ViewBag.transList.PageNumber ? 0 : ViewBag.transList.PageNumber)
+                                                    of @ViewBag.transList.PageCount
+                                                    @Html.PagedListPager((IPagedList)ViewBag.transList, page => Url.Action("Search", new { page, type = ViewBag.type, contractorId = ViewBag.contractorId, GSTIN = ViewBag.GSTN, fromDate = ViewBag.startDate, toDate = ViewBag.endDate }), new PagedListRenderOptions() { LiElementClasses = new string[] { "page-link" } })
 
-                                                        Page @(ViewBag.transList.PageCount < ViewBag.transList.PageNumber ? 0 : ViewBag.transList.PageNumber)
-                                                        of @ViewBag.transList.PageCount
-                                                        @Html.PagedListPager((IPagedList)ViewBag.transList, page => Url.Action("Search", new { page, type = ViewBag.type, contractorId = ViewBag.contractorId, GSTIN = ViewBag.GSTN, fromDate = ViewBag.startDate, toDate = ViewBag.endDate }), new PagedListRenderOptions() { LiElementClasses = new string[] { "page-link" } })
+                                                </li>
 
-                                                    </li>
-
-                                                </ul>
-                                            </div>
+                                            </ul>
+                                        </div>
                                         }
                                         @if (ViewBag.check == "true")
                                         {
 
-                                            <div id='Paging' style="text-align:center">
-                                                <ul class="pagination flex-wrap d-flex justify-content-center">
+                                        <div id='Paging' style="text-align:center">
+                                            <ul class="flex-wrap d-flex justify-content-center">
 
-                                                    <li class="page-item">
+                                                <li class="page-item" style="list-style:none">
 
-                                                        Page @(ViewBag.transList.PageCount < ViewBag.transList.PageNumber ? 0 : ViewBag.transList.PageNumber)
-                                                        of @ViewBag.transList.PageCount
-                                                        @Html.PagedListPager((IPagedList)ViewBag.transList, page => Url.Action("DashBoard", new { page }), new PagedListRenderOptions() { LiElementClasses = new string[] { "page-link" } })
+                                                    Page @(ViewBag.transList.PageCount < ViewBag.transList.PageNumber ? 0 : ViewBag.transList.PageNumber)
+                                                    of @ViewBag.transList.PageCount
+                                                    @Html.PagedListPager((IPagedList)ViewBag.transList, page => Url.Action("DashBoard", new { page }), new PagedListRenderOptions() { LiElementClasses = new string[] { "page-link" } })
 
-                                                    </li>
+                                                </li>
 
-                                                </ul>
-                                            </div>
+                                            </ul>
+                                        </div>
                                         }
                                     </nav>
                                 </div>

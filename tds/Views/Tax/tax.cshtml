@@ -186,18 +186,18 @@ new SelectList(ViewBag.types,
                                 </div>
                                 <nav>
                                    
-                                        <div id='Paging' style="text-align:center">
-                                            Page @(Model.entityList.PageCount < Model.entityList.PageNumber ? 0 : Model.entityList.PageNumber)
-                                            of @Model.entityList.PageCount
-                                            <ul class="pagination flex-wrap d-flex justify-content-center">
+                                    <div id='Paging' style="text-align:center">
+                                        Page @(Model.entityList.PageCount < Model.entityList.PageNumber ? 0 : Model.entityList.PageNumber)
+                                        of @Model.entityList.PageCount
+                                        <ul class="flex-wrap d-flex justify-content-center">
 
-                                                <li class="page-item">
-                                                    @Html.PagedListPager(Model.entityList, page => Url.Action("Get", new { page }), new PagedListRenderOptions() { LiElementClasses = new string[] { "page-link" } })
+                                            <li class="page-item" style="list-style:none">
+                                                @Html.PagedListPager(Model.entityList, page => Url.Action("Get", new { page }), new PagedListRenderOptions() { LiElementClasses = new string[] { "page-link" } })
 
-                                                </li>
+                                            </li>
 
-                                            </ul>
-                                        </div>
+                                        </ul>
+                                    </div>
                                    
                                         <!--  <ul class="pagination flex-wrap d-flex justify-content-center">
               <li class="page-item"><a class="page-link" href="#"><i class="mdi mdi-chevron-left"></i></a></li>
