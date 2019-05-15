@@ -60,13 +60,19 @@ namespace tds.Controllers
 
             if (ModelState.IsValid)
             {
-                if (generalInterface.Save(contractor.entity))
+                if (generalInterface.checkAlreadyExists(contractor.entity))
                 {
-                    TempData["MsgSuccess"] = "Contractor has been Saved Successfully";
+                    if (generalInterface.Save(contractor.entity))
+                    {
+                        TempData["MsgSuccess"] = "Contractor has been Saved Successfully";
+                    }
+                    else
+                    {
+                        TempData["MsgFail"] = "Enter valid data";
+                    }
                 }
-                else
-                {
-                    TempData["MsgFail"] = "Enter valid data";
+                else {
+                    TempData["MsgFail"] = "GSTIN/Registration No. Already Exists";
                 }
             }
             else
@@ -85,9 +91,14 @@ namespace tds.Controllers
         {
             if (ModelState.IsValid)
             {
-                
-                generalInterface.Update(contractor.entity);
-                TempData["MsgSuccess"] = "Contractor has been Updated Successfully";
+                if (generalInterface.checkAlreadyExists(contractor.entity))
+                {
+                    generalInterface.Update(contractor.entity);
+                    TempData["MsgSuccess"] = "Contractor has been Updated Successfully";
+                }
+                else {
+                    TempData["MsgFail"] = "GSTIN/Registration No. Already Exists";
+                }
             }
             else
             {
