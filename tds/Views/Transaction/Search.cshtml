@@ -572,6 +572,8 @@ new SelectList(ViewBag.Contractors,
                 if ($("#exampleFormControlSelecttype").val() == "Individual") {
                     $("#exampleFormControlSelect4").attr('required', true);
                     $("#exampleFormControlSelect3").attr('required', true);
+
+                    $("#IsActive option[value=All]").hide();
                     $("#divHide").show();
 
                 }
@@ -579,6 +581,7 @@ new SelectList(ViewBag.Contractors,
                     $("#exampleFormControlSelect4").attr('required', false);
                     $("#exampleFormControlSelect3").attr('required', false);
                     $("#divHide").hide();
+                    $("#IsActive option[value=All]").show();
 
                 }
             });
