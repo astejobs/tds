@@ -17,7 +17,7 @@ using System.Data.Entity;
 
 namespace tds.Controllers
 {
-//[Authorize(Roles ="Admin")]
+[Authorize(Roles ="Admin")]
     public class TransactionController : Controller
     {
         ApplicationDbContext dbContext = new ApplicationDbContext();
