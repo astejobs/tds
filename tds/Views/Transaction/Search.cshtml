@@ -595,7 +595,7 @@ new SelectList(ViewBag.Contractors,
                         success: function (contractors) {
                             var DDL = $("#exampleFormControlSelect3");
                             DDL.empty();
-                            DDL.append(`<option value=-1>Select Contractor</option`)
+                            DDL.append(`<option value="">Select Contractor</option`)
                             $.each(contractors, function (index,contractor) {
                              
                                 DDL.append(`<option value=${contractor.id}>${contractor.name}</option`)
