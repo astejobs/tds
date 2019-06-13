@@ -52,7 +52,7 @@ namespace tds.Models
         [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
         public DateTime? createDate { get; set; }
 
-        [Required(ErrorMessage = "Deposit is required")]
+       
         public Double deposit { get; set; }
         public Double netAmount { get; set; }
 
