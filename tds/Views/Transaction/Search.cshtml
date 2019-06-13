@@ -317,7 +317,7 @@ new SelectList(ViewBag.Contractors,
 
                                             if (ViewBag.typo == "Individual")
                                             {
-                                                @Html.ActionLink("Export to Pdf", "ExportToPdf", new { id = ViewBag.id, fromDate = ViewBag.startDate, ToDate = ViewBag.endDate }, new { @class = "btn btn-primary mr-2", target = "_blank" })
+                                                @Html.ActionLink("Export to Pdf", "ExportToPdf", new { id = ViewBag.id, Gstin= ViewBag.GSTN, fromDate = ViewBag.startDate, ToDate = ViewBag.endDate }, new { @class = "btn btn-primary mr-2", target = "_blank" })
 
                                             }
                                             else if (ViewBag.typo == "General")

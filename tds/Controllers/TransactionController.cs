@@ -324,45 +324,7 @@ namespace tds.Controllers
           
 
         }
-        //public ActionResult SearchTransactions()
-        //{
-        //    ViewBag.Contractors = contractorInterface.listActiveContractors();
-        //    ViewBag.types = Models.Constants.type;
-        //    return View();
-        //}
-        //[HttpGet]
-        //[Route("transaction/SearchTransaction/")]
-        //public JsonResult SearchTransaction(SearchViewModel formData)
-        //{
-            
-        //    IPagedList<TransactionVM> transList = null;
-            
-        //        if (formData.Type == Constants.type[1])
-        //        {
-        //        transList = generalInterface.SearchIndividual(m => (m.contractorId == formData.ContractorId || m.contractor.GSTIN == formData.GSTIN) && DbFunctions.TruncateTime(m.createDate) >= DbFunctions.TruncateTime(formData.FromDate) && DbFunctions.TruncateTime(m.createDate) <= DbFunctions.TruncateTime(formData.ToDate), formData.PageIndex);
-        //        }
-        //        else
-        //        {
-        //        if(formData.IsActive=="Active")
-        //        {
-        //            transList = generalInterface.SearchGeneralJSon(m => DbFunctions.TruncateTime(m.createDate) >= DbFunctions.TruncateTime(formData.FromDate) && DbFunctions.TruncateTime(m.createDate) <= DbFunctions.TruncateTime(formData.ToDate) && m.contractor.status == true,formData.PageIndex);
-        //        }
-        //      else  if (formData.IsActive == "InActive")
-        //        {
-        //            transList = generalInterface.SearchGeneralJSon(m => DbFunctions.TruncateTime(m.createDate) >= DbFunctions.TruncateTime(formData.FromDate) && DbFunctions.TruncateTime(m.createDate) <= DbFunctions.TruncateTime(formData.ToDate) && m.contractor.status == false, formData.PageIndex);
-        //        }
-        //        else
-        //            {
-        //                transList = generalInterface.SearchGeneralJSon(m => DbFunctions.TruncateTime(m.createDate) >= DbFunctions.TruncateTime(formData.FromDate) && DbFunctions.TruncateTime(m.createDate) <= DbFunctions.TruncateTime(formData.ToDate), formData.PageIndex);
-        //            }
-               
-        //    }
-
-        //        return Json(transList,JsonRequestBehavior.AllowGet);
       
-
-
-        //}
 
         [HttpGet]
         [Route("transactions/")]
@@ -400,11 +362,12 @@ namespace tds.Controllers
 
             return View(_transactions);
         }
-        public ActionResult ExportToPdf(string id, string fromDate, string toDate)
+        public ActionResult ExportToPdf(string id, string Gstin, string fromDate, string toDate)
         {
                ////new changes/////
             SearchViewModel VM = new SearchViewModel();
             VM.ContractorId = id;
+            VM.GSTIN = Gstin;
             DateTime dt = DateTime.ParseExact(fromDate, "dd-MM-yyyy", CultureInfo.InvariantCulture);
             DateTime dt2 = DateTime.ParseExact(toDate, "dd-MM-yyyy", CultureInfo.InvariantCulture);
             string g1 = Convert.ToDateTime(dt).ToString("yyyy-MM-dd HH:mm:ss.fff");
@@ -412,18 +375,7 @@ namespace tds.Controllers
             DateTime d1 = DateTime.ParseExact(g1, "yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture);
             DateTime d2 = DateTime.ParseExact(g2, "yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture);
             _transactions = generalInterface.SearchForPdf(VM, d1, d2).ToList();
-          
-            //foreach(var item in trans)
-            //{
-            //    _transactions.TotalAmountPaid += item.amountPaid;
-            //    _transactions.TotalcgstAmount += item.cgstAmount;
-            //    _transactions.Totaldeposit += item.deposit;
-            //    _transactions.TotalitAmount += item.itAmount;
-            //    _transactions.TotallabourCessAmount += item.labourCessAmount;
-            //    _transactions.TotalnetAmount += item.netAmount;
-            //    _transactions.TotalsgstAmount += item.sgstAmount;
-            //}
-            //_transactions.Transactions = trans;
+           
 
             Transaction total = new Transaction
             {
