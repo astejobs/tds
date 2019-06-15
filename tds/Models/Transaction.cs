@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
 
@@ -40,7 +41,10 @@ namespace tds.Models
 
         public string incometaxtId { get; set; }
         public virtual Tax incomeTax { get; set; }
-
+        [Required]
+        public string SchemeId { get; set; }
+        [NotMapped]
+        public string AccountNo { get; set; }
         public string labourCessId { get; set; }
         public virtual Tax labourCess { get; set; }
 
@@ -48,14 +52,14 @@ namespace tds.Models
         public Double sgstAmount { get; set; }
         public Double itAmount { get; set; }
         public Double labourCessAmount { get; set; }
-
+       
         [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
         public DateTime? createDate { get; set; }
 
        
         public Double deposit { get; set; }
         public Double netAmount { get; set; }
-
+        public Scheme Scheme { get; set; }
         public override string ToString()
         {
             return "Contractor "+contractor.name+" cgst  sgst  it lc dep"+cgstAmount+" "+sgstAmount+" "+itAmount+" "+labourCessAmount+" "+deposit;

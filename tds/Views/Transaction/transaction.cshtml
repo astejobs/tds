@@ -151,13 +151,23 @@
                                         </div>
 
                                         <div class="row">
-                                          
+
                                             <div class="col-md-6">
                                                 <div class="form-group row">
                                                     <label class="col-sm-3 col-form-label">Deposit</label>
                                                     <div class="col-sm-9">
                                                         @Html.TextBoxFor(model => model.deposit, new { placeholder = "Deposit", @class = "form-control" })
                                                         @Html.ValidationMessageFor(model => model.deposit, "", new { @class = "text-danger" })
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group row">
+                                                    <label class="col-sm-3 col-form-label">Scheme</label>
+                                                    <div class="col-sm-9">
+                                                        @Html.DropDownListFor(model => model.SchemeId,null,"Select Scheme", new {@class = "form-control" })
+                                                        @Html.ValidationMessageFor(model => model.SchemeId, "", new { @class = "text-danger",required=true })
 
                                                     </div>
                                                 </div>

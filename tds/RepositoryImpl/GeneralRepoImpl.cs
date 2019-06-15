@@ -198,7 +198,9 @@ namespace tds.RepositoryImpl
                 itAmount = t.Sum(c => c.itAmount),
                 labourCessAmount = t.Sum(c => c.labourCessAmount),
                 deposit = t.Sum(c => c.deposit),
-                netAmount = t.Sum(c => c.netAmount)
+                netAmount = t.Sum(c => c.netAmount),
+                accountNo=t.OrderByDescending(x=>x.createDate).FirstOrDefault().Scheme.AccountNo
+                
             });
 
             var transactions = query.ToList().Select(t => new Transaction
@@ -210,7 +212,9 @@ namespace tds.RepositoryImpl
                 itAmount = t.itAmount,
                 labourCessAmount = t.labourCessAmount,
                 deposit = t.deposit,
-                netAmount = t.netAmount
+                netAmount = t.netAmount,
+                AccountNo=t.accountNo
+                
             }).ToList();
 
 

@@ -21,7 +21,8 @@
                 <b>Amount Paid</b>
             </th>
 
-
+            <th>
+                <b>Scheme Name</b></th>
             <th>
                 <b> CGST</b>
             </th>
@@ -47,40 +48,43 @@
 
         @foreach (var item in Model)
         {
-            <tr>
-                
-                <td>
-                  @(item.Equals(Model.Last()) ? @Html.Raw(" <b> " + @item.contractor.name +"</ b >") : @Html.Raw( @item.contractor.name))
-                </td>
-                <td>
-                    @item.contractor.GSTIN
-                </td>
-                @*<td>
-                    @item.createDate.Value.ToString("dd-MM-yyyy")
-                </td>*@
-                <td>
-                    @(item.Equals(Model.Last()) ? @Html.Raw(" <b> " +@item.amountPaid+ "</ b >") : @Html.Raw(@item.amountPaid))
-                </td>
+        <tr>
 
-                <td>
-                    @(item.Equals(Model.Last()) ? @Html.Raw(" <b> " + @item.cgstAmount + "</ b >") : @Html.Raw(@item.cgstAmount))
-                </td>
-                <td>
-                    @(item.Equals(Model.Last()) ? @Html.Raw(" <b> " + @item.sgstAmount + "</ b >") : @Html.Raw(@item.sgstAmount))
-                </td>
-                <td>
-                    @(item.Equals(Model.Last()) ? @Html.Raw(" <b> " + @item.itAmount + "</ b >") : @Html.Raw(@item.itAmount))
-                </td>
-                <td>
-                    @(item.Equals(Model.Last()) ? @Html.Raw(" <b> " + @item.labourCessAmount + "</ b >") : @Html.Raw(@item.labourCessAmount))
-                </td>
-                <td>
-                    @(item.Equals(Model.Last()) ? @Html.Raw(" <b> " + @item.deposit + "</ b >" ): @Html.Raw(@item.deposit))
-                </td>
-                <td>
-                    @(item.Equals(Model.Last()) ? @Html.Raw(" <b> " + @item.netAmount + "</ b >" ): @Html.Raw(@item.netAmount))
-                </td>
-            </tr>
+            <td>
+                @(item.Equals(Model.Last()) ? @Html.Raw(" <b> " + @item.contractor.name + "</ b >") : @Html.Raw(@item.contractor.name))
+            </td>
+            <td>
+                @item.contractor.GSTIN
+            </td>
+            @*<td>
+            @item.createDate.Value.ToString("dd-MM-yyyy")
+        </td>*@
+            <td>
+                @(item.Equals(Model.Last()) ? @Html.Raw(" <b> " + @item.amountPaid + "</ b >") : @Html.Raw(@item.amountPaid))
+            </td>
+            <td>
+                @(item.Equals(Model.Last()) ? @Html.Raw(" <b></ b >") : @Html.Raw(@item.AccountNo))
+            </td>
+
+            <td>
+                @(item.Equals(Model.Last()) ? @Html.Raw(" <b> " + @item.cgstAmount + "</ b >") : @Html.Raw(@item.cgstAmount))
+            </td>
+            <td>
+                @(item.Equals(Model.Last()) ? @Html.Raw(" <b> " + @item.sgstAmount + "</ b >") : @Html.Raw(@item.sgstAmount))
+            </td>
+            <td>
+                @(item.Equals(Model.Last()) ? @Html.Raw(" <b> " + @item.itAmount + "</ b >") : @Html.Raw(@item.itAmount))
+            </td>
+            <td>
+                @(item.Equals(Model.Last()) ? @Html.Raw(" <b> " + @item.labourCessAmount + "</ b >") : @Html.Raw(@item.labourCessAmount))
+            </td>
+            <td>
+                @(item.Equals(Model.Last()) ? @Html.Raw(" <b> " + @item.deposit + "</ b >") : @Html.Raw(@item.deposit))
+            </td>
+            <td>
+                @(item.Equals(Model.Last()) ? @Html.Raw(" <b> " + @item.netAmount + "</ b >") : @Html.Raw(@item.netAmount))
+            </td>
+        </tr>
 
         }
 

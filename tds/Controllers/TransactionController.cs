@@ -79,9 +79,9 @@ namespace tds.Controllers
 
             if (TempData.ContainsKey("ModelState"))
                 ModelState.Merge((ModelStateDictionary)TempData["ModelState"]);
-            
-           
-            
+
+
+            ViewBag.SchemeId = new SelectList(dbContext.Schemes, "Id", "AccountNo");
             ViewBag.contractors = contractorInterface.listActiveContractors();
             ViewBag.cgstTaxes = taxInterface.listTaxes(Constants.type_of_tax[0]).OrderBy(m => m.rate).ToList();
             ViewBag.sgstTaxes= taxInterface.listTaxes(Constants.type_of_tax[1]).OrderBy(m => m.rate).ToList();
