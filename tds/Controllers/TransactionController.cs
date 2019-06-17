@@ -26,6 +26,7 @@ namespace tds.Controllers
         GeneralInterface<Contractor> contractorInterface;
         GeneralInterface<Deductor> deductorInterface;
         GeneralInterface<Tax> taxInterface;
+        static private Transaction _transPrint;
 
         public TransactionController()
         {
@@ -252,7 +253,7 @@ namespace tds.Controllers
     
         [HttpGet]
         [Route("transaction/search/")]
-        public ActionResult search(int? page, string type,string contractorId,string GSTIN, string fromDate, string toDate, int? id,string isActive)
+        public ActionResult search(int? page, string type,string contractorId,string GSTIN, string fromDate, string toDate, int? id,string isActive,string schemeId)
         {
             string fromDatee = fromDate;
             string toDatee = toDate;
@@ -262,6 +263,7 @@ namespace tds.Controllers
             ViewBag.type = type;
             ViewBag.contractorId = contractorId;
             ViewBag.GSTN = GSTIN;
+            ViewBag.SchemeId = new SelectList(dbContext.Schemes, "Id", "AccountNo");
             IPagedList<Transaction> transList = null;
             
 
@@ -284,6 +286,7 @@ namespace tds.Controllers
                 ViewBag.startDate = fromDate;
                 ViewBag.endDate = toDate;
                 ViewBag.id = contractorId;
+              
                 int pageIndex = 1;
 
 
@@ -296,8 +299,17 @@ namespace tds.Controllers
                 
              if (type == Constants.type[1])
                     {
+                    ViewBag.scheme = schemeId;
                     ViewBag.typo = Constants.type[1];
-                    ViewBag.transList = generalInterface.SearchIndividual(m => (m.contractorId == contractorId || m.contractor.GSTIN == GSTIN) && DbFunctions.TruncateTime(m.createDate) >= DbFunctions.TruncateTime(d1) && DbFunctions.TruncateTime(m.createDate) <= DbFunctions.TruncateTime(d2), pageIndex);
+                    if(!(string.IsNullOrEmpty(schemeId)))
+                    {
+                        ViewBag.transList = generalInterface.SearchIndividual(m => (m.contractorId == contractorId || m.contractor.GSTIN == GSTIN) && m.SchemeId == schemeId && DbFunctions.TruncateTime(m.createDate) >= DbFunctions.TruncateTime(d1) && DbFunctions.TruncateTime(m.createDate) <= DbFunctions.TruncateTime(d2), pageIndex);
+                    }
+                    else
+                    {
+                        ViewBag.transList = generalInterface.SearchIndividual(m => (m.contractorId == contractorId || m.contractor.GSTIN == GSTIN) && DbFunctions.TruncateTime(m.createDate) >= DbFunctions.TruncateTime(d1) && DbFunctions.TruncateTime(m.createDate) <= DbFunctions.TruncateTime(d2), pageIndex);
+                    }
+                 
                     }
                     else
                     {
@@ -349,7 +361,7 @@ namespace tds.Controllers
 
             transaction.sgstAmount = (dbContext.Tax.Find(transaction.sgstId).rate / 100 * transaction.amountPaid);
             transaction.cgstAmount = (dbContext.Tax.Find(transaction.cgstId).rate / 100 * transaction.amountPaid);
-            transaction.itAmount = (dbContext.Tax.Find(transaction.incometaxtId).rate / 100 * transaction.amountPaid);
+            transaction.itAmount = (dbContext.Tax.Find(transaction.incomeTaxId).rate / 100 * transaction.amountPaid);
             transaction.labourCessAmount = (dbContext.Tax.Find(transaction.labourCessId).rate / 100 * transaction.amountPaid);
             transaction.netAmount = transaction.amountPaid - transaction.sgstAmount - transaction.cgstAmount - transaction.labourCessAmount - transaction.itAmount;
             transaction.deductorId = user.Id;
@@ -362,7 +374,7 @@ namespace tds.Controllers
 
             return View(_transactions);
         }
-        public ActionResult ExportToPdf(string id, string Gstin, string fromDate, string toDate)
+        public ActionResult ExportToPdf(string id, string Gstin, string fromDate, string toDate,string scheme)
         {
                ////new changes/////
             SearchViewModel VM = new SearchViewModel();
@@ -374,8 +386,15 @@ namespace tds.Controllers
             string g2 = Convert.ToDateTime(dt2).ToString("yyyy-MM-dd HH:mm:ss.fff");
             DateTime d1 = DateTime.ParseExact(g1, "yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture);
             DateTime d2 = DateTime.ParseExact(g2, "yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture);
-            _transactions = generalInterface.SearchForPdf(VM, d1, d2).ToList();
-           
+            if (!(string.IsNullOrEmpty(scheme)))
+            {
+                _transactions = generalInterface.SearchForPdf(m => (m.contractorId == id || m.contractor.GSTIN == Gstin) && m.SchemeId == scheme && DbFunctions.TruncateTime(m.createDate) >= DbFunctions.TruncateTime(d1) && DbFunctions.TruncateTime(m.createDate) <= DbFunctions.TruncateTime(d2)).ToList();
+            }
+            else
+            {
+                _transactions = generalInterface.SearchForPdf(m => (m.contractorId == id || m.contractor.GSTIN == Gstin) && DbFunctions.TruncateTime(m.createDate) >= DbFunctions.TruncateTime(d1) && DbFunctions.TruncateTime(m.createDate) <= DbFunctions.TruncateTime(d2)).ToList();
+            }
+
 
             Transaction total = new Transaction
             {
@@ -439,7 +458,19 @@ namespace tds.Controllers
 
             return View(excel);
         }
-
+        [AllowAnonymous]
+        public ActionResult PrintInvoice()
+        {
+            return View(_transPrint);
+        }
+        public ActionResult PrintTransaction(string id)
+        {
+            _transPrint = new Transaction();
+            _transPrint = generalInterface.SearchForPdf(x => x.id == id).FirstOrDefault();
+            var report = new ActionAsPdf("PrintInvoice");
+            return report;
+            //return View("PrintInvoice", _transPrint);
+        }
 
         public JsonResult GetContractors(string isActive)
         {

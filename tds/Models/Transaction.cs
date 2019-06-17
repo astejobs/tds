@@ -39,7 +39,7 @@ namespace tds.Models
         public string sgstId { get; set; }
         public virtual Tax sgst { get; set; }
 
-        public string incometaxtId { get; set; }
+        public string incomeTaxId { get; set; }
         public virtual Tax incomeTax { get; set; }
         [Required]
         public string SchemeId { get; set; }
@@ -59,7 +59,7 @@ namespace tds.Models
        
         public Double deposit { get; set; }
         public Double netAmount { get; set; }
-        public Scheme Scheme { get; set; }
+        public virtual Scheme Scheme { get; set; }
         public override string ToString()
         {
             return "Contractor "+contractor.name+" cgst  sgst  it lc dep"+cgstAmount+" "+sgstAmount+" "+itAmount+" "+labourCessAmount+" "+deposit;

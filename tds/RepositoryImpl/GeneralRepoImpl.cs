@@ -98,15 +98,10 @@ namespace tds.RepositoryImpl
 
         }
 
-        public IEnumerable<Transaction> SearchForPdf(SearchViewModel transCriteria, DateTime fromDate, DateTime toDate)
+        public IEnumerable<Transaction> SearchForPdf(System.Linq.Expressions.Expression<Func<Transaction, bool>> predicate)
         {
-            var g1 = Convert.ToDateTime(fromDate).ToString("yyyy-MM-dd HH:mm:ss.fff");
-            string g2 = Convert.ToDateTime(toDate).ToString("yyyy-MM-dd HH:mm:ss.fff");
-            var user_time = DateTime.Parse(g1);
-            //newchange
-            return dbContext.Transaction.OrderByDescending(m => m.createDate).Where(m => (m.contractorId == transCriteria.ContractorId || m.contractor.GSTIN == transCriteria.GSTIN) && DbFunctions.TruncateTime(m.createDate) >= DbFunctions.TruncateTime(fromDate) && DbFunctions.TruncateTime(m.createDate) <= DbFunctions.TruncateTime(toDate)).ToList();
 
-          //  return dbContext.Transaction.OrderByDescending(m => fromDate).Where(m => m.contractorId == transCriteria.contractorId || m.contractor.GSTIN == transCriteria.GSTIN && m.createDate >= fromDate && m.createDate <= toDate);
+            return dbContext.Transaction.OrderByDescending(m => m.createDate).Where(predicate);
 
         }
 

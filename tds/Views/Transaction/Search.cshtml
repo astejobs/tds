@@ -222,13 +222,13 @@
                             <div class="col-12 grid-margin">
                                 <div class="card">
                                     <div class="card-body">
-                                       
+
                                         @if (TempData["MsgFail"] != null)
                                         {
                                             <div class="alert alert-fill-danger" role="alert">
                                                 <i class="mdi mdi-alert-circle"></i> Updation Failed! Enter details properly.
                                             </div>
-                                        } 
+                                        }
                                         @if (TempData["MsgSuccess"] != null)
                                         {
                                             <div class="alert alert-fill-primary" role="alert">
@@ -240,8 +240,8 @@
                                         {
 
                                             @*<p class="card-description">
-                                                Personal info
-                                            </p>*@
+                Personal info
+            </p>*@
                                             <div class="row">
                                                 <div class="col-md-6">
                                                     <div class="form-group row">
@@ -311,19 +311,29 @@ new SelectList(ViewBag.Contractors,
                                                     </div>
                                                 </div>
                                             </div>
+                                            <div class="row schmDiv collapse" id="schmDiv">
+                                                <div class="col-md-6">
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-3 col-form-label">Scheme</label>
+                                                        <div class="col-sm-9">
+                                                            @Html.DropDownListFor(model => model.SchemeId,null,"Select Scheme", new { @class = "form-control exampleFormControlSelect2" })
 
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
 
-                                            <button type="submit" class="btn btn-primary mr-2" >Submit</button>
+                                            <button type="submit" class="btn btn-primary mr-2">Submit</button>
 
                                             if (ViewBag.typo == "Individual")
                                             {
-                                                @Html.ActionLink("Export to Pdf", "ExportToPdf", new { id = ViewBag.id, Gstin= ViewBag.GSTN, fromDate = ViewBag.startDate, ToDate = ViewBag.endDate }, new { @class = "btn btn-primary mr-2", target = "_blank" })
+                                                @Html.ActionLink("Export to Pdf", "ExportToPdf", new { id = ViewBag.id, Gstin = ViewBag.GSTN, fromDate = ViewBag.startDate, ToDate = ViewBag.endDate,scheme=ViewBag.scheme }, new { @class = "btn btn-primary mr-2", target = "_blank" })
 
                                             }
                                             else if (ViewBag.typo == "General")
                                             {
 
-                                                @Html.ActionLink("Export to Excel", "ExportToExcel", new { fromDate = ViewBag.startDate, ToDate = ViewBag.endDate,activeType = ViewBag.activeType }, new { @class = "btn btn-primary mr-2", target = "_blank" })
+                                                @Html.ActionLink("Export to Excel", "ExportToExcel", new { fromDate = ViewBag.startDate, ToDate = ViewBag.endDate, activeType = ViewBag.activeType }, new { @class = "btn btn-primary mr-2", target = "_blank" })
                                             }
                                         }
                                     </div>
@@ -348,9 +358,11 @@ new SelectList(ViewBag.Contractors,
                                                             Date
                                                         </th>
                                                         <th>
-                                                            Amount Paid
+                                                            Amt Paid
                                                         </th>
-
+                                                        <th>
+                                                            Deposit
+                                                        </th>
 
                                                         <th>
                                                             CGST
@@ -362,15 +374,18 @@ new SelectList(ViewBag.Contractors,
                                                             IT
                                                         </th>
                                                         <th>
-                                                            LabourCess
-                                                        </th>
-                                                        <th>
-                                                            Deposit
+                                                            LC
                                                         </th>
 
+
                                                         <th>
-                                                            NetAmount
+                                                            Net Amt
                                                         </th>
+
+                                                        @if (ViewBag.typo == "Individual")
+                                                        {
+                                                            <th>Print</th>
+                                                        }
 
                                                     </tr>
                                                 </thead>
@@ -380,57 +395,60 @@ new SelectList(ViewBag.Contractors,
                                                     {
                                                         foreach (var item in ViewBag.transList)
                                                         {
-                                                            <tr>
-                                                                @if (ViewBag.type == "Individual")
-                                                                {
-                                                                    <td>
-                                                                        <a href="@Url.Action("Get", "Transaction", new { id = item.id })">
-                                                                            @item.contractor.name
+                                                    <tr>
+                                                        @if (ViewBag.type == "Individual")
+                                                        {
+                                                            <td>
+                                                                <a href="@Url.Action("Get", "Transaction", new { id = item.id })">
+                                                                    @item.contractor.name
 
-                                                                        </a>
-                                                                    </td>
-                                                                }
-                                                                else
-                                                                {
-                                                                    <td>
-                                                                        @item.contractor.name
+                                                                </a>
+                                                            </td>
+                                                        }
+                                                        else
+                                                        {
+                                                            <td>
+                                                                @item.contractor.name
 
 
-                                                                    </td>
-                                                                }
-                                                                <td>
-                                                                    @item.contractor.GSTIN
-                                                                </td>
-                                                                <td>
+                                                            </td>
+                                                        }
+                                                        <td>
+                                                            @item.contractor.GSTIN
+                                                        </td>
+                                                        <td>
 
-                                                                    @item.createDate.ToString("dd-MM-yyyy")
-                                                                </td>
-                                                                <td>
-                                                                    @item.amountPaid
+                                                            @item.createDate.ToString("dd-MM-yyyy")
+                                                        </td>
+                                                        <td>
+                                                            @item.amountPaid
 
-                                                                </td>
+                                                        </td>
+                                                        <td>
+                                                            @item.deposit
+                                                        </td>
+                                                        <td>
+                                                            @item.cgstAmount
 
-                                                                <td>
-                                                                    @item.cgstAmount
+                                                        </td>
+                                                        <td>
+                                                            @item.sgstAmount
+                                                        </td>
+                                                        <td>
+                                                            @item.itAmount
+                                                        </td>
+                                                        <td>
+                                                            @item.labourCessAmount
+                                                        </td>
 
-                                                                </td>
-                                                                <td>
-                                                                    @item.sgstAmount
-                                                                </td>
-                                                                <td>
-                                                                    @item.itAmount
-                                                                </td>
-                                                                <td>
-                                                                    @item.labourCessAmount
-                                                                </td>
-                                                                <td>
-                                                                    @item.deposit
-                                                                </td>
-                                                                <td>
-                                                                    @item.netAmount
-                                                                </td>
-
-                                                            </tr>
+                                                        <td>
+                                                            @item.netAmount
+                                                        </td>
+                                                        @if (ViewBag.typo == "Individual")
+                                                        {
+                                                            <td><a target="_blank" href="@Url.Action("PrintTransaction","Transaction",new {id=item.id })"><i class="mdi mdi-printer"></i></a></td>
+                                                        }
+                                                    </tr>
 
                                                         }
                                                     }
@@ -544,10 +562,13 @@ new SelectList(ViewBag.Contractors,
             if ($("#exampleFormControlSelecttype").val() == "General") {
                 $("#exampleFormControlSelect4").attr('required', false);
                 $("#exampleFormControlSelect3").attr('required', false);
+               
                 $("#divHide").hide();
+              
             }
             if ($("#exampleFormControlSelecttype").val() == "Individual") {
                 $("#divHide").show();
+               
                 $("#exampleFormControlSelect4").attr('required', true);
                 $("#exampleFormControlSelect3").attr('required', true);
                 if ($("#exampleFormControlSelect3") != "") {
@@ -575,12 +596,14 @@ new SelectList(ViewBag.Contractors,
 
                     $("#IsActive option[value=All]").hide();
                     $("#divHide").show();
+                    $("#schmDiv").show();
 
                 }
                 if ($("#exampleFormControlSelecttype").val() == "General") {
                     $("#exampleFormControlSelect4").attr('required', false);
                     $("#exampleFormControlSelect3").attr('required', false);
                     $("#divHide").hide();
+                    $("#schmDiv").hide();
                     $("#IsActive option[value=All]").show();
 
                 }

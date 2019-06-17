@@ -15,7 +15,7 @@ namespace tds.RepositoryInterface
         IPagedList<TEntity> pagedList(int num,string sortBy);
         Boolean Delete(string entityId);
         IPagedList<Transaction> Search(SearchViewModel transCriteria, DateTime fromDate, DateTime toDate, int pageIndex);
-        IEnumerable<Transaction> SearchForPdf(SearchViewModel transCriteria, DateTime fromDate, DateTime toDate);
+        IEnumerable<Transaction> SearchForPdf(System.Linq.Expressions.Expression<Func<Transaction, bool>> predicate);
 
         IPagedList<Transaction> SearchGeneral(SearchViewModel transCriteria, DateTime d1, DateTime d2, int pageIndex);
         List<Tax> listTaxes(string type);

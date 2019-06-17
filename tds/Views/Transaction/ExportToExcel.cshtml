@@ -15,14 +15,19 @@
                 <b> GSTIN</b>
             </th>
             @*<th>
-                Date
-            </th>*@
+            Date
+        </th>*@
+            <th>
+                <b>Scheme</b>
+            </th>
             <th>
                 <b>Amount Paid</b>
             </th>
-
             <th>
-                <b>Scheme Name</b></th>
+                <b>Deposit</b>
+            </th>
+
+
             <th>
                 <b> CGST</b>
             </th>
@@ -33,14 +38,11 @@
                 <b>IT</b>
             </th>
             <th>
-                <b>LabourCess</b>
-            </th>
-            <th>
-               <b>Deposit</b> 
+                <b>Labour Cess</b>
             </th>
 
             <th>
-                <b>NetAmount</b>
+                <b>Net Amount</b>
             </th>
         </tr>
     </thead>
@@ -56,15 +58,16 @@
             <td>
                 @item.contractor.GSTIN
             </td>
-            @*<td>
-            @item.createDate.Value.ToString("dd-MM-yyyy")
-        </td>*@
+            <td>
+                @(item.Equals(Model.Last()) ? @Html.Raw(" <b></ b >") : @Html.Raw(@item.AccountNo))
+            </td>
             <td>
                 @(item.Equals(Model.Last()) ? @Html.Raw(" <b> " + @item.amountPaid + "</ b >") : @Html.Raw(@item.amountPaid))
             </td>
             <td>
-                @(item.Equals(Model.Last()) ? @Html.Raw(" <b></ b >") : @Html.Raw(@item.AccountNo))
+                @(item.Equals(Model.Last()) ? @Html.Raw(" <b> " + @item.deposit + "</ b >") : @Html.Raw(@item.deposit))
             </td>
+
 
             <td>
                 @(item.Equals(Model.Last()) ? @Html.Raw(" <b> " + @item.cgstAmount + "</ b >") : @Html.Raw(@item.cgstAmount))
@@ -78,9 +81,7 @@
             <td>
                 @(item.Equals(Model.Last()) ? @Html.Raw(" <b> " + @item.labourCessAmount + "</ b >") : @Html.Raw(@item.labourCessAmount))
             </td>
-            <td>
-                @(item.Equals(Model.Last()) ? @Html.Raw(" <b> " + @item.deposit + "</ b >") : @Html.Raw(@item.deposit))
-            </td>
+
             <td>
                 @(item.Equals(Model.Last()) ? @Html.Raw(" <b> " + @item.netAmount + "</ b >") : @Html.Raw(@item.netAmount))
             </td>

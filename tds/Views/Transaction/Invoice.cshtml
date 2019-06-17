@@ -5,28 +5,40 @@
 
 
 }
-<link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="/Content/vendors/mdi/css/materialdesignicons.min.css">
+<link rel="stylesheet" href="/Content/vendors/css/vendor.bundle.base.css">
+<link rel="stylesheet" href="/Content/vendors/flag-icon-css/css/flag-icon.min.css">
+<!-- endinject -->
+<!-- plugin css for this page -->
+<!-- End plugin css for this page -->
+<!-- inject:css -->
+<link rel="stylesheet" href="/Content/css/vertical-layout-light/style.css">
 <div class="main-panel">
-    <div class="content-wrapper">
+    <div class="content-wrapper" style="background-color:#fff">
         <div class="row">
             <div class="col-lg-12">
                 <div class="card px-2">
                     <div class="card-body">
-                        <div class="container-fluid">
 
-
-                        </div>
                         <div class="container-fluid d-flex justify-content-between">
                             <div class="col-lg-3 pl-0">
 
-                                <h3 style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;margin-bottom:60px;text-decoration:underline;text-align:center"><b>OFFICE OF THE EXECUTIVE ENGINEER SPECIAL SUBDIVISION TANGDAR</b></h3>
-                                <h4 style="margin-bottom:10px;display:inline-block" class="mb-0 mt-5 text-bold"><b>Name : </b></h4>  <h4 style="border-bottom:1px solid;display:inline-block">@Model.FirstOrDefault().contractor.name</h4>
-                                <br />
-                                <h4 style="margin-bottom:10px;display:inline-block;" class="text-bold"><b>GSTIN : </b></h4>  <h4 style="border-bottom:1px solid;display:inline-block"> @Model.FirstOrDefault().contractor.GSTIN</h4>
+                                <h3 style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;margin-bottom:20px;text-align:center">OFFICE OF THE EXECUTIVE ENGINEER SPECIAL SUBDIVISION TANGDAR</h3>
+                                <hr />
                             </div>
+
                         </div>
-                        <div class="container-fluid mt-5 d-flex justify-content-center w-100">
-                            <div class=" w-100">
+
+
+                        <div class="row">
+                            <p style="width:45%;display:inline-block;text-align:left;margin-left:30px; font-size:15px;"><b>Name : </b>@Model.FirstOrDefault().contractor.name </p>
+                           
+                            <p style="width:45%;display:inline-block; text-align:right;font-size:15px"> <b>GSTIN : </b>  @Model.FirstOrDefault().contractor.GSTIN</p>
+                        </div>
+
+
+                        <div class="row mt-3 d-flex justify-content-center w-100">
+                            <div class=" w-100" style="width:100%;">
                                 <table class="table table-bordered table-condensed">
                                     <thead>
                                         <tr>
@@ -34,13 +46,19 @@
 
                                             </th>
 
-                                            <th>
-                                                Amount Paid
-                                            </th>
+
                                             <th>
                                                 Date
                                             </th>
-
+                                            <th>
+                                                Scheme
+                                            </th>
+                                            <th>
+                                                Amt Paid
+                                            </th>
+                                            <th>
+                                                Deposit
+                                            </th>
 
                                             <th>
                                                 CGST
@@ -52,14 +70,11 @@
                                                 IT
                                             </th>
                                             <th>
-                                                LabourCess
-                                            </th>
-                                            <th>
-                                                Deposit
+                                                LC
                                             </th>
 
                                             <th>
-                                                NetAmount
+                                                Net Amt
                                             </th>
                                         </tr>
                                     </thead>
@@ -67,43 +82,51 @@
 
                                         @foreach (var item in Model)
                                         {
-                                            <tr>
-                                                <td>
-                                                    <b> @(item.Equals(Model.Last()) ? "Total" : "")</b>
+                                        <tr>
+                                            <td>
+                                                <b> @(item.Equals(Model.Last()) ? "Total" : "")</b>
 
-                                                </td>
-
-                                                <td>
-                                                    @item.amountPaid
-
-                                                </td>
-
-                                                <td>
-
-                                                    @(!item.Equals(Model.Last()) ? item.createDate.Value.ToString("dd-MM-yyyy") : "")
-                                                </td>
+                                            </td>
 
 
-                                                <td>
-                                                    @item.cgstAmount
 
-                                                </td>
-                                                <td>
-                                                    @item.sgstAmount
-                                                </td>
-                                                <td>
-                                                    @item.itAmount
-                                                </td>
-                                                <td>
-                                                    @item.labourCessAmount
-                                                </td>
-                                                <td>
-                                                    @item.deposit
-                                                </td>
-                                                <td>
-                                                    @item.netAmount
-                                                </td>
-                                            </tr>
+                                            <td>
+
+                                                @(!item.Equals(Model.Last()) ? item.createDate.Value.ToString("dd-MM-yyyy") : "")
+                                            </td>
+                                            <td>
+                                                @if (item.Scheme != null)
+                                                {
+                                                    @item.Scheme.AccountNo
+                                                }
+
+
+                                            </td>
+                                            <td>
+                                                @item.amountPaid
+
+                                            </td>
+                                            <td>
+                                                @item.deposit
+                                            </td>
+                                            <td>
+                                                @item.cgstAmount
+
+                                            </td>
+                                            <td>
+                                                @item.sgstAmount
+                                            </td>
+                                            <td>
+                                                @item.itAmount
+                                            </td>
+                                            <td>
+                                                @item.labourCessAmount
+                                            </td>
+
+                                            <td>
+                                                @item.netAmount
+                                            </td>
+                                        </tr>
 
                                         }
 

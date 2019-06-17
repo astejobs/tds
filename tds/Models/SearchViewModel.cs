@@ -21,5 +21,6 @@ namespace tds.Models
         public int PageIndex { get; set; }
         [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}")]
         public DateTime ToDate { get; set; }
+        public string SchemeId { get; set; }
     }
 }

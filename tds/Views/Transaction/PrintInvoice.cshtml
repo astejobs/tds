@@ -1,0 +1,176 @@
+﻿@model tds.Models.Transaction
+@{ 
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Admin</title>
+    <!-- base:css -->
+    <link rel="stylesheet" href="/Content/vendors/mdi/css/materialdesignicons.min.css">
+    <link rel="stylesheet" href="/Content/vendors/css/vendor.bundle.base.css">
+    <link rel="stylesheet" href="/Content/vendors/flag-icon-css/css/flag-icon.min.css">
+    <!-- endinject -->
+    <!-- plugin css for this page -->
+    <!-- End plugin css for this page -->
+    <!-- inject:css -->
+    <link rel="stylesheet" href="/Content/css/vertical-layout-light/style.css">
+    <!-- endinject -->
+    <link rel="shortcut icon" href="/images/favicon.png" />
+
+    <style>
+
+		.main-panel{
+			width: 100%;
+		}
+		@@media print {
+			@@page {
+				size: auto;
+				margin: 0mm;
+			}
+			.navbar,
+			.sidebar,
+			img,
+			dropdown-item,
+			mdi-menu,
+			navbar-toggler,
+			body>div>nav>div.navbar-menu-wrapper.d-flex.align-items-center.justify-content-end>button,
+			body>div>div>div>div.content-wrapper>div>div>div>div>div:nth-child(5) {
+				display: none;
+			}
+			.footer {
+				position: fixed;
+				bottom: 0px;
+				text-align: center;
+			}
+			@@media only screen and (max-width < 700px) {
+				.navbar,
+				.sidebar,
+				img,
+				dropdown-item,
+				mdi-menu,
+				navbar-toggler {
+					display: none;
+				}
+			}
+		}
+    
+    </style>
+</head>
+<body>
+    <div class="container-scroller">
+        <!-- partial:../../partials/_navbar.html -->
+        <!-- partial -->
+        <div class="container-fluid page-body-wrapper">
+            <!-- partial:../../partials/_settings-panel.html -->
+            <!-- partial -->
+            <!-- partial:../../partials/_sidebar.html -->
+            <!-- partial -->
+            <div class="main-panel">
+                <div class="content-wrapper" style="background-color:#fff">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="card px-2">
+                              
+                                <div class="card-body">
+
+                                    <div class="container-fluid">
+                                        <h3 class="text-center my-3">OFFICE OF THE EXECUTIVE ENGINEER SPECIAL SUBDIVISION TANGDAR</h3>
+                                        <hr />
+
+                                        <div class="row">
+                                            <h4 style="width:33%;display:inline-block;text-align:left;"></h4>
+                                            <h4 style="width:33%;display:inline-block; text-align:center;"></h4>
+                                            <p class=" my-5" style="font-size:17px; width:33%;display:inline-block; text-align:right;"><b>Contractor:</b> @Model.contractor.name</p>
+                                        </div>
+                                        <div class="row">
+                                            <p style="font-size:17px; width:33%;display:inline-block;text-align:left;"><b>Scheme :</b> @Model.Scheme.AccountNo </p>
+                                            <p style="font-size:17px; width:33%;display:inline-block; text-align:center;"><b>Date : </b>@Html.DisplayFor(x => x.createDate)</p>
+                                            <p style="font-size:17px; width:33%;display:inline-block; text-align:right;"><b>GSTIN : </b>@Model.contractor.GSTIN</p>
+                                        </div>
+                                        <hr>
+                                        <div class="row">
+                                            <h4 style="width:33%;display:inline-block; text-align:left;"></h4>
+                                            <h5 class="mb-0 col-md-4  text-bold" style="width:33%;display:inline-block; text-align:center;">Percentage</h5>
+                                            <h5 class="mb-0 col-md-4  text-bold " style="width:33%;display:inline-block; text-align:right;">Amount</h5>
+
+                                        </div>
+                                        <hr>
+                                        <div class="row">
+                                            <p class="mb-0 my-2" style="width:33%;display:inline-block; text-align:left;">Amount Paid</p>
+                                            <p class="mb-0 my-2" style="width:33%;display:inline-block; text-align:center;"></p>
+                                            <p class="mb-0 my-2" style="width:33%;display:inline-block; text-align:right;">@Model.amountPaid</p>
+                                        </div>
+
+                                        <div class="row">
+                                            <p class="mb-0 my-2" style="width:33%;display:inline-block; text-align:left;">Deposit</p>
+                                            <p class="mb-0 my-2" style="width:33%;display:inline-block; text-align:center;"></p>
+                                            <p class="mb-0 my-2" style="width:33%;display:inline-block; text-align:right;"> @Model.deposit</p>
+                                        </div>
+                                        <div class="row">
+                                            <p class="mb-0 my-2" style="width:33%;display:inline-block; text-align:left;"> CGST</p>
+                                            <p class="mb-0 my-2" style="width:33%;display:inline-block; text-align:center;">@Model.cgst.rate %</p>
+                                            <p class="mb-0 my-2 " style="width:33%;display:inline-block; text-align:right;">@Model.cgstAmount</p>
+                                        </div>
+                                        <div class="row">
+                                            <p class="mb-0 my-2 " style="width:33%;display:inline-block; text-align:left;">SGST</p>
+                                            <p class="mb-0 my-2 " style="width:33%;display:inline-block; text-align:center;">@Model.sgst.rate %</p>
+                                            <p class="mb-0 my-2 " style="width:33%;display:inline-block; text-align:right;">@Model.sgstAmount</p>
+                                        </div>
+                                        <div class="row">
+                                            <p class="mb-0 my-2" style="width:33%;display:inline-block; text-align:left;">IT</p>
+                                            <p class="mb-0 my-2" style="width:33%;display:inline-block; text-align:center;">@Model.incomeTax.rate %</p>
+                                            <p class="mb-0 my-2" style="width:33%;display:inline-block; text-align:right;">@Model.itAmount</p>
+                                        </div>
+                                        <div class="row">
+                                            <p class="mb-0 my-2" style="width:33%;display:inline-block; text-align:left;">Labour Cess</p>
+                                            <p class="mb-0 my-2 " style="width:33%;display:inline-block; text-align:center;">@Model.labourCess.rate %</p>
+                                            <p class="mb-0 my-2" style="width:33%;display:inline-block; text-align:right;">@Model.labourCessAmount</p>
+                                        </div>
+
+                                    </div>
+
+                                    <hr />
+                                   
+                                    <div class="container-fluid mt-0 w-100">
+                                     
+                                        <h4 class="text-right mb-5">Net Amount : @Model.netAmount</h4>
+                                      
+                                    </div>
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- content-wrapper ends -->
+                <!-- partial:../../partials/_footer.html -->
+                <!-- partial -->
+            </div>
+            <!-- main-panel ends -->
+        </div>
+        <!-- page-body-wrapper ends -->
+    </div>
+    <!-- container-scroller -->
+    <!-- base:js -->
+    <script src="vendors/js/vendor.bundle.base.js"></script>
+    <!-- endinject -->
+    <!-- Plugin js for this page-->
+    <!-- End plugin js for this page-->
+    <!-- inject:js -->
+    <script src="~/Content/js/off-canvas.js"></script>
+    <script src="~/Content/js/hoverable-collapse.js"></script>
+    <script src="~/Content/js/template.js"></script>
+    <script src="~/Content/js/settings.js"></script>
+    <script src="~/Content/js/todolist.js"></script>
+    <!-- endinject -->
+    <!-- plugin js for this page -->
+    <!-- End plugin js for this page -->
+    <!-- Custom js for this page-->
+    <!-- End custom js for this page-->
+</body>
+</html>
