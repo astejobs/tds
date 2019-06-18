@@ -83,9 +83,11 @@
                                                             Date
                                                         </th>
                                                         <th>
-                                                           Amt Paid
+                                                            Amt Paid
                                                         </th>
-
+                                                        <th>
+                                                            Deposit
+                                                        </th>
 
                                                         <th>
                                                             CGST
@@ -97,14 +99,15 @@
                                                             IT
                                                         </th>
                                                         <th>
-                                                            LabourCess
-                                                        </th>
-                                                        <th>
-                                                            Deposit
+                                                            LC
                                                         </th>
 
+
                                                         <th>
-                                                            NetAmount
+                                                            Net Amt
+                                                        </th>
+                                                        <th>
+                                                            Print
                                                         </th>
 
                                                     </tr>
@@ -115,57 +118,58 @@
                                                     {
                                                         foreach (var item in ViewBag.transList)
                                                         {
-                                                            <tr>
-                                                                @if (ViewBag.type == "Individual")
-                                                                {
-                                                                    <td>
-                                                                        <a href="@Url.Action("Get", "Transaction", new { id = item.id })">
-                                                                            @item.contractor.name
+                                                    <tr>
+                                                        @if (ViewBag.type == "Individual")
+                                                        {
+                                                            <td>
+                                                                <a href="@Url.Action("Get", "Transaction", new { id = item.id })">
+                                                                    @item.contractor.name
 
-                                                                        </a>
-                                                                    </td>
-                                                                }
-                                                                else
-                                                                {
-                                                                    <td>
-                                                                        @item.contractor.name
+                                                                </a>
+                                                            </td>
+                                                        }
+                                                        else
+                                                        {
+                                                            <td>
+                                                                @item.contractor.name
 
 
-                                                                    </td>
-                                                                }
-                                                                <td>
-                                                                    @item.contractor.GSTIN
-                                                                </td>
-                                                                <td>
+                                                            </td>
+                                                        }
+                                                        <td>
+                                                            @item.contractor.GSTIN
+                                                        </td>
+                                                        <td>
 
-                                                                    @item.createDate.ToString("dd-MM-yyyy")
-                                                                </td>
-                                                                <td>
-                                                                    @item.amountPaid
+                                                            @item.createDate.ToString("dd-MM-yyyy")
+                                                        </td>
+                                                        <td>
+                                                            @item.amountPaid
 
-                                                                </td>
+                                                        </td>
+                                                        <td>
+                                                            @item.deposit
+                                                        </td>
+                                                        <td>
+                                                            @Convert.ToInt64(item.cgstAmount)
 
-                                                                <td>
-                                                                    @item.cgstAmount
+                                                        </td>
+                                                        <td>
+                                                            @Convert.ToInt64(item.sgstAmount)
+                                                        </td>
+                                                        <td>
+                                                            @Convert.ToInt64(item.itAmount)
+                                                        </td>
+                                                        <td>
+                                                            @Convert.ToInt64(item.labourCessAmount)
+                                                        </td>
 
-                                                                </td>
-                                                                <td>
-                                                                    @item.sgstAmount
-                                                                </td>
-                                                                <td>
-                                                                    @item.itAmount
-                                                                </td>
-                                                                <td>
-                                                                    @item.labourCessAmount
-                                                                </td>
-                                                                <td>
-                                                                    @item.deposit
-                                                                </td>
-                                                                <td>
-                                                                    @item.netAmount
-                                                                </td>
+                                                        <td>
+                                                            @Convert.ToInt64(item.netAmount)
+                                                        </td>
+                                                        <td><a target="_blank" href="@Url.Action("PrintTransaction","Transaction",new {id=item.id })"><i class="mdi mdi-printer"></i></a></td>
 
-                                                            </tr>
+                                                    </tr>
 
                                                         }
                                                     }
@@ -428,21 +432,21 @@ new SelectList(ViewBag.Contractors,
                                                             @item.deposit
                                                         </td>
                                                         <td>
-                                                            @item.cgstAmount
+                                                            @Convert.ToInt64(item.cgstAmount)
 
                                                         </td>
                                                         <td>
-                                                            @item.sgstAmount
+                                                            @Convert.ToInt64(item.sgstAmount)
                                                         </td>
                                                         <td>
-                                                            @item.itAmount
+                                                            @Convert.ToInt64(item.itAmount)
                                                         </td>
                                                         <td>
-                                                            @item.labourCessAmount
+                                                            @Convert.ToInt64(item.labourCessAmount)
                                                         </td>
 
                                                         <td>
-                                                            @item.netAmount
+                                                            @Convert.ToInt64(item.netAmount)
                                                         </td>
                                                         @if (ViewBag.typo == "Individual")
                                                         {

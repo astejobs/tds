@@ -113,22 +113,22 @@
                                         <div class="row">
                                             <p class="mb-0 my-2" style="width:33%;display:inline-block; text-align:left;"> CGST</p>
                                             <p class="mb-0 my-2" style="width:33%;display:inline-block; text-align:center;">@Model.cgst.rate %</p>
-                                            <p class="mb-0 my-2 " style="width:33%;display:inline-block; text-align:right;">@Model.cgstAmount</p>
+                                            <p class="mb-0 my-2 " style="width:33%;display:inline-block; text-align:right;">@Convert.ToInt64(Model.cgstAmount)</p>
                                         </div>
                                         <div class="row">
                                             <p class="mb-0 my-2 " style="width:33%;display:inline-block; text-align:left;">SGST</p>
                                             <p class="mb-0 my-2 " style="width:33%;display:inline-block; text-align:center;">@Model.sgst.rate %</p>
-                                            <p class="mb-0 my-2 " style="width:33%;display:inline-block; text-align:right;">@Model.sgstAmount</p>
+                                            <p class="mb-0 my-2 " style="width:33%;display:inline-block; text-align:right;">@Convert.ToInt64(Model.sgstAmount)</p>
                                         </div>
                                         <div class="row">
                                             <p class="mb-0 my-2" style="width:33%;display:inline-block; text-align:left;">IT</p>
                                             <p class="mb-0 my-2" style="width:33%;display:inline-block; text-align:center;">@Model.incomeTax.rate %</p>
-                                            <p class="mb-0 my-2" style="width:33%;display:inline-block; text-align:right;">@Model.itAmount</p>
+                                            <p class="mb-0 my-2" style="width:33%;display:inline-block; text-align:right;">@Convert.ToInt64(Model.itAmount)</p>
                                         </div>
                                         <div class="row">
                                             <p class="mb-0 my-2" style="width:33%;display:inline-block; text-align:left;">Labour Cess</p>
                                             <p class="mb-0 my-2 " style="width:33%;display:inline-block; text-align:center;">@Model.labourCess.rate %</p>
-                                            <p class="mb-0 my-2" style="width:33%;display:inline-block; text-align:right;">@Model.labourCessAmount</p>
+                                            <p class="mb-0 my-2" style="width:33%;display:inline-block; text-align:right;">@Convert.ToInt64(Model.labourCessAmount)</p>
                                         </div>
 
                                     </div>
@@ -137,7 +137,7 @@
                                    
                                     <div class="container-fluid mt-0 w-100">
                                      
-                                        <h4 class="text-right mb-5">Net Amount : @Model.netAmount</h4>
+                                        <h4 class="text-right mb-5">Net Amount : @Convert.ToInt64(Model.netAmount)</h4>
                                       
                                     </div>
 

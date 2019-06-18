@@ -63,34 +63,34 @@
                 @item.contractor.GSTIN
             </td>
             <td>
-                @(item.Equals(Model.Last()) ? @Html.Raw(" <b></ b >") : @Html.Raw(@item.Scheme.AccountNo))
+                @(item.Equals(Model.Last()) ? @Html.Raw(" <b></ b >") : @Html.Raw(item.Scheme.AccountNo))
             </td>
             <td>
                 @(item.Equals(Model.Last()) ? @Html.Raw(" <b></ b >") : @Html.Raw(Html.DisplayFor(x=>item.createDate)))
             </td>
             <td>
-                @(item.Equals(Model.Last()) ? @Html.Raw(" <b> " + @item.amountPaid + "</ b >") : @Html.Raw(@item.amountPaid))
+                @(item.Equals(Model.Last()) ? @Html.Raw(" <b> " + @item.amountPaid + "</ b >") : @Html.Raw(item.amountPaid))
             </td>
             <td>
-                @(item.Equals(Model.Last()) ? @Html.Raw(" <b> " + @item.deposit + "</ b >") : @Html.Raw(@item.deposit))
-            </td>
-
-
-            <td>
-                @(item.Equals(Model.Last()) ? @Html.Raw(" <b> " + @item.cgstAmount + "</ b >") : @Html.Raw(@item.cgstAmount))
-            </td>
-            <td>
-                @(item.Equals(Model.Last()) ? @Html.Raw(" <b> " + @item.sgstAmount + "</ b >") : @Html.Raw(@item.sgstAmount))
-            </td>
-            <td>
-                @(item.Equals(Model.Last()) ? @Html.Raw(" <b> " + @item.itAmount + "</ b >") : @Html.Raw(@item.itAmount))
-            </td>
-            <td>
-                @(item.Equals(Model.Last()) ? @Html.Raw(" <b> " + @item.labourCessAmount + "</ b >") : @Html.Raw(@item.labourCessAmount))
+                @(item.Equals(Model.Last()) ? @Html.Raw(" <b> " + @item.deposit + "</ b >") : @Html.Raw(item.deposit))
             </td>
 
+
             <td>
-                @(item.Equals(Model.Last()) ? @Html.Raw(" <b> " + @item.netAmount + "</ b >") : @Html.Raw(@item.netAmount))
+                @(item.Equals(Model.Last()) ? @Html.Raw(" <b> " + @Convert.ToInt64(item.cgstAmount) + "</ b >") : @Html.Raw(Convert.ToInt64(item.cgstAmount)))
+            </td>
+            <td>
+                @(item.Equals(Model.Last()) ? @Html.Raw(" <b> " + @Convert.ToInt64(item.sgstAmount) + "</ b >") : @Html.Raw(Convert.ToInt64(item.sgstAmount)))
+            </td>
+            <td>
+                @(item.Equals(Model.Last()) ? @Html.Raw(" <b> " + @Convert.ToInt64(item.itAmount) + "</ b >") : @Html.Raw(Convert.ToInt64(item.itAmount)))
+            </td>
+            <td>
+                @(item.Equals(Model.Last()) ? @Html.Raw(" <b> " + @Convert.ToInt64(item.labourCessAmount) + "</ b >") : @Html.Raw(Convert.ToInt64(item.labourCessAmount)))
+            </td>
+
+            <td>
+                @(item.Equals(Model.Last()) ? @Html.Raw(" <b> " + @Convert.ToInt64(item.netAmount) + "</ b >") : @Html.Raw(Convert.ToInt64(item.netAmount)))
             </td>
         </tr>
 
