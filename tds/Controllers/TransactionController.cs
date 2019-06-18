@@ -491,6 +491,76 @@ namespace tds.Controllers
 
         }
 
+        public ActionResult SearchByScheme(int? page, string fromDate, string toDate, string schemeId)
+        {
+            ViewBag.SchemeId = new SelectList(dbContext.Schemes, "Id", "AccountNo");
+            if ((String.IsNullOrEmpty(fromDate) || String.IsNullOrEmpty(toDate)))
+            {
 
+                ViewBag.DateMsg = "Please Select StartDate And EndDate";
+
+                return View();
+            }
+            else
+            {
+                DateTime dt = DateTime.ParseExact(fromDate, "dd-MM-yyyy", CultureInfo.InvariantCulture);
+                DateTime dt2 = DateTime.ParseExact(toDate, "dd-MM-yyyy", CultureInfo.InvariantCulture);
+                string g1 = Convert.ToDateTime(dt).ToString("yyyy-MM-dd HH:mm:ss.fff");
+                string g2 = Convert.ToDateTime(dt2).ToString("yyyy-MM-dd HH:mm:ss.fff");
+                DateTime d1 = DateTime.ParseExact(g1, "yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture);
+                DateTime d2 = DateTime.ParseExact(g2, "yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture);
+
+
+                
+                ViewBag.startDate = fromDate;
+                ViewBag.endDate = toDate;
+                ViewBag.scheme = schemeId;
+
+                int pageIndex = 1;
+
+
+                pageIndex = page.HasValue ? Convert.ToInt32(page) : 1;
+
+                ViewBag.transList = generalInterface.SearchIndividual(m => m.SchemeId == schemeId && DbFunctions.TruncateTime(m.createDate) >= DbFunctions.TruncateTime(d1) && DbFunctions.TruncateTime(m.createDate) <= DbFunctions.TruncateTime(d2), pageIndex);
+                if(ViewBag.transList!=null)
+                {
+                    ViewBag.status = "excel";
+                }
+                return View();
+            }
+        }
+
+
+        public ActionResult ExportToExcelByScheme(string fromDate, string toDate, string schemeId)
+        {
+            DateTime dt = DateTime.ParseExact(fromDate, "dd-MM-yyyy", CultureInfo.InvariantCulture);
+            DateTime dt2 = DateTime.ParseExact(toDate, "dd-MM-yyyy", CultureInfo.InvariantCulture);
+            string g1 = Convert.ToDateTime(dt).ToString("yyyy-MM-dd HH:mm:ss.fff");
+            string g2 = Convert.ToDateTime(dt2).ToString("yyyy-MM-dd HH:mm:ss.fff");
+            DateTime d1 = DateTime.ParseExact(g1, "yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture);
+
+            DateTime d2 = DateTime.ParseExact(g2, "yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture);
+
+            //////new changes//////
+            ///
+            List<Transaction> excel = new List<Transaction>();
+             excel = generalInterface.SearchForPdf(m => DbFunctions.TruncateTime(m.createDate) >= DbFunctions.TruncateTime(d1) && DbFunctions.TruncateTime(m.createDate) <= DbFunctions.TruncateTime(d2) && m.SchemeId == schemeId).ToList();
+           
+            Transaction total = new Transaction
+            {
+                contractor = new Contractor { name = "Total" },
+                amountPaid = excel.Sum(item => item.amountPaid),
+                sgstAmount = excel.Sum(item => item.sgstAmount),
+                cgstAmount = excel.Sum(item => item.cgstAmount),
+                itAmount = excel.Sum(item => item.itAmount),
+                deposit = excel.Sum(item => item.deposit),
+                netAmount = excel.Sum(item => item.netAmount),
+                labourCessAmount = excel.Sum(item => item.labourCessAmount),
+
+            };
+            excel.Add(total);
+
+            return View(excel);
+        }
     }
 }

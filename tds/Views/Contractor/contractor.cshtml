@@ -60,14 +60,21 @@
                                             <i class="mdi mdi-alert-circle"></i> @TempData["MsgSuccess"].
                                         </div>
                                     }
-                                    <h4 class="card-title">Contractor</h4>
+                                    @if (actionName == "Post")
+                                    {
+                                        <h4 class="card-title"> Add Contractor</h4>
+                                    }
+                                    else
+                                    {
+                                        <h4 class="card-title"> Edit Contractor</h4>
+                                    }
                                     @using (Html.BeginForm(actionName, "Contractor", Model.entity, FormMethod.Post, new { @class = "form-sample", role = "form" }))
                                     {
-                                        
+
                                         @Html.AntiForgeryToken()
                                         @*<p class="card-description">
-                                            Personal info
-                                        </p>*@
+                Personal info
+            </p>*@
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="form-group row">
@@ -130,18 +137,18 @@
                                             </div>
                                             @if (actionName == "Put")
                                             {
-                                            <div class="col-md-6">
-                                                <div class="form-group row">
-                                                    <label class="col-sm-3 col-form-label">Status</label>
-                                                    <div class="col-sm-9">
-                                                        @Html.RadioButtonFor(model=> model.entity.status, true)
-                                                        &nbsp;Active &nbsp; &nbsp;
-                                                        @Html.RadioButtonFor(model => model.entity.status, false)InActive
-                                                       
+                                                <div class="col-md-6">
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-3 col-form-label">Status</label>
+                                                        <div class="col-sm-9">
+                                                            @Html.RadioButtonFor(model => model.entity.status, true)
+                                                            &nbsp;Active &nbsp; &nbsp;
+                                                            @Html.RadioButtonFor(model => model.entity.status, false)InActive
 
+
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
                                             }
                                         </div>
 

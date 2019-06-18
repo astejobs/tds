@@ -57,7 +57,7 @@ namespace tds.Models
         public DateTime? createDate { get; set; }
 
        
-        public Double deposit { get; set; }
+        public Nullable<Double> deposit { get; set; }
         public Double netAmount { get; set; }
         public virtual Scheme Scheme { get; set; }
         public override string ToString()

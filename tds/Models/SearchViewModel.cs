@@ -12,6 +12,7 @@ namespace tds.Models
         public SearchViewModel()
         {
         }
+        
         public string Type { get; set; }
        public string ContractorId { get; set; }
        public string GSTIN { get; set; }
