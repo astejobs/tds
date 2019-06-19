@@ -236,16 +236,10 @@ public List<Tax> listTaxes(string type)
             return dbContext.Contractor.Where(predicate).Select(x=>new {id=x.id,name=x.name }).ToList();
         }
 
-        public bool checkAlreadyExists(Contractor entity)
+        public bool checkAlreadyExists(System.Linq.Expressions.Expression<Func<Contractor,bool>>predicate)
         {
-           int count= dbContext.Contractor.Where(m => (m.GSTIN == entity.GSTIN || m.regNo == entity.regNo) && m.id!=entity.id).ToList().Count();
-            if (count == 0)
-            {
-                return true;
-            }
-            else {
-                return false;
-            }
+            return dbContext.Contractor.Any(predicate);
+            
         }
     }
 

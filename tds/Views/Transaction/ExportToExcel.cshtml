@@ -17,9 +17,7 @@
             @*<th>
             Date
         </th>*@
-            <th>
-                <b>Scheme</b>
-            </th>
+         
             <th>
                 <b>Amount Paid</b>
             </th>
@@ -58,9 +56,7 @@
             <td>
                 @item.contractor.GSTIN
             </td>
-            <td>
-                @(item.Equals(Model.Last()) ? @Html.Raw(" <b></ b >") : @Html.Raw(@item.AccountNo))
-            </td>
+           
             <td>
                 @(item.Equals(Model.Last()) ? @Html.Raw(" <b> " + @item.amountPaid + "</ b >") : @Html.Raw(@item.amountPaid))
             </td>

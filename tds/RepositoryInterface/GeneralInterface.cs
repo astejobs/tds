@@ -24,6 +24,6 @@ namespace tds.RepositoryInterface
         IPagedList<Transaction> SearchGeneralJSon(System.Linq.Expressions.Expression<Func<Transaction, bool>> predicate, int pageIndex);
         IPagedList<Transaction> SearchIndividual(System.Linq.Expressions.Expression<Func<Transaction, bool>> predicate, int pageIndex);
         dynamic ContractorsList(System.Linq.Expressions.Expression<Func<Contractor, bool>> predicate);
-        Boolean checkAlreadyExists(Contractor entity);
+        Boolean checkAlreadyExists(System.Linq.Expressions.Expression<Func<Contractor, bool>> predicate);
     }
 }

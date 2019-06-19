@@ -60,7 +60,7 @@ namespace tds.Controllers
 
             if (ModelState.IsValid)
             {
-                if (generalInterface.checkAlreadyExists(contractor.entity))
+                if (!generalInterface.checkAlreadyExists(m => (m.GSTIN == contractor.entity.GSTIN || m.regNo == contractor.entity.regNo)))
                 {
                     if (generalInterface.Save(contractor.entity))
                     {
@@ -91,7 +91,7 @@ namespace tds.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (generalInterface.checkAlreadyExists(contractor.entity))
+                if (!generalInterface.checkAlreadyExists(m => (m.GSTIN == contractor.entity.GSTIN || m.regNo == contractor.entity.regNo) && m.id != contractor.entity.id))
                 {
                     generalInterface.Update(contractor.entity);
                     TempData["MsgSuccess"] = "Contractor has been Updated Successfully";
