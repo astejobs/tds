@@ -57,7 +57,13 @@ namespace tds.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (generaInterface.Save(scheme.entity))
+                ApplicationDbContext db = new ApplicationDbContext();
+                if(db.Schemes.Any(x=>x.AccountNo==scheme.entity.AccountNo))
+                {
+                    TempData["MsgFail"] = "Scheme with Account No "+scheme.entity.AccountNo+" already exists";
+                }
+               
+                else if (generaInterface.Save(scheme.entity))
                 {
 
                     TempData["MsgSuccess"] = "Scheme has been Saved Successfully";
@@ -84,8 +90,16 @@ namespace tds.Controllers
         {
             if (ModelState.IsValid)
             {
-                generaInterface.Update(scheme.entity);
-                TempData["MsgSuccess"] = "Shceme has been Updated Successfully";
+                ApplicationDbContext db = new ApplicationDbContext();
+                if (db.Schemes.Any(x => x.AccountNo == scheme.entity.AccountNo&&x.Id!=scheme.entity.Id))
+                {
+                    TempData["MsgFail"] = "Scheme with Account No " + scheme.entity.AccountNo + " already exists";
+                }
+                else
+                {
+                    generaInterface.Update(scheme.entity);
+                    TempData["MsgSuccess"] = "Shceme has been Updated Successfully";
+                }
             }
             else
             {

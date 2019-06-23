@@ -60,14 +60,14 @@
                                     @if (TempData["MsgFail"] != null)
                                     {
 
-                                        <div class="alert alert-fill-danger" role="alert">
+                                        <div class="alert alert-fill-danger hideDiv" role="alert">
                                             <i class="mdi mdi-alert-circle"></i> @TempData["MsgFail"].
                                         </div>
                                     }
                                     @if (TempData["MsgSuccess"] != null)
                                     {
 
-                                        <div class="alert alert-fill-primary" role="alert">
+                                        <div class="alert alert-fill-primary hideDiv" role="alert">
                                             <i class="mdi mdi-alert-circle"></i> @TempData["MsgSuccess"].
                                         </div>
                                     }
@@ -162,28 +162,28 @@ new SelectList(ViewBag.types,
 
                                                 @foreach (var item in Model.entityList.Select((x, i) => new { Data = x, Index = i }))
                                                 {
-                                                <tr>
-                                                    <td>
-                                                        @(item.Index + ((Model.entityList.PageNumber - 1) * Model.entityList.PageSize) + 1)
-                                                    </td>
-                                                    <td>
-                                                        @Html.DisplayFor(modelitem => item.Data.type)
-                                                    </td>
-                                                    <td>
-                                                        @Html.DisplayFor(modelitem => item.Data.rate) %
-                                                    </td>
+                                                    <tr>
+                                                        <td>
+                                                            @(item.Index + ((Model.entityList.PageNumber - 1) * Model.entityList.PageSize) + 1)
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(modelitem => item.Data.type)
+                                                        </td>
+                                                        <td>
+                                                            @Html.DisplayFor(modelitem => item.Data.rate) %
+                                                        </td>
 
-                                                    <td>
+                                                        <td>
 
-                                                        <a href="@Url.Action("Get", "Tax",new {id=item.Data.id})">
-                                                            <i class="mdi mdi-circle-edit-outline"></i> &nbsp;
-                                                        </a>
-                                                    
-                                                        @*<a href="@Url.Action("Delete", "Tax",new {id=item.Data.id })">
-                                                            <i class="mdi mdi-delete-circle"></i>
-                                                        </a>*@
-                                                    </td>
-                                                </tr>
+                                                            <a href="@Url.Action("Get", "Tax",new {id=item.Data.id})">
+                                                                <i class="mdi mdi-circle-edit-outline"></i> &nbsp;
+                                                            </a>
+
+                                                            @*<a href="@Url.Action("Delete", "Tax",new {id=item.Data.id })">
+                                                                    <i class="mdi mdi-delete-circle"></i>
+                                                                </a>*@
+                                                        </td>
+                                                    </tr>
                                                 }
                                             </tbody>
                                         </table>
@@ -191,7 +191,7 @@ new SelectList(ViewBag.types,
 
                                 </div>
                                 <nav>
-                                   
+
                                     <div id='Paging' style="text-align:center">
                                         Page @(Model.entityList.PageCount < Model.entityList.PageNumber ? 0 : Model.entityList.PageNumber)
                                         of @Model.entityList.PageCount
@@ -204,15 +204,15 @@ new SelectList(ViewBag.types,
 
                                         </ul>
                                     </div>
-                                   
-                                        <!--  <ul class="pagination flex-wrap d-flex justify-content-center">
-              <li class="page-item"><a class="page-link" href="#"><i class="mdi mdi-chevron-left"></i></a></li>
-              <li class="page-item active"><a class="page-link" href="#">1</a></li>
-              <li class="page-item"><a class="page-link" href="#">2</a></li>
-              <li class="page-item"><a class="page-link" href="#">3</a></li>
-              <li class="page-item"><a class="page-link" href="#">4</a></li>
-              <li class="page-item"><a class="page-link" href="#"><i class="mdi mdi-chevron-right"></i></a></li>
-          </ul>-->
+
+                                    <!--  <ul class="pagination flex-wrap d-flex justify-content-center">
+                                        <li class="page-item"><a class="page-link" href="#"><i class="mdi mdi-chevron-left"></i></a></li>
+                                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                        <li class="page-item"><a class="page-link" href="#">4</a></li>
+                                        <li class="page-item"><a class="page-link" href="#"><i class="mdi mdi-chevron-right"></i></a></li>
+                                    </ul>-->
                                 </nav>
                             </div>
                         </div>
@@ -253,5 +253,15 @@ new SelectList(ViewBag.types,
     <script src="~/Content/js/typeahead.js"></script>
     <script src="~/Content/js/select2.js"></script>
     <!-- End custom js for this page-->
+    <script>
+        $(document).ready(function () {
+
+            function hideDiv() {
+                $(".hideDiv").hide();
+            }
+            setInterval(hideDiv, 4000);
+
+        });
+    </script>
 </body>
 </html>

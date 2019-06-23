@@ -44,7 +44,8 @@ namespace tds.Controllers
             ModelState.Merge((ModelStateDictionary)TempData["ModelState"]);
             pageIndex = page.HasValue ? Convert.ToInt32(page) : 1;
             ViewBag.types = Models.Constants.type_of_tax;
-            IPagedList<Tax> taxList= generaInterface.pagedList(pageIndex, id);
+            ApplicationDbContext db = new ApplicationDbContext();
+            IPagedList<Tax> taxList= db.Tax.OrderBy(m => m.type).ToPagedList(pageIndex, 10);
             tax.entityList = taxList;
             return View("tax",tax);
         }

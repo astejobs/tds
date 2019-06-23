@@ -40,75 +40,75 @@
                             <div class="card">
                                 @if (TempData["MsgFail"] != null)
                                 {
-                                    <div class="alert alert-fill-danger" role="alert">
+                                    <div class="alert alert-fill-danger hideDiv" role="alert">
                                         <i class="mdi mdi-alert-circle"></i> Updation Failed! Enter details properly.
                                     </div>
                                 }
                                 @if (TempData["MsgSuccess"] != null)
                                 {
-                                    <div class="alert alert-fill-primary" role="alert">
+                                    <div class="alert alert-fill-primary hideDiv" role="alert">
                                         <i class="mdi mdi-alert-circle"></i> Details Updated Successfully.
                                     </div>
                                 }
-                                    <div class="card-body">
-                                        <h4 class="card-title">Add Deductor</h4>
-                                        @using (Html.BeginForm("Put", "Deductor", Model, FormMethod.Post, new { @class = "form-sample", role = "form" }))
-                                        {
-                                            @Html.ValidationSummary()
-                                            @Html.AntiForgeryToken()
-                                            @*<p class="card-description">
+                                <div class="card-body">
+                                    <h4 class="card-title">Add Deductor</h4>
+                                    @using (Html.BeginForm("Put", "Deductor", Model, FormMethod.Post, new { @class = "form-sample", role = "form" }))
+                                    {
+                                        @Html.ValidationSummary()
+                                        @Html.AntiForgeryToken()
+                                        @*<p class="card-description">
                                                 Personal info
                                             </p>*@
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <div class="form-group row">
-                                                        <label class="col-sm-3 col-form-label">Legal Name</label>
-                                                        <div class="col-sm-9">
-                                                            @Html.HiddenFor(model => model.id, new { placeholder = "Legal Name", @class = "form-control" })
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group row">
+                                                    <label class="col-sm-3 col-form-label">Legal Name</label>
+                                                    <div class="col-sm-9">
+                                                        @Html.HiddenFor(model => model.id, new { placeholder = "Legal Name", @class = "form-control" })
 
-                                                            @Html.TextBoxFor(model => model.legalName, new { placeholder = "Legal Name", @class = "form-control" })
-                                                            @Html.ValidationMessageFor(model => model.legalName, "", new { @class = "text-danger" })
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <div class="form-group row">
-                                                        <label class="col-sm-3 col-form-label">GSTIN</label>
-                                                        <div class="col-sm-9">
-                                                            @Html.TextBoxFor(model => model.GSTIN, new { placeholder = "GSTIN", @class = "form-control" })
-                                                            @Html.ValidationMessageFor(model => model.GSTIN, "", new { @class = "text-danger" })
-
-                                                        </div>
+                                                        @Html.TextBoxFor(model => model.legalName, new { placeholder = "Legal Name", @class = "form-control" })
+                                                        @Html.ValidationMessageFor(model => model.legalName, "", new { @class = "text-danger" })
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <div class="form-group row">
-                                                        <label class="col-sm-3 col-form-label">Trade Name</label>
-                                                        <div class="col-sm-9">
-                                                            @Html.TextBoxFor(model => model.tradeName, new { placeholder = "Trade Name", @class = "form-control" })
-                                                            @Html.ValidationMessageFor(model => model.tradeName, "", new { @class = "text-danger" })
+                                            <div class="col-md-6">
+                                                <div class="form-group row">
+                                                    <label class="col-sm-3 col-form-label">GSTIN</label>
+                                                    <div class="col-sm-9">
+                                                        @Html.TextBoxFor(model => model.GSTIN, new { placeholder = "GSTIN", @class = "form-control" })
+                                                        @Html.ValidationMessageFor(model => model.GSTIN, "", new { @class = "text-danger" })
 
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <div class="form-group row">
-                                                        <label class="col-sm-3 col-form-label">Department Name</label>
-                                                        <div class="col-sm-9">
-                                                            @Html.TextBoxFor(model => model.departmentName, new { placeholder = "Department Name", @class = "form-control" })
-                                                            @Html.ValidationMessageFor(model => model.departmentName, "", new { @class = "text-danger" })
-
-                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group row">
+                                                    <label class="col-sm-3 col-form-label">Trade Name</label>
+                                                    <div class="col-sm-9">
+                                                        @Html.TextBoxFor(model => model.tradeName, new { placeholder = "Trade Name", @class = "form-control" })
+                                                        @Html.ValidationMessageFor(model => model.tradeName, "", new { @class = "text-danger" })
 
-                                            <button type="submit" class="btn btn-primary mr-2">Submit</button>
-                                        }
-                                    </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group row">
+                                                    <label class="col-sm-3 col-form-label">Department Name</label>
+                                                    <div class="col-sm-9">
+                                                        @Html.TextBoxFor(model => model.departmentName, new { placeholder = "Department Name", @class = "form-control" })
+                                                        @Html.ValidationMessageFor(model => model.departmentName, "", new { @class = "text-danger" })
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <button type="submit" class="btn btn-primary mr-2">Submit</button>
+                                    }
                                 </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -147,5 +147,15 @@
     <script src="~/Content/js/typeahead.js"></script>
     <script src="~/Content/js/select2.js"></script>
     <!-- End custom js for this page-->
+    <script>
+        $(document).ready(function () {
+
+            function hideDiv() {
+                $(".hideDiv").hide();
+            }
+            setInterval(hideDiv, 4000);
+
+        });
+    </script>
 </body>
 </html>

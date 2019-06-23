@@ -52,30 +52,30 @@
                                     @if (TempData["MsgFail"] != null)
                                     {
 
-                                        <div class="alert alert-fill-danger" role="alert">
+                                        <div class="alert alert-fill-danger hideDiv" role="alert">
                                             <i class="mdi mdi-alert-circle"></i> @TempData["MsgFail"].
                                         </div>
                                     }
                                     @if (TempData["MsgSuccess"] != null)
                                     {
 
-                                        <div class="alert alert-fill-primary" role="alert">
+                                        <div class="alert alert-fill-primary hideDiv" role="alert">
                                             <i class="mdi mdi-alert-circle"></i> @TempData["MsgSuccess"].
                                         </div>
                                     }
                                     <h4 class="card-title">Transaction</h4>
                                     @using (Html.BeginForm(actionName, "Transaction", Model, FormMethod.Post, new { @class = "form-sample", role = "form" }))
                                     {
-                                   
+
                                         @Html.AntiForgeryToken()
-                                    <p class="card-description">
-                                     
-                                        @if (actionName == "Put")
-                                        {
-                                            @Html.HiddenFor(model => model.id)
-                                          
-                                        }
-                                    </p>
+                                        <p class="card-description">
+
+                                            @if (actionName == "Put")
+                                            {
+                                                @Html.HiddenFor(model => model.id)
+
+                                            }
+                                        </p>
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="form-group row">
@@ -156,7 +156,7 @@
                                                 <div class="form-group row">
                                                     <label class="col-sm-3 col-form-label">Deposit</label>
                                                     <div class="col-sm-9">
-                                                        @Html.TextBoxFor(model => model.deposit, new { placeholder = "Deposit", @class = "form-control"})
+                                                        @Html.TextBoxFor(model => model.deposit, new { placeholder = "Deposit", @class = "form-control" })
                                                         @Html.ValidationMessageFor(model => model.deposit, "", new { @class = "text-danger" })
 
                                                     </div>
@@ -166,8 +166,8 @@
                                                 <div class="form-group row">
                                                     <label class="col-sm-3 col-form-label">Scheme</label>
                                                     <div class="col-sm-9">
-                                                        @Html.DropDownListFor(model => model.SchemeId,null,"Select Scheme", new {@class = "form-control",style= "padding: 1rem .75rem !important;" })
-                                                        @Html.ValidationMessageFor(model => model.SchemeId, "", new { @class = "text-danger"})
+                                                        @Html.DropDownListFor(model => model.SchemeId, null, "Select Scheme", new { @class = "form-control", style = "padding: 1rem .75rem !important;" })
+                                                        @Html.ValidationMessageFor(model => model.SchemeId, "", new { @class = "text-danger" })
 
                                                     </div>
                                                 </div>
@@ -223,8 +223,18 @@
     <script src="~/Content/js/typeahead.js"></script>
     <script src="~/Content/js/select2.js"></script>
     <script>
-       
+
     </script>
     <!-- End custom js for this page-->
+    <script>
+        $(document).ready(function () {
+
+            function hideDiv() {
+                $(".hideDiv").hide();
+            }
+            setInterval(hideDiv, 4000);
+
+        });
+    </script>
 </body>
 </html>
