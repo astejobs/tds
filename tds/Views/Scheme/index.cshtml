@@ -160,11 +160,12 @@
                                                         </td>
 
                                                         <td>
-
-                                                            <a href="@Url.Action("Index", "Scheme",new {id=item.Data.Id})">
+                                                         @if (item.Data.Transactions.Count()==0)
+                                                         {
+                                                            <a href="@Url.Action("Index", "Scheme", new { id = item.Data.Id })">
                                                                 <i class="mdi mdi-circle-edit-outline"></i> &nbsp;
                                                             </a>
-
+                                                         }
 
                                                         </td>
                                                     </tr>

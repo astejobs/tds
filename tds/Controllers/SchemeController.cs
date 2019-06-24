@@ -45,7 +45,7 @@ namespace tds.Controllers
             int pageIndex = 1;
             ModelState.Merge((ModelStateDictionary)TempData["ModelState"]);
             pageIndex = page.HasValue ? Convert.ToInt32(page) : 1;
-            IPagedList<Scheme> schemeList = generaInterface.pagedList(pageIndex, id);
+            IPagedList<Scheme> schemeList = dbContext.Schemes.Include("Transactions").OrderBy(x=>x.Id).ToPagedList(pageIndex, 10);
             schemes.entityList = schemeList;
             return View("Index", schemes);
         }
