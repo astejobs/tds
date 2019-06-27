@@ -13,11 +13,12 @@ namespace tds.Controllers
     [Authorize(Roles ="Admin")]
     public class SchemeController : Controller
     {
-        ApplicationDbContext dbContext = new ApplicationDbContext();
+        ApplicationDbContext dbContext; 
         GeneralInterface<Scheme> generaInterface;
 
         public SchemeController()
         {
+            dbContext = new ApplicationDbContext();
             generaInterface = new GeneralRepoImpl<Scheme>();
         }
 
@@ -45,7 +46,7 @@ namespace tds.Controllers
             int pageIndex = 1;
             ModelState.Merge((ModelStateDictionary)TempData["ModelState"]);
             pageIndex = page.HasValue ? Convert.ToInt32(page) : 1;
-            IPagedList<Scheme> schemeList = dbContext.Schemes.Include("Transactions").OrderBy(x=>x.Id).ToPagedList(pageIndex, 10);
+            IPagedList<Scheme> schemeList = dbContext.Schemes.Include("Transactions").OrderBy(x=>x.Transactions.Count()).ToPagedList(pageIndex, 10);
             schemes.entityList = schemeList;
             return View("Index", schemes);
         }
@@ -109,7 +110,14 @@ namespace tds.Controllers
             return RedirectToAction("Index");
         }
 
-
+        public ActionResult Delete(string id)
+        {
+            Scheme scheme = dbContext.Schemes.Find(id);
+            dbContext.Entry(scheme).State = System.Data.Entity.EntityState.Deleted;
+            dbContext.SaveChanges();
+            TempData["MsgSuccess"] = "Scheme Deleted Successfully";
+            return RedirectToAction("index");
+        }
        
     }
 }

@@ -143,7 +143,7 @@
                                                     </th>
 
                                                     <th>
-                                                        Edit
+                                                        Action
                                                     </th>
                                                 </tr>
                                             </thead>
@@ -160,12 +160,15 @@
                                                         </td>
 
                                                         <td>
-                                                         @if (item.Data.Transactions.Count()==0)
-                                                         {
-                                                            <a href="@Url.Action("Index", "Scheme", new { id = item.Data.Id })">
-                                                                <i class="mdi mdi-circle-edit-outline"></i> &nbsp;
-                                                            </a>
-                                                         }
+                                                            @if (item.Data.Transactions.Count() == 0)
+                                                            {
+                                                                <a href="@Url.Action("Index", "Scheme", new { id = item.Data.Id })">
+                                                                    <i class="mdi mdi-circle-edit-outline mr-3"></i> &nbsp;
+                                                                </a>
+                                                                <a onclick="return confirm('Are you Sure that tou want to delete this scheme')" href="@Url.Action("delete", "Scheme", new { id = item.Data.Id })">
+                                                                    <i class="mdi mdi-delete"></i> &nbsp;
+                                                                </a>
+                                                            }
 
                                                         </td>
                                                     </tr>
