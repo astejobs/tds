@@ -26,7 +26,7 @@
     <table class="table">
   <thead>
     <tr>
-      <th scope="col">S>NO</th>
+      <th scope="col">S.NO</th>
       <th scope="col"></th>
       <th scope="col">Amount</th>
     </tr>
