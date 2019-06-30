@@ -471,5 +471,26 @@ namespace tds.Controllers
 
             return View(excel);
         }
+        public JsonResult GetTransaction(string id)
+        {
+            dynamic transaction = dbContext.Transaction.Where(x => x.id == id).Select(y => new
+            {
+                id=y.id,
+                contractor = y.contractor.name,
+                gstin = y.contractor.GSTIN,
+                amountPaid = (y.amountPaid),
+                sgstAmount = (y.sgstAmount),
+                cgstAmount = (y.cgstAmount),
+                itAmount = (y.itAmount),
+                labourCessAmount = (y.labourCessAmount),
+                deposit = (y.deposit),
+                netAmount = (y.netAmount),
+                scheme = y.Scheme.AccountNo,
+                createDate = (y.createDate).ToString()
+
+
+            }).FirstOrDefault();
+            return Json(transaction, JsonRequestBehavior.AllowGet);
+        }
     }
 }

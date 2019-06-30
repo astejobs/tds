@@ -158,6 +158,7 @@
                                                     <div class="col-sm-9">
                                                         @Html.TextBoxFor(model => model.deposit, new { placeholder = "Deposit", @class = "form-control" })
                                                         @Html.ValidationMessageFor(model => model.deposit, "", new { @class = "text-danger" })
+                                                        <span id="depositSpan" class="text-danger collapse" ></span>
 
                                                     </div>
                                                 </div>
@@ -229,6 +230,14 @@
     <script>
         $(document).ready(function () {
 
+            $("[type=submit]").click(function () {
+                
+                if ($("#deposit").val() >= $("#amountPaid").val()) {
+                   
+                    $("#depositSpan").html("Deposit Should be less than Amount Paid").show();
+                    return false;
+                }
+            })
             function hideDiv() {
                 $(".hideDiv").hide();
             }

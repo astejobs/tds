@@ -7,8 +7,8 @@
 @{
     Layout = null;
 
-   var transl = (IPagedList<Transaction>)ViewBag.transList;
-    
+    var transl = (IPagedList<Transaction>)ViewBag.transList;
+
 
 }
 <!DOCTYPE html>
@@ -33,18 +33,25 @@
     <link rel="shortcut icon" href="~/Content/images/favicon.png" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/datejs/1.0/date.min.js"></script>
     <style>
 
         .exampleFormControlSelect2 {
             padding: 1rem .75rem !important;
-            
         }
+
+        .p-h {
+            font-size: 13px;
+            width: 50%;
+            display: inline-block;
+        }
+
         .page-body-wrapper {
             padding-top: 47px !important;
         }
     </style>
-   
+
+    <script src="~/Content/customScript.js"></script>
 </head>
 <body>
     <div class="container-scroller">
@@ -67,7 +74,7 @@
                             <div class="col-lg-12 grid-margin stretch-card">
                                 <div class="card">
                                     <div class="card-body">
-                                        <h4 class="card-title">All Transactions </h4>
+                                        <h4 class="card-title ">All Transactions </h4>
 
                                         <div class="table-responsive pt-3">
                                             <table class="table table-bordered" id="table2excel">
@@ -118,58 +125,58 @@
                                                     {
                                                         foreach (var item in ViewBag.transList)
                                                         {
-                                                    <tr>
-                                                        @if (ViewBag.type == "Individual")
-                                                        {
-                                                            <td>
-                                                                <a href="@Url.Action("Get", "Transaction", new { id = item.id })">
-                                                                    @item.contractor.name
+                                                            <tr onclick="showModal('@item.id')">
+                                                                @if (ViewBag.type == "Individual")
+                                                                {
+                                                                    <td>
+                                                                        <a href="@Url.Action("Get", "Transaction", new { id = item.id })">
+                                                                            @item.contractor.name
 
-                                                                </a>
-                                                            </td>
-                                                        }
-                                                        else
-                                                        {
-                                                            <td>
-                                                                @item.contractor.name
+                                                                        </a>
+                                                                    </td>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <td>
+                                                                        @item.contractor.name
 
 
-                                                            </td>
-                                                        }
-                                                        <td>
-                                                            @item.contractor.GSTIN
-                                                        </td>
-                                                        <td>
+                                                                    </td>
+                                                                }
+                                                                <td>
+                                                                    @item.contractor.GSTIN
+                                                                </td>
+                                                                <td>
 
-                                                            @item.createDate.ToString("dd-MM-yyyy")
-                                                        </td>
-                                                        <td>
-                                                            @item.amountPaid
+                                                                    @item.createDate.ToString("dd-MM-yyyy")
+                                                                </td>
+                                                                <td>
+                                                                    @item.amountPaid
 
-                                                        </td>
-                                                        <td>
-                                                            @item.deposit
-                                                        </td>
-                                                        <td>
-                                                            @Convert.ToInt64(item.cgstAmount)
+                                                                </td>
+                                                                <td>
+                                                                    @item.deposit
+                                                                </td>
+                                                                <td>
+                                                                    @Convert.ToInt64(item.cgstAmount)
 
-                                                        </td>
-                                                        <td>
-                                                            @Convert.ToInt64(item.sgstAmount)
-                                                        </td>
-                                                        <td>
-                                                            @Convert.ToInt64(item.itAmount)
-                                                        </td>
-                                                        <td>
-                                                            @Convert.ToInt64(item.labourCessAmount)
-                                                        </td>
+                                                                </td>
+                                                                <td>
+                                                                    @Convert.ToInt64(item.sgstAmount)
+                                                                </td>
+                                                                <td>
+                                                                    @Convert.ToInt64(item.itAmount)
+                                                                </td>
+                                                                <td>
+                                                                    @Convert.ToInt64(item.labourCessAmount)
+                                                                </td>
 
-                                                        <td>
-                                                            @Convert.ToInt64(item.netAmount)
-                                                        </td>
-                                                        <td><a target="_blank" href="@Url.Action("PrintTransaction","Transaction",new {id=item.id })"><i class="mdi mdi-printer"></i></a></td>
+                                                                <td>
+                                                                    @Convert.ToInt64(item.netAmount)
+                                                                </td>
+                                                                <td><a target="_blank" href="@Url.Action("PrintTransaction","Transaction",new {id=item.id })"><i class="mdi mdi-printer"></i></a></td>
 
-                                                    </tr>
+                                                            </tr>
 
                                                         }
                                                     }
@@ -184,19 +191,19 @@
 
                                         {
 
-                                        <div id='Paging' style="text-align:center">
-                                            <ul class="flex-wrap d-flex justify-content-center">
+                                            <div id='Paging' style="text-align:center">
+                                                <ul class="flex-wrap d-flex justify-content-center">
 
-                                                <li class="page-item" style="list-style:none">
+                                                    <li class="page-item" style="list-style:none">
 
-                                                    Page @(ViewBag.transList.PageCount < ViewBag.transList.PageNumber ? 0 : ViewBag.transList.PageNumber)
-                                                    of @ViewBag.transList.PageCount
-                                                    @Html.PagedListPager((IPagedList)ViewBag.transList, page => Url.Action("Search", new { page, type = ViewBag.type, contractorId = ViewBag.contractorId, GSTIN = ViewBag.GSTN, fromDate = ViewBag.startDate, toDate = ViewBag.endDate }), new PagedListRenderOptions() { LiElementClasses = new string[] { "page-link" } })
+                                                        Page @(ViewBag.transList.PageCount < ViewBag.transList.PageNumber ? 0 : ViewBag.transList.PageNumber)
+                                                        of @ViewBag.transList.PageCount
+                                                        @Html.PagedListPager((IPagedList)ViewBag.transList, page => Url.Action("Search", new { page, type = ViewBag.type, contractorId = ViewBag.contractorId, GSTIN = ViewBag.GSTN, fromDate = ViewBag.startDate, toDate = ViewBag.endDate }), new PagedListRenderOptions() { LiElementClasses = new string[] { "page-link" } })
 
-                                                </li>
+                                                    </li>
 
-                                            </ul>
-                                        </div>
+                                                </ul>
+                                            </div>
                                         }
                                         @if (ViewBag.check == "true")
                                         {
@@ -218,7 +225,7 @@
                                     </nav>
                                 </div>
                             </div>
-                            
+
                         }
                         else
                         {
@@ -244,8 +251,8 @@
                                         {
 
                                             @*<p class="card-description">
-                Personal info
-            </p>*@
+                                                    Personal info
+                                                </p>*@
                                             <div class="row">
                                                 <div class="col-md-6">
                                                     <div class="form-group row">
@@ -320,7 +327,7 @@ new SelectList(ViewBag.Contractors,
                                                     <div class="form-group row">
                                                         <label class="col-sm-3 col-form-label">Scheme</label>
                                                         <div class="col-sm-9">
-                                                            @Html.DropDownListFor(model => model.SchemeId,null,"Select Scheme", new { @class = "form-control exampleFormControlSelect2" })
+                                                            @Html.DropDownListFor(model => model.SchemeId, null, "Select Scheme", new { @class = "form-control exampleFormControlSelect2" })
 
                                                         </div>
                                                     </div>
@@ -331,7 +338,7 @@ new SelectList(ViewBag.Contractors,
 
                                             if (ViewBag.typo == "Individual")
                                             {
-                                                @Html.ActionLink("Export to Pdf", "ExportToPdf", new { id = ViewBag.id, Gstin = ViewBag.GSTN, fromDate = ViewBag.startDate, ToDate = ViewBag.endDate,scheme=ViewBag.scheme }, new { @class = "btn btn-primary mr-2", target = "_blank" })
+                                                @Html.ActionLink("Export to Pdf", "ExportToPdf", new { id = ViewBag.id, Gstin = ViewBag.GSTN, fromDate = ViewBag.startDate, ToDate = ViewBag.endDate, scheme = ViewBag.scheme }, new { @class = "btn btn-primary mr-2", target = "_blank" })
 
                                             }
                                             else if (ViewBag.typo == "General")
@@ -399,60 +406,60 @@ new SelectList(ViewBag.Contractors,
                                                     {
                                                         foreach (var item in ViewBag.transList)
                                                         {
-                                                    <tr>
-                                                        @if (ViewBag.type == "Individual")
-                                                        {
-                                                            <td>
-                                                                <a href="@Url.Action("Get", "Transaction", new { id = item.id })">
-                                                                    @item.contractor.name
+                                                          <tr onclick="showModal('@item.id','@ViewBag.type')">
+                                                                @if (ViewBag.type == "Individual")
+                                                                {
+                                                                    <td>
+                                                                        <a href="@Url.Action("Get", "Transaction", new { id = item.id })">
+                                                                            @item.contractor.name
 
-                                                                </a>
-                                                            </td>
-                                                        }
-                                                        else
-                                                        {
-                                                            <td>
-                                                                @item.contractor.name
+                                                                        </a>
+                                                                    </td>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <td>
+                                                                        @item.contractor.name
 
 
-                                                            </td>
-                                                        }
-                                                        <td>
-                                                            @item.contractor.GSTIN
-                                                        </td>
-                                                        <td>
+                                                                    </td>
+                                                                }
+                                                                <td>
+                                                                    @item.contractor.GSTIN
+                                                                </td>
+                                                                <td>
 
-                                                            @item.createDate.ToString("dd-MM-yyyy")
-                                                        </td>
-                                                        <td>
-                                                            @item.amountPaid
+                                                                    @item.createDate.ToString("dd-MM-yyyy")
+                                                                </td>
+                                                                <td>
+                                                                    @item.amountPaid
 
-                                                        </td>
-                                                        <td>
-                                                            @item.deposit
-                                                        </td>
-                                                        <td>
-                                                            @Convert.ToInt64(item.cgstAmount)
+                                                                </td>
+                                                                <td>
+                                                                    @item.deposit
+                                                                </td>
+                                                                <td>
+                                                                    @Convert.ToInt64(item.cgstAmount)
 
-                                                        </td>
-                                                        <td>
-                                                            @Convert.ToInt64(item.sgstAmount)
-                                                        </td>
-                                                        <td>
-                                                            @Convert.ToInt64(item.itAmount)
-                                                        </td>
-                                                        <td>
-                                                            @Convert.ToInt64(item.labourCessAmount)
-                                                        </td>
+                                                                </td>
+                                                                <td>
+                                                                    @Convert.ToInt64(item.sgstAmount)
+                                                                </td>
+                                                                <td>
+                                                                    @Convert.ToInt64(item.itAmount)
+                                                                </td>
+                                                                <td>
+                                                                    @Convert.ToInt64(item.labourCessAmount)
+                                                                </td>
 
-                                                        <td>
-                                                            @Convert.ToInt64(item.netAmount)
-                                                        </td>
-                                                        @if (ViewBag.typo == "Individual")
-                                                        {
-                                                            <td><a target="_blank" href="@Url.Action("PrintTransaction","Transaction",new {id=item.id })"><i class="mdi mdi-printer"></i></a></td>
-                                                        }
-                                                    </tr>
+                                                                <td>
+                                                                    @Convert.ToInt64(item.netAmount)
+                                                                </td>
+                                                                @if (ViewBag.typo == "Individual")
+                                                                {
+                                                                    <td><a target="_blank" href="@Url.Action("PrintTransaction","Transaction",new {id=item.id })"><i class="mdi mdi-printer"></i></a></td>
+                                                                }
+                                                            </tr>
 
                                                         }
                                                     }
@@ -467,35 +474,35 @@ new SelectList(ViewBag.Contractors,
 
                                         {
 
-                                        <div id='Paging' style="text-align:center">
-                                            <ul class="flex-wrap d-flex justify-content-center">
+                                            <div id='Paging' style="text-align:center">
+                                                <ul class="flex-wrap d-flex justify-content-center">
 
-                                                <li class="page-item" style="list-style:none">
-                                                    Page @(ViewBag.transList.PageCount < ViewBag.transList.PageNumber ? 0 : ViewBag.transList.PageNumber)
-                                                    of @ViewBag.transList.PageCount
-                                                    @Html.PagedListPager((IPagedList)ViewBag.transList, page => Url.Action("Search", new { page, type = ViewBag.type, contractorId = ViewBag.contractorId, GSTIN = ViewBag.GSTN, fromDate = ViewBag.startDate, toDate = ViewBag.endDate }), new PagedListRenderOptions() { LiElementClasses = new string[] { "page-link" } })
+                                                    <li class="page-item" style="list-style:none">
+                                                        Page @(ViewBag.transList.PageCount < ViewBag.transList.PageNumber ? 0 : ViewBag.transList.PageNumber)
+                                                        of @ViewBag.transList.PageCount
+                                                        @Html.PagedListPager((IPagedList)ViewBag.transList, page => Url.Action("Search", new { page, type = ViewBag.type, contractorId = ViewBag.contractorId, GSTIN = ViewBag.GSTN, fromDate = ViewBag.startDate, toDate = ViewBag.endDate }), new PagedListRenderOptions() { LiElementClasses = new string[] { "page-link" } })
 
-                                                </li>
+                                                    </li>
 
-                                            </ul>
-                                        </div>
+                                                </ul>
+                                            </div>
                                         }
                                         @if (ViewBag.check == "true")
                                         {
 
-                                        <div id='Paging' style="text-align:center">
-                                            <ul class="flex-wrap d-flex justify-content-center">
+                                            <div id='Paging' style="text-align:center">
+                                                <ul class="flex-wrap d-flex justify-content-center">
 
-                                                <li class="page-item" style="list-style:none">
+                                                    <li class="page-item" style="list-style:none">
 
-                                                    Page @(ViewBag.transList.PageCount < ViewBag.transList.PageNumber ? 0 : ViewBag.transList.PageNumber)
-                                                    of @ViewBag.transList.PageCount
-                                                    @Html.PagedListPager((IPagedList)ViewBag.transList, page => Url.Action("DashBoard", new { page }), new PagedListRenderOptions() { LiElementClasses = new string[] { "page-link" } })
+                                                        Page @(ViewBag.transList.PageCount < ViewBag.transList.PageNumber ? 0 : ViewBag.transList.PageNumber)
+                                                        of @ViewBag.transList.PageCount
+                                                        @Html.PagedListPager((IPagedList)ViewBag.transList, page => Url.Action("DashBoard", new { page }), new PagedListRenderOptions() { LiElementClasses = new string[] { "page-link" } })
 
-                                                </li>
+                                                    </li>
 
-                                            </ul>
-                                        </div>
+                                                </ul>
+                                            </div>
                                         }
                                     </nav>
                                 </div>
@@ -520,6 +527,27 @@ new SelectList(ViewBag.Contractors,
     </div>
     <!-- container-scroller -->
     <!-- base:js -->
+    <div class="modal fade" id="transModal" tabindex="-1" role="dialog" aria-labelledby="transModal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="transModalLabel">Transaction Details</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="transBody">
+
+                </div>
+                <div class="modal-footer" id="transFooter">
+                    
+                   
+                </div>
+
+            </div>
+        </div>
+    </div>
+    
     <script src="~/Content/vendors/js/vendor.bundle.base.js"></script>
     <!-- endinject -->
     <!-- inject:js -->
@@ -544,9 +572,9 @@ new SelectList(ViewBag.Contractors,
             $(".btn").click(function () {
                 if ($("#fromDate").val() == "") {
                     $('.errr1').remove();
-                    
+
                     $("#fromDate").after("<i class='errr1 text-danger'> Select the date </i>");
-                   
+
                     console.log("svvdsv");
                     return false;
                 }
@@ -566,13 +594,13 @@ new SelectList(ViewBag.Contractors,
             if ($("#exampleFormControlSelecttype").val() == "General") {
                 $("#exampleFormControlSelect4").attr('required', false);
                 $("#exampleFormControlSelect3").attr('required', false);
-               
+
                 $("#divHide").hide();
-              
+
             }
             if ($("#exampleFormControlSelecttype").val() == "Individual") {
                 $("#divHide").show();
-               
+
                 $("#exampleFormControlSelect4").attr('required', true);
                 $("#exampleFormControlSelect3").attr('required', true);
                 if ($("#exampleFormControlSelect3") != "") {
@@ -590,7 +618,7 @@ new SelectList(ViewBag.Contractors,
                 $("#exampleFormControlSelect4").attr('required', false);
                 $("#exampleFormControlSelect4").attr('disabled', true);
             }
-           
+
             $("#exampleFormControlSelecttype").change(function () {
 
                 $("#IsActive").val(null);
@@ -618,13 +646,13 @@ new SelectList(ViewBag.Contractors,
                         url: "/Transaction/GetContractors",
                         dataType: "json",
                         method: "get",
-                        data: {isActive:$("#IsActive").val()},
+                        data: { isActive: $("#IsActive").val() },
                         success: function (contractors) {
                             var DDL = $("#exampleFormControlSelect3");
                             DDL.empty();
                             DDL.append(`<option value="">Select Contractor</option`)
-                            $.each(contractors, function (index,contractor) {
-                             
+                            $.each(contractors, function (index, contractor) {
+
                                 DDL.append(`<option value=${contractor.id}>${contractor.name}</option`)
                             })
                         }
@@ -647,20 +675,20 @@ new SelectList(ViewBag.Contractors,
                     $("#exampleFormControlSelect3").attr('required', false);
                     $("#exampleFormControlSelect3").attr('disabled', false);
                 } else {
-                    
+
                     $("#exampleFormControlSelect3").attr('required', true);
                     $("#exampleFormControlSelect3").attr('disabled', true);
                 }
             });
-            
-            
+
+
         });
 
     </script>
     <script>
-        flatpickr(".date", {dateFormat: 'd-m-Y'});
-        ////////new changes////////////
-       
+        flatpickr(".date", { dateFormat: 'd-m-Y' });
+                ////////new changes////////////
+
 
 
     </script>
