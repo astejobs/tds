@@ -13,6 +13,12 @@
             var date = Date.parse(`${transaction.createDate}`);
             var newDate = date.toString('dd-MM-yyyy');
             $("#transBody").html(`
+<div class="row modal-header" style="margin-top:-40px;">
+ <a class="btn btn-primary" target="_blank" href="/transaction/printtransaction/${transaction.id}">Print <i class="mdi mdi-printer"></i></a>
+  <button type="button" class="close " data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+</div>
 <div class="row">
         <p class="p-h text-left" ><b>Scheme :</b> ${transaction.scheme} </p>
         <p class="p-h text-right"><b>Contractor:</b> ${transaction.contractor}</p>
@@ -23,57 +29,49 @@
         <p class="p-h text-right"><b>GSTIN : </b>${transaction.gstin}</p>
     </div>
     <hr>
-    <table class="table">
+    <table class="table table-sm">
   <thead>
-    <tr>
-      <th scope="col">S.NO</th>
-      <th scope="col"></th>
-      <th scope="col">Amount</th>
+    <tr  >
+      <th class="text-left" scope="col">Title</th>
+      <th class="text-right" scope="col">Amount</th>
     </tr>
   </thead>
   <tbody>
-    <tr>
-      <th scope="row">1</th>
-       <td>Amount Paid</td>
-      <td>${transaction.amountPaid}</td>
+    <tr> 
+       <td class="text-left">Amount Paid</td>
+      <td class="text-right">${transaction.amountPaid}</td>
      
     </tr>
     <tr>
-      <th scope="row">2</th>
-     <td> Deposit</td>
-      <td>${Math.round(transaction.deposit)}</td>
+     <td class="text-left"> Deposit</td>
+      <td class="text-right">${Math.round(transaction.deposit)}</td>
     </tr>
  <tr>
-      <th scope="row">3</th>
-     <td>CGST Amount</td>
-      <td>${Math.round(transaction.cgstAmount)}</td>
+     <td class="text-left">CGST Amount</td>
+      <td  class="text-right">${Math.round(transaction.cgstAmount)}</td>
     </tr>
     <tr>
-      <th scope="row">4</th>
-     <td>SGST Amount</td>
-      <td>${Math.round(transaction.sgstAmount)}</td>
+     <td  class="text-left">SGST Amount</td>
+      <td  class="text-right">${Math.round(transaction.sgstAmount)}</td>
     </tr>
   <tr>
-      <th scope="row">5</th>
-     <td>IT Amount</td>
-      <td>${Math.round(transaction.itAmount)}</td>
+     <td  class="text-left">IT Amount</td>
+      <td  class="text-right">${Math.round(transaction.itAmount)}</td>
     </tr>
   <tr>
-      <th scope="row">6</th>
-     <td>Labour Cess Amount</td>
-      <td>${Math.round(transaction.labourCessAmount)}</td>
+     <td  class="text-left">Labour Cess Amount</td>
+      <td  class="text-right">${Math.round(transaction.labourCessAmount)}</td>
     </tr>
  <tr>
-      <th scope="row"></th>
-     <td> <h4>Net Amount</h4></td>
-      <td><h4>${Math.round(transaction.netAmount)}</h4></td>
+     <td  class="text-left"> <h4>Net Amount</h4></td>
+      <td  class="text-right"><h4>${Math.round(transaction.netAmount)}</h4></td>
     </tr>
 
   </tbody>
 </table>
 
 `)
-            $("#transFooter").html(`<a class="btn btn-primary" target="_blank" href="/transaction/printtransaction/${transaction.id}">Print Transaction <i class="mdi mdi-printer"></i></a>`);
+           
             $("#transModal").modal("show");
 
         }
