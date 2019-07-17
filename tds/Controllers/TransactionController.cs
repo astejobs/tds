@@ -59,6 +59,7 @@ namespace tds.Controllers
         [Route("transaction/")]
         public ActionResult Get(string id)
         {
+            ViewBag.Schemes = dbContext.Schemes;
             Transaction t = new Transaction();
             if (id == null)
             {
@@ -68,9 +69,11 @@ namespace tds.Controllers
             else
             {
                 var user = UserManager.FindById(User.Identity.GetUserId());
-
+               
                 t = generalInterface.Find(id);
-                t.contractor =(Contractor) contractorInterface.Find(t.contractorId);
+                ViewBag.SchemeId = t.SchemeWork.SchemeId;
+                ViewBag.WorkId = t.SchemeWorkId;
+               t.contractor =(Contractor) contractorInterface.Find(t.contractorId);
                 t.cgst =(Tax) taxInterface.Find(t.cgstId);
                 t.sgst = (Tax)taxInterface.Find(t.sgstId);
                 t.deductor = (Deductor)deductorInterface.Find(user.Id);
@@ -82,7 +85,7 @@ namespace tds.Controllers
                 ModelState.Merge((ModelStateDictionary)TempData["ModelState"]);
 
 
-            ViewBag.SchemeId = new SelectList(dbContext.Schemes, "Id", "AccountNo");
+          
             ViewBag.contractors = contractorInterface.listActiveContractors();
             ViewBag.cgstTaxes = taxInterface.listTaxes(Constants.type_of_tax[0]).OrderBy(m => m.rate).ToList();
             ViewBag.sgstTaxes= taxInterface.listTaxes(Constants.type_of_tax[1]).OrderBy(m => m.rate).ToList();
@@ -92,11 +95,14 @@ namespace tds.Controllers
         }
 
         [HttpPost]
+    
         [Route("transaction/")]
         [ValidateAntiForgeryToken]
-        public ActionResult Post(Transaction transaction)
+        public ActionResult Post([Bind(Exclude = "createDate")] Transaction transaction,string createDate)
         {
-           
+            DateTime dt = DateTime.ParseExact(createDate, "dd-MM-yyyy", CultureInfo.InvariantCulture);
+            string g1 = Convert.ToDateTime(dt).ToString("yyyy-MM-dd HH:mm:ss.fff");
+          transaction.createDate = DateTime.ParseExact(g1, "yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture);
 
             if (ModelState.IsValid)
             {
@@ -121,8 +127,12 @@ namespace tds.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("transaction/update")]
-        public ActionResult Put(Transaction transac)
+        public ActionResult Put(Transaction transac,string createDate)
         {
+            DateTime dt = DateTime.ParseExact(createDate, "dd-MM-yyyy", CultureInfo.InvariantCulture);
+            string g1 = Convert.ToDateTime(dt).ToString("yyyy-MM-dd HH:mm:ss.fff");
+            transac.createDate = DateTime.ParseExact(g1, "yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture);
+
             var user = UserManager.FindById(User.Identity.GetUserId());
 
              transac.contractor =(Contractor) contractorInterface.Find(transac.contractorId);
@@ -212,7 +222,7 @@ namespace tds.Controllers
                     ViewBag.typo = Constants.type[1];
                     if(!(string.IsNullOrEmpty(schemeId)))
                     {
-                        ViewBag.transList = generalInterface.SearchIndividual(m => (m.contractorId == contractorId || m.contractor.GSTIN == GSTIN) && m.SchemeId == schemeId && DbFunctions.TruncateTime(m.createDate) >= DbFunctions.TruncateTime(d1) && DbFunctions.TruncateTime(m.createDate) <= DbFunctions.TruncateTime(d2), pageIndex);
+                        ViewBag.transList = generalInterface.SearchIndividual(m => (m.contractorId == contractorId || m.contractor.GSTIN == GSTIN) && m.SchemeWork.SchemeId == schemeId && DbFunctions.TruncateTime(m.createDate) >= DbFunctions.TruncateTime(d1) && DbFunctions.TruncateTime(m.createDate) <= DbFunctions.TruncateTime(d2), pageIndex);
                     }
                     else
                     {
@@ -257,7 +267,6 @@ namespace tds.Controllers
             ViewBag.type = Constants.type[1];
             int pageIndex = 1;
             pageIndex = page.HasValue ? Convert.ToInt32(page) : 1;
-            SearchViewModel transCriteria = new SearchViewModel();
             ViewBag.transList = generalInterface.listAll(id).ToPagedList(pageIndex,10);
             
             return View("Search");
@@ -297,7 +306,7 @@ namespace tds.Controllers
             DateTime d2 = DateTime.ParseExact(g2, "yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture);
             if (!(string.IsNullOrEmpty(scheme)))
             {
-                _transactions = generalInterface.SearchForPdf(m => (m.contractorId == id || m.contractor.GSTIN == Gstin) && m.SchemeId == scheme && DbFunctions.TruncateTime(m.createDate) >= DbFunctions.TruncateTime(d1) && DbFunctions.TruncateTime(m.createDate) <= DbFunctions.TruncateTime(d2)).ToList();
+                _transactions = generalInterface.SearchForPdf(m => (m.contractorId == id || m.contractor.GSTIN == Gstin) && m.SchemeWork.SchemeId == scheme&& DbFunctions.TruncateTime(m.createDate) >= DbFunctions.TruncateTime(d1) && DbFunctions.TruncateTime(m.createDate) <= DbFunctions.TruncateTime(d2)).ToList();
             }
             else
             {
@@ -430,7 +439,7 @@ namespace tds.Controllers
 
                 pageIndex = page.HasValue ? Convert.ToInt32(page) : 1;
 
-                ViewBag.transList = generalInterface.SearchIndividual(m => m.SchemeId == schemeId && DbFunctions.TruncateTime(m.createDate) >= DbFunctions.TruncateTime(d1) && DbFunctions.TruncateTime(m.createDate) <= DbFunctions.TruncateTime(d2), pageIndex);
+                ViewBag.transList = generalInterface.SearchIndividual(m => m.SchemeWork.SchemeId == schemeId && DbFunctions.TruncateTime(m.createDate) >= DbFunctions.TruncateTime(d1) && DbFunctions.TruncateTime(m.createDate) <= DbFunctions.TruncateTime(d2), pageIndex);
                 if(ViewBag.transList!=null)
                 {
                     ViewBag.status = "excel";
@@ -453,7 +462,7 @@ namespace tds.Controllers
             //////new changes//////
             ///
             List<Transaction> excel = new List<Transaction>();
-             excel = generalInterface.SearchForPdf(m => DbFunctions.TruncateTime(m.createDate) >= DbFunctions.TruncateTime(d1) && DbFunctions.TruncateTime(m.createDate) <= DbFunctions.TruncateTime(d2) && m.SchemeId == schemeId).ToList();
+             excel = generalInterface.SearchForPdf(m => DbFunctions.TruncateTime(m.createDate) >= DbFunctions.TruncateTime(d1) && DbFunctions.TruncateTime(m.createDate) <= DbFunctions.TruncateTime(d2) && m.SchemeWork.SchemeId == schemeId).ToList();
            
             Transaction total = new Transaction
             {
@@ -477,6 +486,8 @@ namespace tds.Controllers
             {
                 id=y.id,
                 contractor = y.contractor.name,
+                tvNo=y.TreasuryVoucherNo,
+                work=y.SchemeWork.Work.Title,
                 gstin = y.contractor.GSTIN,
                 amountPaid = (y.amountPaid),
                 sgstAmount = (y.sgstAmount),
@@ -485,12 +496,23 @@ namespace tds.Controllers
                 labourCessAmount = (y.labourCessAmount),
                 deposit = (y.deposit),
                 netAmount = (y.netAmount),
-                scheme = y.Scheme.AccountNo,
+                scheme = y.SchemeWork.Scheme.AccountNo,
                 createDate = (y.createDate).ToString()
 
 
             }).FirstOrDefault();
             return Json(transaction, JsonRequestBehavior.AllowGet);
+        }
+
+
+        public JsonResult GetWorks(string schemeId)
+        {
+          dynamic works=  dbContext.SchemeWorks.Where(x => x.SchemeId == schemeId).Select(y => new
+            {
+                id = y.Id,
+                title = y.Work.Title
+            });
+            return Json(works, JsonRequestBehavior.AllowGet);
         }
     }
 }

@@ -4,6 +4,7 @@
 @{
     Layout = null;
     String actionName = (String)TempData["actionStatus"];
+   
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -23,6 +24,9 @@
     <!-- End plugin css for this page -->
     <!-- inject:css -->
     <link rel="stylesheet" href="~/Content/css/vertical-layout-light/style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/datejs/1.0/date.min.js"></script>
     <!-- endinject -->
     <link rel="shortcut icon" href="~/Content/images/favicon.png" />
     <style>
@@ -107,7 +111,7 @@
                                                     <div class="col-sm-9">
                                                         @Html.DropDownListFor(m => m.labourCessId,
                   new SelectList(ViewBag.labourTaxes,
-                "id", "rate"),"Select", new { @class = "form-control", @Id = "exampleFormControlSelect2", @required = "required" })
+                "id", "rate"), "Select", new { @class = "form-control", @Id = "exampleFormControlSelect2", @required = "required" })
 
                                                     </div>
                                                 </div>
@@ -118,7 +122,32 @@
                                                     <div class="col-sm-9">
                                                         @Html.DropDownListFor(m => m.cgstId,
                                                                          new SelectList(ViewBag.cgstTaxes,
-                                                                       "id", "rate"),"Select", new { @class = "form-control", @Id = "exampleFormControlSelect2", @required = "required" })
+                                                                       "id", "rate"), "Select", new { @class = "form-control", @Id = "exampleFormControlSelect2", @required = "required" })
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+
+
+                                            <div class="col-md-6">
+                                                <div class="form-group row">
+                                                    <label class="col-sm-3 col-form-label">Scheme</label>
+                                                    <div class="col-sm-9">
+                                                        @Html.DropDownList("SchemeId", new SelectList(ViewBag.Schemes, "Id", "AccountNo"), "Select Scheme", new { @class = "form-control", style = "padding: 1rem .75rem !important;" })
+                                                        @Html.ValidationMessage("SchemeId", "", new { @class = "text-danger" })
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group row">
+                                                    <label class="col-sm-3 col-form-label">Work</label>
+                                                    <div class="col-sm-9">
+                                                        <select style="padding: 1rem .75rem !important;" name="SchemeWorkId" id="SchemeWorkId" class="form-control"></select>
+                                                        @Html.ValidationMessageFor(model => model.SchemeWorkId, "", new { @class = "text-danger" })
+                                                        <span id="depositSpan" class="text-danger collapse"></span>
 
                                                     </div>
                                                 </div>
@@ -131,7 +160,7 @@
                                                     <div class="col-sm-9">
                                                         @Html.DropDownListFor(m => m.sgstId,
                  new SelectList(ViewBag.sgstTaxes,
-               "id", "rate"),"Select", new { @class = "form-control", @Id = "exampleFormControlSelect2", @required = "required" })
+               "id", "rate"), "Select", new { @class = "form-control", @Id = "exampleFormControlSelect2", @required = "required" })
 
                                                     </div>
                                                 </div>
@@ -142,14 +171,13 @@
                                                     <div class="col-sm-9">
                                                         @Html.DropDownListFor(m => m.incomeTaxId,
                   new SelectList(ViewBag.itTaxes,
-                "id", "rate"),"Select", new { @class = "form-control", @Id = "exampleFormControlSelect2",@required="required"})
+                "id", "rate"), "Select", new { @class = "form-control", @Id = "exampleFormControlSelect2", @required = "required" })
 
                                                     </div>
                                                 </div>
                                             </div>
 
                                         </div>
-
                                         <div class="row">
 
                                             <div class="col-md-6">
@@ -158,36 +186,52 @@
                                                     <div class="col-sm-9">
                                                         @Html.TextBoxFor(model => model.deposit, new { placeholder = "Deposit", @class = "form-control" })
                                                         @Html.ValidationMessageFor(model => model.deposit, "", new { @class = "text-danger" })
-                                                        <span id="depositSpan" class="text-danger collapse" ></span>
+                                                        <span id="depositSpan" class="text-danger collapse"></span>
 
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="form-group row">
-                                                    <label class="col-sm-3 col-form-label">Scheme</label>
+                                                    <label class="col-sm-3 col-form-label">TV No</label>
                                                     <div class="col-sm-9">
-                                                        @Html.DropDownListFor(model => model.SchemeId, null, "Select Scheme", new { @class = "form-control", style = "padding: 1rem .75rem !important;" })
-                                                        @Html.ValidationMessageFor(model => model.SchemeId, "", new { @class = "text-danger" })
+                                                        @Html.TextBoxFor(x => x.TreasuryVoucherNo, new { placeholder = "Treasury Voucher", @class = "form-control" })
+                                                        @Html.ValidationMessageFor(x => x.TreasuryVoucherNo, "", new { @class = "text-danger" })
+
 
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        if (actionName == "Post")
-                                        {
+                                        <div class="row">
+
+                                            <div class="col-md-6">
+                                                <div class="form-group row">
+                                                    <label class="col-sm-3 col-form-label">Deposit</label>
+                                                    <div class="col-sm-9">
+                                                        @Html.EditorFor(model => model.createDate,new { htmlAttributes = new { placeholder = "Enter Date", @class = "form-control" } })
+                                                        @*@Html.TextBoxFor(model => model.createDate,  new { placeholder = "Enter Date", @class = "form-control" })*@
+                                                        @Html.ValidationMessageFor(model => model.createDate, "", new { @class = "text-danger" })
+                                                        <span id="depositSpan" class="text-danger collapse"></span>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            </div>
+                                            if (actionName == "Post")
+                                            {
                                             <button type="submit" class="btn btn-primary mr-2">Submit</button>
-                                        }
-                                        else
-                                        {
+                                            }
+                                            else
+                                            {
                                             <button type="submit" class="btn btn-primary mr-2">Update</button>
-                                        }
-                                    }
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                                            }
+                                            }
+                                        </div>
+                                    </div>
+                                            </div>
+                                        </div>
+                                    </div>
                 <!-- content-wrapper ends -->
                 <!-- partial:../../partials/_footer.html -->
                 <div class="footer-wrapper">
@@ -229,9 +273,36 @@
     <!-- End custom js for this page-->
     <script>
         $(document).ready(function () {
+           
+            flatpickr("#createDate", { dateFormat: 'd-m-Y' });
+            getWorks();
+            $("#SchemeWorkId").val("@ViewBag.WorkId")
+            $("#SchemeId").change(getWorks);
+            function getWorks() {
+                 var id = $("#SchemeId").val();
+                $.ajax({
+                    url: "/transaction/getworks",
+                    method: "get",
+                    data: { schemeId: id },
+                    async: false,
+                    success: function (works) {
+                        var workDdl = $("#SchemeWorkId");
+                        workDdl.html(' <option value="">Select Work</option>');
+                        $.each(works, function (index, work) {
+                            workDdl.append(`<option value="${work.id}">${work.title}</option>`);
+                        });
+                        
+                       
+                    }
 
+
+                })
+            }
+            
+       
             $("[type=submit]").click(function () {
                 
+               
                 if ($("#deposit").val() >= $("#amountPaid").val()) {
                    
                     $("#depositSpan").html("Deposit Should be less than Amount Paid").show();

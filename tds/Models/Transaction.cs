@@ -9,13 +9,12 @@ namespace tds.Models
 {
     public class Transaction
     {
-        ApplicationDbContext dbContext = new ApplicationDbContext();
+        
 
         public Transaction()
         {
            id = Guid.NewGuid().ToString();
 
-            createDate = DateTime.Today;
         }
 
 
@@ -42,10 +41,12 @@ namespace tds.Models
         public string incomeTaxId { get; set; }
         public virtual Tax incomeTax { get; set; }
         [Required]
-        public string SchemeId { get; set; }
+        [ForeignKey("SchemeWork")]
+        public string SchemeWorkId { get; set; }
         [NotMapped]
         public string AccountNo { get; set; }
         public string labourCessId { get; set; }
+        public string TreasuryVoucherNo { get; set; }
         public virtual Tax labourCess { get; set; }
 
         public Double cgstAmount { get; set; }
@@ -59,7 +60,7 @@ namespace tds.Models
        
         public Nullable<Double> deposit { get; set; }
         public Double netAmount { get; set; }
-        public virtual Scheme Scheme { get; set; }
+        public virtual SchemeWork SchemeWork { get; set; }
         public override string ToString()
         {
             return "Contractor "+contractor.name+" cgst  sgst  it lc dep"+cgstAmount+" "+sgstAmount+" "+itAmount+" "+labourCessAmount+" "+deposit;

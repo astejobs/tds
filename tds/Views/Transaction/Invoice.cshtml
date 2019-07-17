@@ -51,6 +51,9 @@
                                                 Date
                                             </th>
                                             <th>
+                                                TV No
+                                            </th>
+                                            <th>
                                                 Scheme
                                             </th>
                                             <th>
@@ -95,9 +98,13 @@
                                                 @(!item.Equals(Model.Last()) ? item.createDate.Value.ToString("dd-MM-yyyy") : "")
                                             </td>
                                             <td>
-                                                @if (item.Scheme != null)
+                                                @item.TreasuryVoucherNo
+
+                                            </td>
+                                            <td>
+                                                @if (item.SchemeWork != null)
                                                 {
-                                                    @item.Scheme.AccountNo
+                                                    @item.SchemeWork.Scheme.AccountNo
                                                 }
 
 

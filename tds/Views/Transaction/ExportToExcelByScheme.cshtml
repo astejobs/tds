@@ -19,7 +19,13 @@
             Date
         </th>*@
             <th>
+                <b>TV NO</b>
+            </th>
+            <th>
                 <b>Scheme</b>
+            </th>
+            <th>
+                <b>Work</b>
             </th>
             <th>
                 <b>Date</b>
@@ -63,10 +69,16 @@
                 @item.contractor.GSTIN
             </td>
             <td>
-                @(item.Equals(Model.Last()) ? @Html.Raw(" <b></ b >") : @Html.Raw(item.Scheme.AccountNo))
+                @(item.Equals(Model.Last()) ? @Html.Raw(" <b></ b >") : @Html.Raw(item.TreasuryVoucherNo))
             </td>
             <td>
-                @(item.Equals(Model.Last()) ? @Html.Raw(" <b></ b >") : @Html.Raw(Html.DisplayFor(x=>item.createDate)))
+                @(item.Equals(Model.Last()) ? @Html.Raw(" <b></ b >") : @Html.Raw(item.SchemeWork.Scheme.AccountNo))
+            </td>
+            <td>
+                @(item.Equals(Model.Last()) ? @Html.Raw(" <b></ b >") : @Html.Raw(item.SchemeWork.Work.Title))
+            </td>
+            <td>
+                @(item.Equals(Model.Last()) ? @Html.Raw(" <b></ b >") : @Html.Raw(Html.DisplayFor(x => item.createDate)))
             </td>
             <td>
                 @(item.Equals(Model.Last()) ? @Html.Raw(" <b> " + @item.amountPaid + "</ b >") : @Html.Raw(item.amountPaid))

@@ -132,6 +132,12 @@
                                                     GSTIN
                                                 </th>
                                                 <th>
+                                                    TV No
+                                                </th>
+                                                <th>
+                                                    Scheme
+                                                </th>
+                                                <th>
                                                     Date
                                                 </th>
                                                 <th>
@@ -159,11 +165,7 @@
                                                     Net Amt
                                                 </th>
 
-                                                @if (ViewBag.status == "excel")
-                                                {
-                                                    <th>Print</th>
-                                                }
-
+                                              
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -172,61 +174,66 @@
                                             {
                                                 foreach (var item in ViewBag.transList)
                                                 {
-                                                    <tr onclick="showModal('@item.id')">
-                                                        @if (ViewBag.type == "Individual")
-                                                        {
-                                                            <td>
-                                                                <a href="@Url.Action("Get", "Transaction", new { id = item.id })">
-                                                                    @item.contractor.name
+                                            <tr onclick="showModal('@item.id')">
+                                                @if (ViewBag.type == "Individual")
+                                                {
+                                                    <td>
+                                                        <a href="@Url.Action("Get", "Transaction", new { id = item.id })">
+                                                            @item.contractor.name
 
-                                                                </a>
-                                                            </td>
-                                                        }
-                                                        else
-                                                        {
-                                                            <td>
-                                                                @item.contractor.name
+                                                        </a>
+                                                    </td>
+                                                }
+                                                else
+                                                {
+                                                    <td>
+                                                        @item.contractor.name
 
 
-                                                            </td>
-                                                        }
-                                                        <td>
-                                                            @item.contractor.GSTIN
-                                                        </td>
-                                                        <td>
+                                                    </td>
+                                                }
+                                                <td>
+                                                    @item.contractor.GSTIN
+                                                </td>
+                                                <td>
+                                                    @item.TreasuryVoucherNo
 
-                                                            @item.createDate.ToString("dd-MM-yyyy")
-                                                        </td>
-                                                        <td>
-                                                            @item.amountPaid
+                                                </td>
+                                                <td>
+                                                    @item.SchemeWork.Scheme.AccountNo
 
-                                                        </td>
-                                                        <td>
-                                                            @item.deposit
-                                                        </td>
-                                                        <td>
-                                                            @Convert.ToInt64(item.cgstAmount)
+                                                </td>
+                                                <td>
 
-                                                        </td>
-                                                        <td>
-                                                            @Convert.ToInt64(item.sgstAmount)
-                                                        </td>
-                                                        <td>
-                                                            @Convert.ToInt64(item.itAmount)
-                                                        </td>
-                                                        <td>
-                                                            @Convert.ToInt64(item.labourCessAmount)
-                                                        </td>
+                                                    @item.createDate.ToString("dd-MM-yyyy")
+                                                </td>
+                                                <td>
+                                                    @item.amountPaid
 
-                                                        <td>
+                                                </td>
+                                                <td>
+                                                    @item.deposit
+                                                </td>
+                                                <td>
+                                                    @Convert.ToInt64(item.cgstAmount)
 
-                                                            @Convert.ToInt64(item.netAmount)
-                                                        </td>
-                                                        @if (ViewBag.status == "excel")
-                                                        {
-                                                            <td><a target="_blank" href="@Url.Action("PrintTransaction","Transaction",new {id=item.id })"><i class="mdi mdi-printer"></i></a></td>
-                                                        }
-                                                    </tr>
+                                                </td>
+                                                <td>
+                                                    @Convert.ToInt64(item.sgstAmount)
+                                                </td>
+                                                <td>
+                                                    @Convert.ToInt64(item.itAmount)
+                                                </td>
+                                                <td>
+                                                    @Convert.ToInt64(item.labourCessAmount)
+                                                </td>
+
+                                                <td>
+
+                                                    @Convert.ToInt64(item.netAmount)
+                                                </td>
+                                              
+                                            </tr>
 
                                                 }
                                             }

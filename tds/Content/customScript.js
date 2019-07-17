@@ -20,6 +20,13 @@
                     </button>
 </div>
 <div class="row">
+                                            <p  style="font-size:17px; width:100%;display:inline-block; text-align:center;"><b> Work: </b>${transaction.work}</p>
+                                            </div>
+<div class="row">
+       
+        <p class="p-h text-left"><b>TV NO:</b> ${transaction.tvNo}</p>
+    </div>
+<div class="row">
         <p class="p-h text-left" ><b>Scheme :</b> ${transaction.scheme} </p>
         <p class="p-h text-right"><b>Contractor:</b> ${transaction.contractor}</p>
     </div>

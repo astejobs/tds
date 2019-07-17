@@ -101,7 +101,7 @@ namespace tds.RepositoryImpl
         public IEnumerable<Transaction> SearchForPdf(System.Linq.Expressions.Expression<Func<Transaction, bool>> predicate)
         {
 
-            return dbContext.Transaction.OrderByDescending(m => m.createDate).Where(predicate);
+            return dbContext.Transaction.Where(predicate).OrderByDescending(m => m.createDate);
 
         }
 
@@ -194,7 +194,7 @@ namespace tds.RepositoryImpl
                 labourCessAmount = t.Sum(c => c.labourCessAmount),
                 deposit = t.Sum(c => c.deposit),
                 netAmount = t.Sum(c => c.netAmount),
-                accountNo=t.OrderByDescending(x=>x.createDate).FirstOrDefault().Scheme.AccountNo
+                //accountNo=t.OrderByDescending(x=>x.createDate).FirstOrDefault().Scheme.AccountNo
                 
             });
 
@@ -208,7 +208,7 @@ namespace tds.RepositoryImpl
                 labourCessAmount = t.labourCessAmount,
                 deposit = t.deposit,
                 netAmount = t.netAmount,
-                AccountNo=t.accountNo
+                //AccountNo=t.accountNo
                 
             }).ToList();
 

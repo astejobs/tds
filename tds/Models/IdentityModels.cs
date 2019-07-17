@@ -30,6 +30,8 @@ namespace tds.Models
         }
         public DbSet<Models.Deductor> Deductor { get; set; }
         public DbSet<Models.Scheme> Schemes { get; set; }
+        public DbSet<Models.SchemeWork> SchemeWorks { get; set; }
+        public DbSet<Models.Work> Works { get; set; }
         public DbSet<Models.Contractor> Contractor { get; set; }
         public DbSet<Models.Tax> Tax { get; set; }
         public DbSet<Models.Transaction> Transaction { get; set; }

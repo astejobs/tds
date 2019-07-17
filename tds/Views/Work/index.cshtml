@@ -3,7 +3,7 @@
 
 
 @using PagedList.Mvc;
-@model EntityViewModel<Scheme>
+@model EntityViewModel<Work>
 
 @{
     Layout = null;
@@ -30,31 +30,10 @@
     <link rel="stylesheet" href="~/Content/css/vertical-layout-light/style.css">
     <!-- endinject -->
     <link rel="shortcut icon" href="~/Content/images/favicon.png" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.15/css/bootstrap-multiselect.css">
-
     <style>
 
         .exampleFormControlSelect2 {
             padding: 1rem .75rem !important;
-        }
-
-        .multiselect-container {
-            height: 200px;
-            overflow-y: scroll;
-            width: 100% !important;
-        }
-        .multiselect-selected-text {
-        
-            overflow:hidden !important;
-            display:block;
-        }
-        .multiselect
-        {
-             width: 100% !important;
-        }
-        .btn-group{
-           
-            width: 100% !important;
         }
     </style>
 </head>
@@ -94,18 +73,18 @@
                                     @if (actionName == "Post")
                                     {
                                         <h4 class="card-title">
-                                            Add Scheme
+                                            Add Work
                                         </h4>
                                     }
                                     else
                                     {
                                         <h4 class="card-title">
-                                            Edit Scheme
+                                            Edit Work
                                         </h4>
                                     }
 
 
-                                    @using (Html.BeginForm(actionName, "Scheme", FormMethod.Post, new { @class = "form-sample", role = "form" }))
+                                    @using (Html.BeginForm(actionName, "Work", FormMethod.Post, new { @class = "form-sample", role = "form" }))
                                     {
 
                                         @Html.AntiForgeryToken()
@@ -113,10 +92,10 @@
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="form-group row">
-                                                    <label class="col-sm-3 col-form-label">Account No</label>
+                                                    <label class="col-sm-3 col-form-label">Title</label>
                                                     <div class="col-sm-9">
-                                                        @Html.TextBoxFor(model => model.entity.AccountNo, new { placeholder = "Account No", @class = "form-control" })
-                                                        @Html.ValidationMessageFor(model => model.entity.AccountNo, "", new { @class = "text-danger" })
+                                                        @Html.TextBoxFor(model => model.entity.Title, new { placeholder = "Work Title", @class = "form-control" })
+                                                        @Html.ValidationMessageFor(model => model.entity.Title, "", new { @class = "text-danger" })
                                                         @Html.Hidden("page", TempData["page"], new { name = "page" })
                                                         @if (actionName == "Put")
                                                         {
@@ -124,14 +103,6 @@
                                                         }
 
 
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="form-group row">
-                                                    <label class="col-sm-3 col-form-label">Works</label>
-                                                    <div class="col-sm-9">
-                                                        @Html.ListBoxFor(x=>x.entity.Works, new SelectList(ViewBag.Works, "Id", "Title"), new { @class = "form-control listbox collapse" })
                                                     </div>
                                                 </div>
                                             </div>
@@ -156,7 +127,7 @@
                         <div class="col-lg-12 grid-margin stretch-card">
                             <div class="card">
                                 <div class="card-body">
-                                    <h4 class="card-title">Schemes </h4>
+                                    <h4 class="card-title">Works </h4>
 
                                     <div class="table-responsive pt-3">
                                         <table class="table table-bordered">
@@ -168,7 +139,7 @@
                                                     </th>
 
                                                     <th>
-                                                        Account No
+                                                        Title
                                                     </th>
 
                                                     <th>
@@ -185,17 +156,16 @@
                                                             @(item.Index + ((Model.entityList.PageNumber - 1) * Model.entityList.PageSize) + 1)
                                                         </td>
                                                         <td>
-                                                            @Html.DisplayFor(modelitem => item.Data.AccountNo)
+                                                            @Html.DisplayFor(modelitem => item.Data.Title)
                                                         </td>
 
                                                         <td>
-                                                            <a href="@Url.Action("Index", "Scheme", new { id = item.Data.Id })">
-                                                                <i class="mdi mdi-circle-edit-outline mr-3"></i> &nbsp;
-                                                            </a>
                                                             @if (item.Data.SchemeWorks.Count() == 0)
                                                             {
-
-                                                                <a onclick="return confirm('Are you Sure that tou want to delete this scheme')" href="@Url.Action("delete", "Scheme", new { id = item.Data.Id })">
+                                                                <a href="@Url.Action("Index", "Work", new { id = item.Data.Id })">
+                                                                    <i class="mdi mdi-circle-edit-outline mr-3"></i> &nbsp;
+                                                                </a>
+                                                                <a onclick="return confirm('Are you Sure that tou want to delete this Work')" href="@Url.Action("delete", "Work", new { id = item.Data.Id })">
                                                                     <i class="mdi mdi-delete"></i> &nbsp;
                                                                 </a>
                                                             }
@@ -254,7 +224,6 @@
     <script src="~/Content/js/template.js"></script>
     <script src="~/Content/js/settings.js"></script>
     <script src="~/Content/js/todolist.js"></script>
-    <script src="~/Scripts/bootstrap.js"></script>
     <!-- endinject -->
     <!-- plugin js for this page -->
     <script src="~/Content/vendors/typeahead.js/typeahead.bundle.min.js"></script>
@@ -264,7 +233,6 @@
     <script src="~/Content/js/file-upload.js"></script>
     <script src="~/Content/js/typeahead.js"></script>
     <script src="~/Content/js/select2.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.15/js/bootstrap-multiselect.js"></script>
     <!-- End custom js for this page-->
     <script>
         $(document).ready(function () {
@@ -276,14 +244,5 @@
 
         });
     </script>
-    <script type="text/javascript">
-        $(function () {
-            $('.listbox').multiselect({
-                includeSelectAllOption: true,
-                scroll: true
-            });
-        });
-    </script>
-   
 </body>
 </html>
