@@ -147,7 +147,6 @@
                                                     <div class="col-sm-9">
                                                         <select style="padding: 1rem .75rem !important;" name="SchemeWorkId" id="SchemeWorkId" class="form-control"></select>
                                                         @Html.ValidationMessageFor(model => model.SchemeWorkId, "", new { @class = "text-danger" })
-                                                        <span id="depositSpan" class="text-danger collapse"></span>
 
                                                     </div>
                                                 </div>
@@ -207,7 +206,7 @@
 
                                             <div class="col-md-6">
                                                 <div class="form-group row">
-                                                    <label class="col-sm-3 col-form-label">Deposit</label>
+                                                    <label class="col-sm-3 col-form-label">Date</label>
                                                     <div class="col-sm-9">
                                                         @Html.EditorFor(model => model.createDate,new { htmlAttributes = new { placeholder = "Enter Date", @class = "form-control" } })
                                                         @*@Html.TextBoxFor(model => model.createDate,  new { placeholder = "Enter Date", @class = "form-control" })*@

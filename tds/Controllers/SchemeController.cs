@@ -148,6 +148,25 @@ namespace tds.Controllers
             TempData["MsgSuccess"] = "Scheme Deleted Successfully";
             return RedirectToAction("index");
         }
+      public JsonResult  GetWorksByScheme(string schemeId)
+        {
+            
+          dynamic works=  dbContext.Works.Where(x => x.SchemeWorks.Any(y => y.SchemeId == schemeId) == false).Select(z=>new {
 
+                id=z.Id,
+                title=z.Title
+
+
+            }).ToList();
+            return Json(works, JsonRequestBehavior.AllowGet);
+        }
+        [HttpPost]
+        public ActionResult AddSchemeWork(SchemeWork schemeWork)
+        {
+            dbContext.SchemeWorks.Add(schemeWork);
+            dbContext.SaveChanges();
+            TempData["MsgSuccess"] = "Works has been Added Successfully to Scheme";
+            return RedirectToAction("index");
+        }
     }
 }
