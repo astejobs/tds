@@ -161,9 +161,20 @@ namespace tds.Controllers
             return Json(works, JsonRequestBehavior.AllowGet);
         }
         [HttpPost]
-        public ActionResult AddSchemeWork(SchemeWork schemeWork)
+        public ActionResult AddSchemeWork(SchemeWorkVM schemeWorkVM)
         {
-            dbContext.SchemeWorks.Add(schemeWork);
+            List<SchemeWork> schemeWorks = new List<SchemeWork>();
+            foreach (string workId in schemeWorkVM.Works)
+            {
+                SchemeWork schemeWork = new SchemeWork
+                {
+                    WorkId = workId,
+                    SchemeId = schemeWorkVM.SchemeId
+
+                };
+                schemeWorks.Add(schemeWork);
+            }
+            dbContext.SchemeWorks.AddRange(schemeWorks);
             dbContext.SaveChanges();
             TempData["MsgSuccess"] = "Works has been Added Successfully to Scheme";
             return RedirectToAction("index");
